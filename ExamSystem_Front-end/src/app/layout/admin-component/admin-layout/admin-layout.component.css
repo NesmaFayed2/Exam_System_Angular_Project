@@ -1,0 +1,182 @@
+/* src/app/layout/admin-component/admin-layout/admin-layout.component.css */
+
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.admin-layout {
+  display: flex;
+  flex: 1;
+  background-color: #f4f7fa; /* Light background for the main content area */
+  color: #333; /* Default text color */
+}
+
+.sidebar-content {
+  width: 250px; /* Fixed width sidebar */
+  background-color: #000039; /* Darker, professional sidebar background (e.g., deep charcoal) */
+  color: white;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow on the sidebar */
+  transition: width 0.3s ease; /* Smooth transition for potential collapse */
+}
+
+.sidebar-header {
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center; /* Center the header text */
+}
+
+.sidebar-header h3 {
+  color: white;
+  margin: 0;
+  font-size: 1.4rem; /* Slightly larger heading */
+  font-weight: 700; /* Bolder for prominence */
+  letter-spacing: 0.5px;
+}
+
+.sidebar-menu {
+  flex: 1; /* Allows the menu to take up available space */
+  padding: 15px 0;
+  display: flex;
+  flex-direction: column; /* Stack menu items vertically */
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  font-weight: 500; /* Slightly bolder text */
+}
+
+.menu-item:hover {
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.15
+  ); /* Slightly stronger hover effect */
+  color: white;
+  padding-left: 25px; /* Slight push on hover */
+}
+
+.menu-item.active {
+  background-color: #34495e; /* A distinct background for active link */
+  color: white;
+  border-left: 4px solid #3498db; /* A prominent blue border on active */
+  font-weight: 600;
+}
+
+.menu-item i {
+  font-size: 1.3rem; /* Slightly larger icons */
+  margin-right: 12px; /* More space for icon */
+}
+
+.menu-item span {
+  font-size: 1rem; /* Slightly larger text */
+}
+
+/* Main content area */
+main {
+  flex-grow: 1; /* Allows main content to fill remaining width */
+  padding: 25px; /* More padding for content */
+  overflow-y: auto; /* Allow scrolling within the main content if needed */
+}
+
+/* Optional: Adding a specific footer if you plan to have one in the sidebar */
+.sidebar-footer {
+  padding: 15px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: auto; /* Pushes the footer to the bottom of the sidebar */
+  text-align: center;
+}
+
+.help-item {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center help item if it's the only one */
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+  text-decoration: none; /* Ensure it's not underlined */
+  transition: color 0.2s ease;
+}
+
+.help-item i {
+  font-size: 1.2rem;
+  margin-right: 8px;
+}
+
+.help-item:hover {
+  color: white;
+  cursor: pointer;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .sidebar-content {
+    width: 80px; /* Collapse sidebar on smaller screens */
+  }
+  .sidebar-content .sidebar-header h3,
+  .sidebar-content .menu-item span {
+    display: none; /* Hide text */
+  }
+  .sidebar-content .menu-item {
+    justify-content: center; /* Center icons when text is hidden */
+    padding: 12px 0; /* Adjust padding */
+  }
+  .sidebar-content .menu-item i {
+    margin-right: 0; /* Remove margin right */
+  }
+  .sidebar-content .menu-item.active {
+    border-left: none; /* Remove left border */
+    border-bottom: 3px solid #3498db; /* Add bottom border for active state */
+  }
+
+  .admin-layout {
+    flex-direction: column; /* Stack sidebar and main content vertically on small screens */
+  }
+
+  main {
+    padding: 15px; /* Reduce padding on small screens */
+  }
+}
+
+@media (max-width: 576px) {
+  .sidebar-content {
+    width: 100%; /* Full width sidebar at very small sizes (or make it a top bar) */
+    flex-direction: row; /* Make menu items horizontal */
+    height: auto;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  .sidebar-content .sidebar-header {
+    display: none; /* Hide header */
+  }
+  .sidebar-content .sidebar-menu {
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 0;
+    width: 100%;
+  }
+  .sidebar-content .menu-item {
+    flex: 1; /* Distribute items evenly */
+    padding: 10px 5px;
+    text-align: center;
+    flex-direction: column; /* Stack icon and text vertically within item */
+  }
+  .sidebar-content .menu-item i {
+    margin-right: 0;
+    margin-bottom: 5px;
+  }
+  .sidebar-content .menu-item span {
+    font-size: 0.75rem; /* Smaller text */
+  }
+  .sidebar-content .menu-item.active {
+    border-left: none;
+    border-bottom: 3px solid #3498db;
+  }
+}

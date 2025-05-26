@@ -1,0 +1,49 @@
+:root {
+  --primary-color: #000039;
+  --primary-hover: #1a1a8f;
+  --accent-color: #4c6fff;
+}
+
+.hero {
+  background-color: var(--primary-color);
+  color: white;
+  text-align: center;
+}
+
+h2, h3 {
+  color: var(--primary-color);
+}
+
+form {
+  max-width: 100%;
+}
+
+button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--primary-hover);
+  color: white;
+}
+
+a {
+  color: var(--accent-color);
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}

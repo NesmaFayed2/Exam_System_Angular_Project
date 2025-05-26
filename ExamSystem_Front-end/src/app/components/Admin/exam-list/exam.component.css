@@ -1,0 +1,264 @@
+/* src/app/components/Admin/exam-list/exam.component.css */
+
+.container {
+  max-width: 1000px; /* Adjust max-width as needed */
+  margin: 40px auto; /* Center the container with vertical spacing */
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mb-4 {
+  margin-bottom: 1.5rem;
+}
+
+.mt-5 {
+  margin-top: 3rem;
+}
+
+/* --- Add New Exam Button --- */
+.btn-add-new {
+  background-color: #151550;
+  border-color: #000039;
+  color: white;
+  padding: 12px 25px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(41, 10, 179, 0.3);
+  font-weight: 600;
+}
+
+.btn-add-new:hover {
+  background-color: #2c3280;
+  border-color: #25115c;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(23, 21, 116, 0.4);
+}
+
+.alert-info {
+  background-color: #e0f7fa;
+  color: #00796b;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #b2ebf2;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.exam-list {
+  list-style: none; /* Remove bullet points */
+  padding: 0;
+  margin: 0;
+  border: 1px solid #dee2e6; /* Light border around the whole list */
+  border-radius: 8px;
+  overflow: hidden; /* Ensures rounded corners apply to inner elements */
+  /* Add grid for better arrangement if you want multiple items per row */
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(300px, 1fr)
+  ); /* 300px minimum width for card, auto-fit into rows */
+  gap: 20px; /* Space between cards */
+  padding: 15px; /* Padding for the grid container itself */
+  border: none; /* Remove border from exam-list, individual items will have borders/shadows */
+  background-color: transparent; /* Make list background transparent */
+  box-shadow: none; /* Remove shadow from list */
+}
+
+/* Individual Exam Item (now more like a compact card) */
+.exam-list li.exam-item {
+  background-color: #ffffff;
+  padding: 0; /* Remove padding from here, it will be added to sections */
+  border-bottom: none; /* No bottom border needed */
+  border-radius: 8px; /* Rounded corners for the "card" */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); /* Soft shadow for each card */
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth hover effect */
+  overflow: hidden; /* Ensure rounded corners on title */
+}
+
+.exam-list li.exam-item:last-child {
+  border-bottom: none;
+}
+
+.exam-list li.exam-item:hover {
+  transform: translateY(-3px); /* Lift card slightly on hover */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+}
+
+.exam-title {
+  background-color: #000039;
+  color: white;
+  padding: 15px 20px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0;
+  border-radius: 8px 8px 0 0;
+  line-height: 1.3;
+}
+
+.exam-details {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  padding: 15px 20px; /* Padding for the details section */
+  margin-right: 0; /* No right margin needed here */
+}
+
+.detail-item {
+  min-width: unset; /* Remove min-width to allow more flexibility */
+}
+
+.detail-item strong {
+  display: inline; /* Make label and span inline */
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-bottom: 0; /* Remove margin */
+  margin-right: 5px; /* Space between label and value */
+}
+
+.detail-item span {
+  font-size: 0.95rem; /* Slightly smaller detail text */
+  color: #343a40;
+  font-weight: 500;
+}
+
+.exam-description {
+  font-size: 0.9rem; /* Smaller description text */
+  color: #555;
+  line-height: 1.4;
+  margin-bottom: 15px; /* Space after description */
+  grid-column: 1 / -1; /* Spans full width if using grid */
+}
+
+.exam-track .badge {
+  background-color: #1c0447;
+  color: white;
+  padding: 5px 10px; /* Slightly smaller padding for badge */
+  border-radius: 20px;
+  font-size: 0.75rem; /* Smaller badge text */
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 5px rgba(111, 66, 193, 0.3);
+}
+
+.exam-actions {
+  display: flex;
+  justify-content: flex-end; /* Align buttons to the right */
+  gap: 8px;
+  flex-shrink: 0;
+  padding: 15px 20px; /* Padding for the action section */
+  border-top: 1px solid #e9ecef; /* Separator above buttons */
+}
+
+.exam-actions .btn {
+  padding: 8px 12px;
+  font-size: 0.8rem; /* Smaller button text */
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.exam-actions .btn i {
+  margin-right: 5px;
+}
+
+.btn-add-new {
+  background-color: #151550;
+  border-color: #000039;
+  color: white;
+}
+.btn-add-new:hover {
+  background-color: #2c3280;
+  border-color: #25115c;
+}
+
+.btn-view {
+  background-color: #0d2238;
+  border-color: #007bff;
+  color: white;
+}
+.btn-view:hover {
+  background-color: #0056b3;
+  border-color: #004085;
+}
+
+.btn-edit {
+  border-color: #ffc107;
+  color: #000000;
+}
+.btn-edit:hover {
+  background-color: #e0a800;
+  border-color: #cc9b00;
+}
+
+.btn-delete {
+  border-color: #dc3545;
+  color: rgb(0, 0, 0);
+}
+.btn-delete:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+  color: white;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .exam-list {
+    grid-template-columns: 1fr; /* Stack items vertically on smaller screens */
+    padding: 10px;
+    gap: 15px;
+  }
+
+  .exam-list li.exam-item {
+    flex-direction: column; /* Ensure vertical stacking */
+    padding: 0; /* Reset padding here */
+  }
+
+  .exam-title {
+    font-size: 1.2rem;
+    padding: 12px 15px;
+  }
+
+  .exam-details {
+    padding: 12px 15px;
+  }
+
+  .exam-description {
+    font-size: 0.85rem;
+  }
+
+  .detail-item strong,
+  .detail-item span {
+    font-size: 0.9rem;
+  }
+
+  .exam-actions {
+    flex-wrap: wrap; /* Allow buttons to wrap */
+    justify-content: center; /* Center buttons */
+    padding: 12px 15px;
+  }
+
+  .exam-actions .btn {
+    flex-grow: 1; /* Allow buttons to grow to fill space */
+    font-size: 0.8rem;
+    padding: 10px;
+  }
+
+  .btn-add-new {
+    width: 100%;
+  }
+}

@@ -1,0 +1,101 @@
+.container {
+  max-width: 1000px; /* Standard container width */
+  margin: 40px auto;
+  padding: 0; /* Card will handle padding */
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Soft, subtle shadow */
+  padding: 25px; /* Internal padding for the card */
+}
+
+.card-title {
+  background-color: #000039; /* Dark blue background for title */
+  color: white; /* White text */
+  padding: 15px 20px;
+  /* Adjust margin to extend background to card edges, matching border-radius */
+  margin: -25px -25px 25px -25px;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-align: center;
+  border-radius: 10px 10px 0 0; /* Rounded top corners */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* Space between icon and text */
+}
+
+.card-title i {
+  font-size: 2rem; /* Larger icon */
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto; /* Allows horizontal scrolling on small screens */
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse; /* Remove double borders */
+  margin-top: 20px;
+  font-size: 0.95rem;
+  min-width: 600px; /* Ensures table doesn't get too squished on smaller viewports before scrolling */
+}
+
+.results-table th,
+.results-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #e9ecef; /* Light separator */
+}
+
+.results-table th {
+  background-color: #f8f9fa; /* Light header background */
+  font-weight: 600;
+  color: #495057;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.results-table tbody tr:hover {
+  background-color: #f1f4f6; /* Subtle row hover effect */
+}
+
+.results-table tbody tr:last-child td {
+  border-bottom: none; /* No border for the last row */
+}
+
+.score-cell {
+  font-weight: 700;
+  color: #007bff; /* Highlight score with a primary color */
+}
+
+/* Alert styles (assuming Bootstrap alerts or similar styling needed if Bootstrap isn't fully included) */
+.alert {
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.alert-info {
+  background-color: #e0f7fa;
+  color: #00796b;
+  border: 1px solid #b2ebf2;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Spinner for loading state */
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+  border-width: 0.3rem;
+  margin-bottom: 10px;
+}

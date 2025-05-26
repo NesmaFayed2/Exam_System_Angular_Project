@@ -1,0 +1,139 @@
+<div class="container mt-4">
+  <div class="card p-4 shadow-sm">
+    <h2 class="card-title text-center mb-4 text-primary">
+      Manage Questions for: <br />"{{ examTitle }}"
+    </h2>
+
+    @if (examId === null) {
+    <div class="alert alert-danger text-center">
+      Error: No exam ID provided.
+    </div>
+    } @else {
+    <h3 class="mb-3 text-center text-secondary">Questions</h3>
+
+    @if (questions.length === 0) {
+    <div class="alert alert-info text-center my-4">
+      No questions added yet. Click "Add New Question" to get started!
+    </div>
+    } @for (question of questions; track $index) {
+    <div class="question-block p-3 mb-4 border rounded bg-white shadow-sm">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="text-dark m-0">Question {{ $index + 1 }}</h5>
+        <div class="question-actions-buttons">
+          <button
+            type="button"
+            (click)="saveQuestion(question)"
+            class="btn btn-sm btn-outline-success me-2"
+            title="Save Question"
+          >
+            <i class="bi bi-save"></i> Save Question
+          </button>
+          <button
+            type="button"
+            (click)="removeQuestion($index)"
+            class="btn btn-sm btn-outline-danger"
+            title="Remove Question"
+          >
+            <i class="bi bi-trash"></i> Remove Question
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group mb-3">
+        <label [for]="'questionText-' + $index" class="form-label"
+          >Question Text</label
+        >
+        <input
+          [id]="'questionText-' + $index"
+          type="text"
+          [(ngModel)]="question.text"
+          placeholder="Enter question here"
+          [name]="'questionText-' + $index + '-text'"
+          required
+          class="form-control"
+        />
+      </div>
+
+      <div class="form-group mb-3">
+        <label [for]="'questionScore-' + $index" class="form-label"
+          >Score for this Question</label
+        >
+        <input
+          [id]="'questionScore-' + $index"
+          type="number"
+          [(ngModel)]="question.score"
+          placeholder="e.g., 5"
+          [name]="'questionScore-' + $index + '-score'"
+          required
+          min="1"
+          class="form-control"
+        />
+      </div>
+
+      <h6>Choices</h6>
+      @for (choice of question.choices; track $index) {
+      <div class="input-group mb-2">
+        <div class="input-group-text">
+          <input
+            type="radio"
+            [id]="'correctChoice-' + question.id + '-' + $index"
+            [value]="choice.text"
+            [(ngModel)]="question.correctAnswer"
+            [name]="'correctAnswer-' + question.id"
+            class="form-check-input mt-0"
+            required
+          />
+        </div>
+        <input
+          type="text"
+          [(ngModel)]="choice.text"
+          placeholder="Choice text"
+          [name]="'choiceText-' + question.id + '-' + $index"
+          required
+          class="form-control"
+        />
+        <button
+          type="button"
+          (click)="removeChoice(question, $index)"
+          class="btn btn-sm btn-outline-secondary ms-2"
+          title="Remove Choice"
+        >
+          <i class="bi bi-dash-circle"></i>
+        </button>
+      </div>
+      }
+      <button
+        type="button"
+        (click)="addChoice(question)"
+        class="btn btn-sm btn-outline-info mt-2"
+      >
+        <i class="bi bi-plus-circle"></i> Add Choice
+      </button>
+    </div>
+    }
+
+    <div class="text-center mb-4">
+      <button
+        type="button"
+        (click)="addQuestion()"
+        class="btn btn-outline-primary px-4 py-2 me-3"
+      >
+        ➕ Add New Question
+      </button>
+      <button
+        type="button"
+        (click)="saveAllQuestions()"
+        class="btn btn-success px-4 py-2"
+      >
+        💾 Save All Questions & Exit
+      </button>
+    </div>
+
+    <div class="text-center mt-4">
+      <a [routerLink]="['/admin/examlist']" class="btn btn-secondary px-4 py-2">
+        <i class="bi bi-arrow-left"></i> Back to Exam List
+      </a>
+    </div>
+    }
+  </div>
+</div>

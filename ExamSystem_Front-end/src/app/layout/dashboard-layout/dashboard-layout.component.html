@@ -1,0 +1,20 @@
+<div class="dashboard-wrapper">
+  <app-navbar (toggleSidebar)="toggleSidebar()"></app-navbar>
+
+  <div class="dashboard-container">
+    <div class="sidebar" [class.collapsed]="isSidebarCollapsed && isSmallScreen">
+      <app-sidebaar></app-sidebaar>
+    </div>
+
+    <div class="main-content">
+      <div class="content-container">
+        <router-outlet></router-outlet>
+      </div>
+      <app-footer></app-footer>
+    </div>
+
+    @if (isSidebarCollapsed && isSmallScreen) {
+      <div class="overlay" (click)="toggleSidebar()"></div>
+    }
+  </div>
+</div>

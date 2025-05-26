@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "title": "Angular Basics",
+    "description": "Introduction to Angular",
+    "startDate": "2025-05-15",
+    "endDate": "2025-05-15",
+    "track": "Angular",
+    "duration": 60,
+    "questions": [
+      {
+        "id": 1,
+        "examId": 1,
+        "text": "What is a component?",
+        "choices": [
+          { "id": 1, "text": "Class" },
+          { "id": 2, "text": "Service" },
+          { "id": 3, "text": "Directive" },
+          { "id": 4, "text": "Pipe" }
+        ],
+        "score": 1,
+        "correctAnswer": "Class"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "HTML Basics",
+    "description": "Covers tags and structure",
+    "startDate": "2025-05-15",
+    "endDate": "2025-05-15",
+    "track": "Angular",
+    "duration": 30,
+    "questions": [
+      {
+        "id": 1,
+        "examId": 2,
+        "text": "What does HTML stand for?",
+        "choices": [
+          { "id": 1, "text": "Hyper Text Markup Language" },
+          { "id": 2, "text": "Home Tool Markup Language" },
+          { "id": 3, "text": "Hyperlinks and Text Markup Language" },
+          { "id": 4, "text": "None of the above" }
+        ],
+        "correctAnswer": "Hyper Text Markup Language",
+        "score": 1
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Angular Fundamentals",
+    "description": "Covers components, routing",
+    "startDate": "2025-05-15",
+    "endDate": "2025-05-15",
+    "track": "Angular",
+    "duration": 60,
+    "questions": [
+      {
+        "id": 1,
+        "examId": 3,
+        "text": "Which module is required for routing?",
+        "choices": [
+          { "id": 1, "text": "HttpClientModule" },
+          { "id": 2, "text": "FormsModule" },
+          { "id": 3, "text": "RouterModule" },
+          { "id": 4, "text": "NgModule" }
+        ],
+        "correctAnswer": "RouterModule",
+        "score": 1
+      }
+    ]
+  }
+]

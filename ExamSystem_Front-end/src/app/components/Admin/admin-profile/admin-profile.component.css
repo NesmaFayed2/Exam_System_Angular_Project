@@ -1,0 +1,144 @@
+/* src/app/components/Admin/admin-profile/admin-profile.component.css */
+
+.container {
+  max-width: 600px; /* Make the profile card a bit narrower */
+  margin: 50px auto; /* Center with more vertical space */
+  padding: 0; /* Remove padding from container, card handles it */
+  background-color: transparent; /* Make container background transparent */
+  box-shadow: none; /* Remove shadow from container */
+  border-radius: 0; /* Remove border-radius from container */
+}
+
+/* The Profile Card */
+.profile-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Deeper shadow for the main card */
+  overflow: hidden; /* Ensures rounded corners apply to title */
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-title {
+  background-color: #000039; /* Dark blue background for title */
+  color: white; /* White text for title */
+  padding: 20px 25px; /* Generous padding */
+  margin: 0; /* Remove default margin */
+  font-size: 1.8rem; /* Prominent title size */
+  font-weight: 700;
+  text-align: center;
+  border-radius: 10px 10px 0 0; /* Rounded top corners */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* Space between icon and text */
+}
+
+.profile-title i {
+  font-size: 2rem; /* Larger icon in title */
+}
+
+/* Profile Details Grid */
+.profile-details-grid {
+  padding: 25px; /* Padding for the details section */
+  display: grid;
+  grid-template-columns: 1fr; /* Stack items by default */
+  gap: 20px; /* Space between detail items */
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column; /* Stack label and value/input */
+  gap: 5px; /* Small gap between label and value/input */
+}
+
+.detail-item.full-width {
+  grid-column: 1 / -1; /* Make password fields span full width on larger screens */
+}
+
+.detail-label {
+  font-weight: 600;
+  color: #555;
+  font-size: 0.95rem;
+  margin-bottom: 0; /* Remove default margin */
+}
+
+.detail-value {
+  background-color: #f1f4f6; /* Light background for static values */
+  padding: 10px 15px;
+  border-radius: 5px;
+  color: #333;
+  font-size: 1rem;
+  min-height: 40px; /* Ensure consistent height with inputs */
+  display: flex;
+  align-items: center;
+}
+
+.form-control {
+  /* Inherit some Bootstrap form-control styles if Bootstrap is used */
+  padding: 10px 15px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  font-size: 1rem;
+  color: #333;
+  width: 100%;
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.form-control:focus {
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+}
+
+/* Action Buttons Section */
+.profile-actions {
+  padding: 20px 25px;
+  border-top: 1px solid #e9ecef; /* Separator above buttons */
+  display: flex;
+  justify-content: center; /* Center buttons */
+  gap: 15px; /* Space between buttons */
+}
+
+/* Alert Messages (Bootstrap classes are good here) */
+.alert {
+  margin: 15px 25px 0; /* Adjust margin to sit within card padding */
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+/* Loading State */
+.loading-state {
+  padding: 50px 25px; /* More padding for loading state */
+}
+
+/* Responsive Adjustments */
+@media (min-width: 768px) {
+  .profile-details-grid {
+    grid-template-columns: repeat(2, 1fr); /* Two columns on larger screens */
+  }
+  /* Password fields will still be full-width due to .full-width class */
+}
+
+@media (max-width: 576px) {
+  .profile-card {
+    border-radius: 0; /* No border-radius on very small screens */
+    box-shadow: none; /* No shadow on very small screens */
+  }
+  .profile-title {
+    font-size: 1.5rem;
+    padding: 15px 20px;
+  }
+  .profile-title i {
+    font-size: 1.7rem;
+  }
+  .profile-details-grid,
+  .profile-actions {
+    padding: 15px 20px; /* Reduced padding on small screens */
+  }
+  .profile-actions button {
+    width: 100%; /* Full width buttons on small screens */
+    margin-bottom: 10px; /* Space between stacked buttons */
+  }
+}

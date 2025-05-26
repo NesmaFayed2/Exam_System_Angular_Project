@@ -1,0 +1,78 @@
+<div class="container mt-4">
+  @if (exam) {
+  <div class="card p-4 shadow-sm">
+    <h2 class="card-title text-center mb-4 text-primary">
+      <i class="bi bi-eye"></i> Exam Details
+    </h2>
+
+    <div class="exam-detail-section mb-3">
+      <label class="detail-label">Title:</label>
+      <p class="detail-value">{{ exam.title }}</p>
+    </div>
+    <div class="exam-detail-section mb-3">
+      <label class="detail-label">Description:</label>
+      <p class="detail-value">{{ exam.description }}</p>
+    </div>
+    <div class="exam-detail-section mb-3">
+      <label class="detail-label">Start Date:</label>
+      <p class="detail-value">{{ exam.startDate | date : "mediumDate" }}</p>
+    </div>
+    <div class="exam-detail-section mb-3">
+      <label class="detail-label">End Date:</label>
+      <p class="detail-value">{{ exam.endDate | date : "mediumDate" }}</p>
+    </div>
+    <div class="exam-detail-section mb-4">
+      <label class="detail-label">Duration:</label>
+      <p class="detail-value">{{ exam.duration }} minutes</p>
+    </div>
+    <div class="exam-detail-section mb-4">
+      <label class="detail-label">Track:</label>
+      <p class="detail-value">
+        <span class="badge bg-info">{{ exam.track }}</span>
+      </p>
+    </div>
+    <h3 class="mb-3 text-secondary">Questions:</h3>
+    @if (exam.questions.length === 0) {
+    <div class="alert alert-info text-center">
+      No questions have been added to this exam yet.
+    </div>
+    } @else { @for (question of exam.questions; track question.id) {
+    <div class="question-view-block p-3 mb-3 border rounded bg-light shadow-sm">
+      <h5 class="text-dark mb-2">Q{{ $index + 1 }}: {{ question.text }}</h5>
+      <ul class="list-unstyled mb-2">
+        @for (choice of question.choices; track choice.id) {
+        <li [class.correct-answer]="choice.text === question.correctAnswer">
+          {{ String.fromCharCode(65 + $index) }}. {{ choice.text }}
+          @if (choice.text === question.correctAnswer) {
+          <i class="bi bi-check-circle-fill text-success ms-2"></i> (Correct
+          Answer) }
+        </li>
+        }
+      </ul>
+    </div>
+    } }
+
+    <div class="text-center mt-4">
+      <button (click)="goBack()" class="btn btn-secondary px-4 py-2 me-3">
+        <i class="bi bi-arrow-left"></i> Back to Exams
+      </button>
+      <button
+        [routerLink]="['/admin/edit-exam', exam.id]"
+        class="btn btn-warning px-4 py-2 me-3"
+      >
+        <i class="bi bi-pencil-square"></i> Edit Exam Details
+      </button>
+      <button
+        [routerLink]="['/admin/exam-questions', exam.id]"
+        class="btn btn-info px-4 py-2"
+      >
+        <i class="bi bi-list-check"></i> Manage Questions
+      </button>
+    </div>
+  </div>
+  } @else {
+  <div class="alert alert-warning text-center mt-5">
+    Loading exam details or exam not found...
+  </div>
+  }
+</div>

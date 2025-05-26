@@ -1,0 +1,97 @@
+<div class="container mt-4">
+  <div class="card p-4 shadow-sm">
+    <h2 class="card-title text-center mb-4 text-primary">
+      {{ isEditMode ? "✏️ Edit Exam " : "➕ Add New Exam" }}
+    </h2>
+
+    <form (ngSubmit)="saveExam()" class="exam-form">
+      <div class="form-group mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input
+          id="title"
+          [(ngModel)]="exam.title"
+          name="title"
+          placeholder="e.g., Angular Fundamentals Exam"
+          required
+          class="form-control"
+        />
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea
+          id="description"
+          [(ngModel)]="exam.description"
+          name="description"
+          placeholder="Brief description of the exam content"
+          required
+          rows="3"
+          class="form-control"
+        ></textarea>
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="startDate" class="form-label">Start Date</label>
+        <input
+          id="startDate"
+          type="date"
+          [(ngModel)]="exam.startDate"
+          name="startDate"
+          required
+          class="form-control"
+        />
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="endDate" class="form-label">End Date</label>
+        <input
+          id="endDate"
+          type="date"
+          [(ngModel)]="exam.endDate"
+          name="endDate"
+          required
+          class="form-control"
+        />
+      </div>
+
+      <div class="form-group mb-4">
+        <label for="duration" class="form-label">Duration (minutes)</label>
+        <input
+          id="duration"
+          type="number"
+          [(ngModel)]="exam.duration"
+          name="duration"
+          placeholder="e.g., 60"
+          required
+          min="1"
+          class="form-control"
+        />
+      </div>
+      <div class="form-group mb-4">
+        <label for="track" class="form-label">Track</label>
+        <select
+          id="track"
+          [(ngModel)]="exam.track"
+          name="track"
+          required
+          class="form-select"
+        >
+          <option value="" disabled>Select a Track</option>
+          @for (trackOption of availableTracks; track trackOption) {
+          <option [value]="trackOption">{{ trackOption }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="text-center mt-4">
+        <button
+          type="submit"
+          class="btn btn-success px-5 py-2"
+          [routerLink]="['/admin/examlist']"
+        >
+          💾 {{ isEditMode ? "Update Details" : "Save Exam" }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

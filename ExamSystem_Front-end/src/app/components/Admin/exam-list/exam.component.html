@@ -1,0 +1,58 @@
+<div class="container mt-4">
+  <div class="text-center mb-4">
+    <button [routerLink]="['/admin/add-exam']" class="btn-add-new">
+      ➕ Add New Exam
+    </button>
+  </div>
+
+  @if (exams.length === 0) {
+  <div class="alert alert-info text-center mt-5">
+    No exams found. Click "Add New Exam" to create one!
+  </div>
+  } @else {
+  <ul class="exam-list">
+    @for (exam of exams; track exam.id) {
+    <li class="exam-item">
+      <h2 class="exam-title">{{ exam.title }}</h2>
+      <div class="exam-details">
+        <p class="exam-description">{{ exam.description }}</p>
+
+        <div class="detail-item">
+          <strong>Start Date:</strong>
+          <span>{{ exam.startDate | date : "mediumDate" }}</span>
+        </div>
+        <div class="detail-item">
+          <strong>End Date : </strong>
+          <span>{{ exam.endDate | date : "mediumDate" }}</span>
+        </div>
+        <div class="detail-item">
+          <strong>Duration:</strong>
+          <span>{{ exam.duration }} minutes</span>
+        </div>
+        <div class="detail-item exam-track">
+          <strong>Track:</strong>
+          <span class="badge">{{ exam.track }}</span>
+        </div>
+      </div>
+      <div class="exam-actions">
+        <button
+          [routerLink]="['/admin/view-exam', exam.id]"
+          class="btn btn-view"
+        >
+          <i class="bi bi-eye"></i> View
+        </button>
+        <button
+          [routerLink]="['/admin/edit-exam', exam.id]"
+          class="btn btn-edit"
+        >
+          <i class="bi bi-pencil-square"></i> Edit
+        </button>
+        <button (click)="deleteExam(exam.id)" class="btn btn-delete">
+          <i class="bi bi-trash"></i> Delete
+        </button>
+      </div>
+    </li>
+    }
+  </ul>
+  }
+</div>

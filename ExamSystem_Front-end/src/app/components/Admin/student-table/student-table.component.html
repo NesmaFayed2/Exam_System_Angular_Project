@@ -1,0 +1,53 @@
+<div class="container mt-4">
+  <div class="card p-4 shadow-sm">
+    <h2 class="card-title text-center mb-4">
+      <i class="bi bi-people-fill"></i> Student Exam Results
+    </h2>
+
+    @if (isLoading) {
+    <div class="text-center text-muted">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-2">Loading student results...</p>
+    </div>
+    } @else if (errorMessage) {
+    <div
+      class="alert alert-danger text-center animate__animated animate__shakeX mb-3"
+      role="alert"
+    >
+      {{ errorMessage }}
+    </div>
+    } @else if (results.length === 0) {
+    <div
+      class="alert alert-info text-center animate__animated animate__fadeIn mb-3"
+      role="alert"
+    >
+      No exam results found.
+    </div>
+    } @else {
+    <div class="table-responsive">
+      <table class="results-table">
+        <thead>
+          <tr>
+            <th>Student Name</th>
+            <th>Exam Title</th>
+            <th>Total Score</th>
+            <th>Submitted At</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (result of results; track result.id) {
+          <tr>
+            <td>{{ result.studentName }}</td>
+            <td>{{ result.examTitle }}</td>
+            <td class="score-cell">{{ result.totalScore }}</td>
+            <td>{{ result.submittedAt | date : "medium" }}</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    }
+  </div>
+</div>

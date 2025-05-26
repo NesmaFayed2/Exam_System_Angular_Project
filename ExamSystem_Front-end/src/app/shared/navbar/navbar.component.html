@@ -1,0 +1,26 @@
+<nav class="navbar">
+  <div class="container">
+    <button class="sidebar-toggle" (click)="toggleSidebar.emit()">
+      <i class="bi bi-list"></i>
+    </button>
+
+    <a routerLink="/student/dashboard" class="logo">
+      <i class="bi bi-mortarboard"></i>
+      <span>Exam System</span>
+    </a>
+
+    <div class="user-menu">
+      <div class="user-info">
+        <img
+          [src]="userData?.image || defaultImage"
+          alt="User"
+          class="user-avatar"
+        />
+        <span>{{ userData?.email }}</span>
+      </div>
+      <button class="logout-btn" (click)="onLogOut()">
+        <i class="bi bi-box-arrow-right"></i> Logout
+      </button>
+    </div>
+  </div>
+</nav>

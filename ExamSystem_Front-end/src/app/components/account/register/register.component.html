@@ -1,0 +1,85 @@
+<div class="px-3">
+  <h3 class="text-center mb-4">Registration</h3>
+
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div class="form-floating mb-3">
+      <input type="text" id="firstName" class="form-control" placeholder="First Name" formControlName="firstName" />
+      <label for="firstName">First Name</label>
+      @if (registerForm.get('firstName')?.touched && registerForm.get('firstName')?.errors?.['required']) {
+        <div class="text-danger mt-1">First name is required</div>
+      }
+    </div>
+
+    <div class="form-floating mb-3">
+      <input type="text" id="lastName" class="form-control" placeholder="Last Name" formControlName="lastName" />
+      <label for="lastName">Last Name</label>
+      @if (registerForm.get('lastName')?.touched && registerForm.get('lastName')?.errors?.['required']) {
+        <div class="text-danger mt-1">Last name is required</div>
+      }
+    </div>
+
+    <div class="form-floating mb-3">
+      <input type="email" id="registerEmail" class="form-control" placeholder="name@example.com" formControlName="email" />
+      <label for="registerEmail">Email address</label>
+      @if (registerForm.get('email')?.touched && registerForm.get('email')?.errors) {
+        <div class="text-danger mt-1">
+          @if (registerForm.get('email')?.errors?.['required']) {
+            <div>Email is required</div>
+          }
+          @if (registerForm.get('email')?.errors?.['email']) {
+            <div>Enter a valid email</div>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="form-floating mb-3">
+      <input type="password" id="registerPassword" class="form-control" placeholder="Password" formControlName="password" />
+      <label for="registerPassword">Password</label>
+      @if (registerForm.get('password')?.touched && registerForm.get('password')?.errors) {
+        <div class="text-danger mt-1">
+          @if (registerForm.get('password')?.errors?.['required']) {
+            <div>Password is required</div>
+          }
+          @if (registerForm.get('password')?.errors?.['pattern']) {
+            <div>Password must contain letters and numbers (min 6 characters)</div>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="form-floating mb-4">
+      <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm Password" formControlName="confirmPassword" />
+      <label for="confirmPassword">Confirm Password</label>
+      @if (registerForm.get('confirmPassword')?.touched && registerForm.get('confirmPassword')?.errors) {
+        <div class="text-danger mt-1">
+          @if (registerForm.get('confirmPassword')?.errors?.['required']) {
+            <div>Confirm Password is required</div>
+          }
+          @if (registerForm.get('confirmPassword')?.errors?.['mismatch']) {
+            <div>Passwords do not match</div>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="form-floating mb-4">
+      <select id="major" class="form-select" formControlName="major">
+        <option value="" disabled selected>Select your track</option>
+        <option value="mern">MERN Track</option>
+        <option value="python">Python Track</option>
+        <option value="dotnet">.NET Track</option>
+      </select>
+      <label for="major">Track</label>
+      @if (registerForm.get('major')?.touched && registerForm.get('major')?.errors?.['required']) {
+        <div class="text-danger mt-1">Track selection is required</div>
+      }
+    </div>
+
+    <button type="submit" class="btn w-100">Create Account</button>
+
+    <p class="mt-3 text-center">
+      Already registered? <a routerLink="/account/login" class="text-decoration-none text-primary">Login here</a>
+    </p>
+  </form>
+</div>
