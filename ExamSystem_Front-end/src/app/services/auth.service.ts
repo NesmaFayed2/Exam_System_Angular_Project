@@ -1,35 +1,99 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  private readonly API_URL = 'http://localhost:5000/api/auth';
   private readonly TOKEN_KEY = 'exam_auth_token';
   private readonly USER_DATA = 'user_data';
-  private readonly USERS_KEY = 'registered_users';
 
   private userDataSubject = new BehaviorSubject<any>(this.getUserData());
   userData$ = this.userDataSubject.asObservable();
 
-  constructor(private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
-  login(userData: any): void {
-    localStorage.setItem(this.TOKEN_KEY, 'logged_in');
-    localStorage.setItem(this.USER_DATA, JSON.stringify(userData));
-    this.userDataSubject.next(userData); // تحديث البيانات
+  register(userData: any): Observable<any> {
+    const registerData = {
+      first_name: userData.firstName,
+      last_name: userData.lastName,
+      email: userData.email,
+      password: userData.password,
+      major: userData.major,
+    };
+
+    return this.http.post(`${this.API_URL}/register`, registerData).pipe(
+      tap((response: any) => {
+        if (response.status === 'success') {
+          localStorage.setItem(this.TOKEN_KEY, response.data.accessToken);
+          localStorage.setItem(
+            this.USER_DATA,
+            JSON.stringify(response.data.user)
+          );
+          this.userDataSubject.next(response.data.user);
+        }
+      }),
+      catchError(this.handleError)
+    );
   }
 
-  logout(): void {
-    localStorage.removeItem(this.TOKEN_KEY);
-    localStorage.removeItem(this.USER_DATA);
-    this.userDataSubject.next(null); // إعلام المشتركين إنه خرج
-    this.router.navigate(['/account/login']);
+  login(credentials: any): Observable<any> {
+    return this.http.post(`${this.API_URL}/login`, credentials).pipe(
+      tap((response: any) => {
+        if (response.status === 'success') {
+          localStorage.setItem(this.TOKEN_KEY, response.data.accessToken);
+          localStorage.setItem(
+            this.USER_DATA,
+            JSON.stringify(response.data.user)
+          );
+          this.userDataSubject.next(response.data.user);
+        }
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  logout(): Observable<any> {
+    const token = this.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.post(`${this.API_URL}/logout`, {}, { headers }).pipe(
+      tap(() => {
+        localStorage.removeItem(this.TOKEN_KEY);
+        localStorage.removeItem(this.USER_DATA);
+        this.userDataSubject.next(null);
+        this.router.navigate(['/account/login']);
+      }),
+      catchError((error) => {
+        localStorage.removeItem(this.TOKEN_KEY);
+        localStorage.removeItem(this.USER_DATA);
+        this.userDataSubject.next(null);
+        this.router.navigate(['/account/login']);
+        return throwError(error);
+      })
+    );
+  }
+
+  getProfile(): Observable<any> {
+    const token = this.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http
+      .get(`${this.API_URL}/profile`, { headers })
+      .pipe(catchError(this.handleError));
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem(this.TOKEN_KEY);
+    const token = this.getToken();
+    return !!token && !this.isTokenExpired(token);
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem(this.TOKEN_KEY);
   }
 
   getUserData(): any {
@@ -37,18 +101,19 @@ export class AuthService {
     return userData ? JSON.parse(userData) : null;
   }
 
-  registerUser(userData: any): void {
-    const users = this.getRegisteredUsers();
-    users.push(userData);
-    localStorage.setItem(this.USERS_KEY, JSON.stringify(users));
+  private isTokenExpired(token: string): boolean {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.exp * 1000 < Date.now();
+    } catch {
+      return true;
+    }
   }
 
-  getRegisteredUsers(): any[] {
-    const users = localStorage.getItem(this.USERS_KEY);
-    return users ? JSON.parse(users) : [];
-  }
-
-  findUserByEmail(email: string): any | null {
-    return this.getRegisteredUsers().find(user => user.email === email) || null;
+  private handleError(error: any) {
+    console.error('Auth Service Error:', error);
+    const errorMessage =
+      error.error?.data?.message || error.error?.message || 'An error occurred';
+    return throwError(errorMessage);
   }
 }

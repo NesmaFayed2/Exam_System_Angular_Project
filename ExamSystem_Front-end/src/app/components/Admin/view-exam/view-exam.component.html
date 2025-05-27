@@ -1,78 +1,192 @@
 <div class="container mt-4">
-  @if (exam) {
-  <div class="card p-4 shadow-sm">
-    <h2 class="card-title text-center mb-4 text-primary">
-      <i class="bi bi-eye"></i> Exam Details
-    </h2>
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="text-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-2">Loading exam details...</p>
+  </div>
 
-    <div class="exam-detail-section mb-3">
-      <label class="detail-label">Title:</label>
-      <p class="detail-value">{{ exam.title }}</p>
-    </div>
-    <div class="exam-detail-section mb-3">
-      <label class="detail-label">Description:</label>
-      <p class="detail-value">{{ exam.description }}</p>
-    </div>
-    <div class="exam-detail-section mb-3">
-      <label class="detail-label">Start Date:</label>
-      <p class="detail-value">{{ exam.startDate | date : "mediumDate" }}</p>
-    </div>
-    <div class="exam-detail-section mb-3">
-      <label class="detail-label">End Date:</label>
-      <p class="detail-value">{{ exam.endDate | date : "mediumDate" }}</p>
-    </div>
-    <div class="exam-detail-section mb-4">
-      <label class="detail-label">Duration:</label>
-      <p class="detail-value">{{ exam.duration }} minutes</p>
-    </div>
-    <div class="exam-detail-section mb-4">
-      <label class="detail-label">Track:</label>
-      <p class="detail-value">
-        <span class="badge bg-info">{{ exam.track }}</span>
-      </p>
-    </div>
-    <h3 class="mb-3 text-secondary">Questions:</h3>
-    @if (exam.questions.length === 0) {
-    <div class="alert alert-info text-center">
-      No questions have been added to this exam yet.
-    </div>
-    } @else { @for (question of exam.questions; track question.id) {
-    <div class="question-view-block p-3 mb-3 border rounded bg-light shadow-sm">
-      <h5 class="text-dark mb-2">Q{{ $index + 1 }}: {{ question.text }}</h5>
-      <ul class="list-unstyled mb-2">
-        @for (choice of question.choices; track choice.id) {
-        <li [class.correct-answer]="choice.text === question.correctAnswer">
-          {{ String.fromCharCode(65 + $index) }}. {{ choice.text }}
-          @if (choice.text === question.correctAnswer) {
-          <i class="bi bi-check-circle-fill text-success ms-2"></i> (Correct
-          Answer) }
-        </li>
-        }
-      </ul>
-    </div>
-    } }
+  <!-- Error State -->
+  <div *ngIf="errorMessage && !isLoading" class="alert alert-danger">
+    <i class="bi bi-exclamation-triangle"></i>
+    Error: {{ errorMessage }}
+  </div>
 
-    <div class="text-center mt-4">
-      <button (click)="goBack()" class="btn btn-secondary px-4 py-2 me-3">
-        <i class="bi bi-arrow-left"></i> Back to Exams
-      </button>
-      <button
-        [routerLink]="['/admin/edit-exam', exam.id]"
-        class="btn btn-warning px-4 py-2 me-3"
-      >
-        <i class="bi bi-pencil-square"></i> Edit Exam Details
-      </button>
-      <button
-        [routerLink]="['/admin/exam-questions', exam.id]"
-        class="btn btn-info px-4 py-2"
-      >
-        <i class="bi bi-list-check"></i> Manage Questions
-      </button>
+  <!-- Exam Details -->
+  <div *ngIf="exam && !isLoading">
+    <div class="card p-4 shadow-sm">
+      <!-- Header with Status -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="card-title text-primary mb-0">
+          <i class="bi bi-eye"></i> Exam Details
+        </h2>
+        <span class="badge fs-6" [class]="examStatusClass">{{
+          examStatus
+        }}</span>
+      </div>
+
+      <!-- Exam Information -->
+      <div class="row">
+        <div class="col-md-6">
+          <div class="exam-detail-section mb-3">
+            <label class="detail-label">Title:</label>
+            <p class="detail-value">{{ exam.title }}</p>
+          </div>
+          <div class="exam-detail-section mb-3">
+            <label class="detail-label">Description:</label>
+            <p class="detail-value">{{ exam.description }}</p>
+          </div>
+          <div class="exam-detail-section mb-3">
+            <label class="detail-label">Track:</label>
+            <p class="detail-value">
+              <span class="badge bg-info">{{
+                exam.major.name | uppercase
+              }}</span>
+            </p>
+          </div>
+          <div class="exam-detail-section mb-3">
+            <label class="detail-label">Duration:</label>
+            <p class="detail-value">{{ exam.duration }} minutes</p>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="exam-detail-section mb-3">
+            <label class="detail-label">Start Date:</label>
+            <p class="detail-value">{{ exam.start_date | date : "medium" }}</p>
+          </div>
+          <div class="exam-detail-section mb-3">
+            <label class="detail-label">End Date:</label>
+            <p class="detail-value">{{ exam.end_date | date : "medium" }}</p>
+          </div>
+          <div class="exam-detail-section mb-3">
+            <label class="detail-label">Total Marks:</label>
+            <p class="detail-value">{{ exam.total_marks }}</p>
+          </div>
+          <div class="exam-detail-section mb-3">
+            <label class="detail-label">Passing Marks:</label>
+            <p class="detail-value">{{ exam.passing_marks }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Creator Information -->
+      <div class="exam-detail-section mb-4 p-3 bg-light rounded">
+        <label class="detail-label">Created By:</label>
+        <p class="detail-value mb-1">
+          {{ exam.created_by.first_name }} {{ exam.created_by.last_name }}
+        </p>
+        <small class="text-muted">{{ exam.created_by.email }}</small>
+        <br />
+        <small class="text-muted"
+          >Created: {{ exam.created_at | date : "short" }}</small
+        >
+      </div>
+
+      <!-- Questions Section -->
+      <div class="questions-section">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h3 class="text-secondary mb-0">Questions ({{ questionsCount }})</h3>
+          <button class="btn btn-success btn-sm" (click)="addQuestion()">
+            <i class="bi bi-plus"></i> Add Question
+          </button>
+        </div>
+
+        <!-- No Questions -->
+        <div
+          *ngIf="questions.length === 0"
+          class="alert alert-info text-center"
+        >
+          <i class="bi bi-question-circle display-1 text-muted"></i>
+          <p class="mt-2">No questions have been added to this exam yet.</p>
+          <button class="btn btn-success" (click)="addQuestion()">
+            <i class="bi bi-plus"></i> Add First Question
+          </button>
+        </div>
+
+        <!-- Questions List -->
+        <div *ngIf="questions.length > 0">
+          <div
+            class="question-view-block p-3 mb-3 border rounded bg-light shadow-sm"
+            *ngFor="
+              let question of questions;
+              let i = index;
+              trackBy: trackQuestionById
+            "
+          >
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <h5 class="text-dark mb-0">
+                Q{{ i + 1 }}: {{ question.question_text }}
+              </h5>
+              <div>
+                <span class="badge bg-primary me-2"
+                  >{{ question.marks }} marks</span
+                >
+                <button
+                  class="btn btn-outline-primary btn-sm me-1"
+                  (click)="editQuestion(question._id)"
+                >
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button
+                  class="btn btn-outline-danger btn-sm"
+                  (click)="deleteQuestion(question._id)"
+                >
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Options -->
+            <ul class="list-unstyled mb-0">
+              <li
+                class="mb-1"
+                *ngFor="
+                  let option of question.options;
+                  trackBy: trackOptionById
+                "
+                [class.correct-answer]="
+                  option.option_label === question.correct_answer
+                "
+              >
+                {{ option.option_label }}. {{ option.option_text }}
+                <i
+                  *ngIf="option.option_label === question.correct_answer"
+                  class="bi bi-check-circle-fill text-success ms-2"
+                ></i>
+                <span
+                  *ngIf="option.option_label === question.correct_answer"
+                  class="text-success fw-bold"
+                  >(Correct Answer)</span
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="text-center mt-4">
+        <button (click)="goBack()" class="btn btn-secondary px-4 py-2 me-3">
+          <i class="bi bi-arrow-left"></i> Back to Exams
+        </button>
+        <button class="btn btn-warning px-4 py-2 me-3" (click)="editExam()">
+          <i class="bi bi-pencil-square"></i> Edit Exam
+        </button>
+        <button class="btn btn-danger px-4 py-2" (click)="deleteExam()">
+          <i class="bi bi-trash"></i> Delete Exam
+        </button>
+      </div>
     </div>
   </div>
-  } @else {
-  <div class="alert alert-warning text-center mt-5">
-    Loading exam details or exam not found...
+
+  <!-- Exam Not Found -->
+  <div
+    *ngIf="!exam && !isLoading && !errorMessage"
+    class="alert alert-warning text-center mt-5"
+  >
+    <i class="bi bi-exclamation-triangle"></i>
+    Exam not found or you don't have permission to view it.
   </div>
-  }
 </div>

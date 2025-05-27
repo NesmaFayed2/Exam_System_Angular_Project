@@ -1,17 +1,25 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, CommonModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  isLoading = false;
+  errorMessage = '';
 
   constructor(
     private fb: FormBuilder,
@@ -26,16 +34,34 @@ export class LoginComponent {
 
   onSubmit(): void {
     if (this.loginForm.valid) {
-      const formEmail = this.loginForm.value.email;
-      const formPassword = this.loginForm.value.password;
-      const user = this.authService.findUserByEmail(formEmail);
+      this.isLoading = true;
+      this.errorMessage = '';
 
-      if (user && user.password === formPassword) {
-        this.authService.login(user);
-        this.router.navigate(['/student']);
-      } else {
-        alert('Invalid login. Please check your email and password.');
-      }
+      const credentials = {
+        email: this.loginForm.value.email,
+        password: this.loginForm.value.password,
+      };
+
+      this.authService.login(credentials).subscribe({
+        next: (response) => {
+          console.log('Login successful:', response);
+          // Navigate based on user role
+          const user = response.data.user;
+          if (user.role === 'admin') {
+            this.router.navigate(['/admin']);
+          } else {
+            this.router.navigate(['/student']);
+          }
+        },
+        error: (error) => {
+          console.error('Login failed:', error);
+          this.errorMessage = error;
+          this.isLoading = false;
+        },
+        complete: () => {
+          this.isLoading = false;
+        },
+      });
     } else {
       this.loginForm.markAllAsTouched();
     }

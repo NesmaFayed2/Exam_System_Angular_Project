@@ -22,3 +22,22 @@ export interface Exam {
   track: ExamTrack; // Added track field
   questions: Question[];
 }
+
+export interface StudentExam {
+  id: string;
+  title: string;
+  description: string;
+  duration: number;
+  total_marks: number;
+  major: {
+    _id: string;
+    name: string;
+    description: string;
+  };
+  status: string;
+  can_take: boolean;
+  is_taken: boolean;
+  startDate: string;
+  endDate: string;
+  questions_count: number;
+}

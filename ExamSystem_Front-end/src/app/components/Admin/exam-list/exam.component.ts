@@ -1,60 +1,85 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { RouterLink, RouterModule } from '@angular/router'; 
-import { CommonModule, DatePipe } from '@angular/common';// CommonModule for *ngIf, *ngFor, DatePipe for date formatting
-import { HttpErrorResponse } from '@angular/common/http'; // For robust error handling
-import { ExamService } from './../../../services/exam.service'; // Adjust path to your service
-import { Exam } from './../../../models/exam'; // Adjust path to your model
-import { Subscription } from 'rxjs'; // For managing subscriptions
+import { RouterLink, RouterModule } from '@angular/router';
+import { CommonModule, DatePipe } from '@angular/common';
+import { AdminExamService } from '../../../services/admin-exam.service'; // Updated import
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-exam-list',
   standalone: true,
-   imports: [CommonModule, RouterLink, RouterModule, DatePipe],
+  imports: [CommonModule, RouterLink, RouterModule, DatePipe],
   templateUrl: './exam.component.html',
-  styleUrls: ['./exam.component.css'], // Link to the new CSS file
+  styleUrls: ['./exam.component.css'],
 })
 export class ExamListComponent implements OnInit, OnDestroy {
-  exams: Exam[] = [];
-  private examsSubscription: Subscription | undefined; // To manage the subscription
+  exams: any[] = [];
+  isLoading = false;
+  errorMessage = '';
 
-  constructor(private examService: ExamService) {}
+  private examsSubscription: Subscription | undefined;
+
+  constructor(private adminExamService: AdminExamService) {} // Updated service
 
   ngOnInit(): void {
-    this.examsSubscription = this.examService.getAll().subscribe({
-      next: (data: Exam[]) => {
-        this.exams = data;
-        console.log('Exams successfully fetched and displayed:', this.exams);
+    this.loadExams();
+  }
+
+  loadExams(): void {
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.examsSubscription = this.adminExamService.getAllExams().subscribe({
+      next: (data: any[]) => {
+        // Map backend data to frontend format
+        this.exams = data.map((exam) => ({
+          id: exam._id,
+          title: exam.title,
+          description: exam.description,
+          startDate: exam.start_date,
+          endDate: exam.end_date,
+          duration: exam.duration,
+          track: exam.major?.name || 'N/A',
+          totalMarks: exam.total_marks,
+          passingMarks: exam.passing_marks,
+          isActive: exam.is_active,
+        }));
+        console.log('Exams loaded successfully:', this.exams);
       },
-      error: (err: HttpErrorResponse | Error) => {
-        console.error('Error fetching exams for list:', err);
+      error: (error) => {
+        console.error('Error loading exams:', error);
+        this.errorMessage = error;
+      },
+      complete: () => {
+        this.isLoading = false;
       },
     });
   }
 
-  deleteExam(id: number): void {
+  deleteExam(id: string): void {
     if (
       confirm(
-        `Are you sure you want to delete exam with ID: ${id}? This action cannot be undone.`
+        'Are you sure you want to delete this exam? This action cannot be undone.'
       )
     ) {
-      this.examService.delete(id).subscribe({
+      this.adminExamService.deleteExam(id).subscribe({
         next: () => {
+          // Remove deleted exam from the list
+          this.exams = this.exams.filter((exam) => exam.id !== id);
           console.log(`Exam with ID ${id} deleted successfully.`);
         },
-        error: (err: HttpErrorResponse | Error) => {
-          console.error(`Error deleting exam with ID ${id}:`, err);
+        error: (error) => {
+          console.error(`Error deleting exam with ID ${id}:`, error);
+          alert('Error deleting exam: ' + error);
         },
       });
     }
   }
 
-  trackById(index: number, exam: Exam): number {
+  trackById(index: number, exam: any): string {
     return exam.id;
   }
 
   ngOnDestroy(): void {
-    if (this.examsSubscription) {
-      this.examsSubscription.unsubscribe();
-    }
+    this.examsSubscription?.unsubscribe();
   }
 }

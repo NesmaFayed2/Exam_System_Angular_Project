@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth.service';
@@ -9,10 +14,19 @@ import { AuthService } from '../../../services/auth.service';
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, RouterLink],
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent {
   registerForm: FormGroup;
+  isLoading = false;
+  errorMessage = '';
+
+  // Available majors (matching your backend)
+  majors = [
+    { value: 'mern', label: 'MERN Stack' },
+    { value: 'dotnet', label: '.NET' },
+    { value: 'python', label: 'Python' },
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -21,10 +35,10 @@ export class RegisterComponent {
   ) {
     this.registerForm = this.fb.group(
       {
-        firstName: ['', Validators.required],
-        lastName: ['', Validators.required],
+        firstName: ['', [Validators.required, Validators.minLength(2)]],
+        lastName: ['', [Validators.required, Validators.minLength(2)]],
         email: ['', [Validators.required, Validators.email]],
-        password: ['', [Validators.required, Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/)]],
+        password: ['', [Validators.required, Validators.minLength(6)]],
         confirmPassword: ['', Validators.required],
         major: ['', Validators.required],
       },
@@ -40,21 +54,30 @@ export class RegisterComponent {
 
   onSubmit(): void {
     if (this.registerForm.valid) {
-      const formData = this.registerForm.value;
-      const userData = {
-        name: `${formData.firstName} ${formData.lastName}`,
-        email: formData.email,
-        password: formData.password,
-        major: formData.major,
-        image: null
-      };
+      this.isLoading = true;
+      this.errorMessage = '';
 
-      this.authService.registerUser(userData);
-      this.authService.login(userData);
-      this.router.navigate(['/student']);
+      const formData = this.registerForm.value;
+
+      this.authService.register(formData).subscribe({
+        next: (response) => {
+          console.log('Registration successful:', response);
+          // Navigate to login
+          this.router.navigate(['/account/login'], {
+            queryParams: { registered: 'true' },
+          });
+        },
+        error: (error) => {
+          console.error('Registration failed:', error);
+          this.errorMessage = error;
+          this.isLoading = false;
+        },
+        complete: () => {
+          this.isLoading = false;
+        },
+      });
     } else {
       this.registerForm.markAllAsTouched();
     }
-  
   }
 }

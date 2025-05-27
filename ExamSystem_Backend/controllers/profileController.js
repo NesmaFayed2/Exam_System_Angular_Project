@@ -2,6 +2,7 @@ const User = require("../models/User");
 const mongoose = require("mongoose");
 const asyncWrapper = require("../MiddleWares/asyncWrapper");
 const httpStatusText = require("../utils/httpStatusText");
+const Major = require("../models/Major");
 
 const getProfile = asyncWrapper(async (req, res) => {
   const user = await User.findById(req.user.id).populate("major");
@@ -26,16 +27,27 @@ const editProfile = asyncWrapper(async (req, res) => {
   const updateFields = {};
   if (first_name) updateFields.first_name = first_name;
   if (last_name) updateFields.last_name = last_name;
-  if (major) updateFields.major = major;
   if (req.file) {
     updateFields.profile_image = req.file.path;
+  }
+
+  if (major) {
+    // Find the Major document by name to get its ObjectId
+    const majorDoc = await Major.findOne({ name: major });
+    if (!majorDoc) {
+      return res.status(400).json({
+        status: httpStatusText.ERROR,
+        data: { message: `Major '${major}' not found` },
+      });
+    }
+    updateFields.major = majorDoc._id; // Use ObjectId, not string
   }
 
   const updatedUser = await User.findByIdAndUpdate(
     userId,
     { $set: updateFields },
     { new: true, runValidators: true }
-  ).populate("major");
+  ).populate("major", "name description");
 
   res.status(200).json({
     status: httpStatusText.SUCCESS,

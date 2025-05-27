@@ -12,10 +12,8 @@ const getAllStudents = asyncWrapper(async (req, res) => {
 
   const filter = { role: "student", is_active: true };
 
-  // Total count for pagination
   const total = await User.countDocuments(filter);
 
-  // Fetch students with pagination, exclude __v and password, and populate major
   const students = await User.find(filter, { __v: 0, password: 0 })
     .populate("major")
     .limit(limit)
@@ -42,7 +40,6 @@ const register = asyncWrapper(async (req, res) => {
     role = "student";
   }
 
-  // Check if user already exists
   const existingUser = await User.findOne({ email });
   if (existingUser) {
     return res.status(409).json({
@@ -63,7 +60,6 @@ const register = asyncWrapper(async (req, res) => {
       }
       majorId = majorDoc._id;
     } else {
-      // If it's a valid ObjectId, check if it exists
       const majorDoc = await Major.findById(major);
       if (!majorDoc) {
         return res.status(400).json({
@@ -74,7 +70,6 @@ const register = asyncWrapper(async (req, res) => {
     }
   }
 
-  // Build user data
   const userData = {
     first_name,
     last_name,
@@ -83,17 +78,15 @@ const register = asyncWrapper(async (req, res) => {
     role,
   };
   if (role === "student") {
-    userData.major = majorId; // Make sure this is the ObjectId!
+    userData.major = majorId;
   }
 
   const user = new User(userData);
   await user.save();
 
-  // Generate tokens
   const accessToken = user.generateAuthToken();
   const refreshToken = generateRefreshToken({ userId: user._id });
 
-  // Set refresh token cookie
   res.cookie("jwt", refreshToken, {
     httpOnly: true,
     secure: true,
@@ -101,7 +94,6 @@ const register = asyncWrapper(async (req, res) => {
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
-  // Prepare response
   const userResponse = user.toObject();
   delete userResponse.password;
 
@@ -117,18 +109,14 @@ const register = asyncWrapper(async (req, res) => {
 const login = asyncWrapper(async (req, res) => {
   const { email, password } = req.body;
 
-  // Find user by credentials
   const user = await User.findByCredentials(email, password);
 
-  // Update last login
   user.last_login = new Date();
   await user.save();
 
-  // Generate tokens
   const accessToken = user.generateAuthToken();
   const refreshToken = generateRefreshToken({ userId: user._id });
 
-  // Set refresh token cookie
   res.cookie("jwt", refreshToken, {
     httpOnly: true,
     secure: true,
@@ -136,10 +124,8 @@ const login = asyncWrapper(async (req, res) => {
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
-  // Populate major if student
   if (user.role === "student") await user.populate("major");
 
-  // Prepare response
   const userResponse = user.toObject();
   delete userResponse.password;
 

@@ -28,10 +28,16 @@ const getAvailableExams = asyncWrapper(async (req, res) => {
 
   const takenExamIds = takenExams.map((result) => result.exam.toString());
 
-  // Mark exams as taken/available
-  const availableExams = exams.map((exam) => ({
+  // Count questions for each exam in parallel
+  const questionCounts = await Promise.all(
+    exams.map((exam) => Question.countDocuments({ exam: exam._id }))
+  );
+
+  // Mark exams as taken/available and add question count
+  const availableExams = exams.map((exam, index) => ({
     ...exam.toObject(),
     is_taken: takenExamIds.includes(exam._id.toString()),
+    questions_count: questionCounts[index],
   }));
 
   res.status(200).json({

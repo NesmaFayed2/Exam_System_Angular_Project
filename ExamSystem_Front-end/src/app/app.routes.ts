@@ -15,6 +15,7 @@ import { ViewExamComponent } from './components/Admin/view-exam/view-exam.compon
 import { AdminProfileComponent } from './components/Admin/admin-profile/admin-profile.component';
 import { ExamQuestionManagerComponent } from './components/Admin/exam-question-manager/exam-question-manager.component';
 import { StudentTableComponent } from './components/Admin/student-table/student-table.component';
+import { StudentExamReviewComponent } from './components/student/student-exam-review/student-exam-review.component';
 
 export const routes: Routes = [
   {
@@ -51,6 +52,10 @@ export const routes: Routes = [
       { path: 'dashboard', component: StudentDashboardComponent },
       { path: 'exam/:id', component: TakeExamComponent },
       { path: 'results', component: StudentResultsComponent },
+      {
+        path: 'results/:examId',
+        component: StudentExamReviewComponent,
+      },
       { path: 'profile', component: ProfileComponent },
     ],
   },

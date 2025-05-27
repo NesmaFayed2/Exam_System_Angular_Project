@@ -80,12 +80,10 @@ userSchema.pre("save", function (next) {
   next();
 });
 
-// Instance method to compare passwords
 userSchema.methods.comparePassword = async function (candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };
 
-// Instance method to generate JWT token
 userSchema.methods.generateAuthToken = function () {
   return jwt.sign(
     {
@@ -99,19 +97,18 @@ userSchema.methods.generateAuthToken = function () {
   );
 };
 
-// Static method to find user by credentials
 userSchema.statics.findByCredentials = async function (email, password) {
   const user = await this.findOne({ email, is_active: true }).select(
     "+password"
   );
 
   if (!user) {
-    throw new Error("Invalid login credentials");
+    throw new Error("Invalid Email or Password");
   }
 
   const isMatch = await user.comparePassword(password);
   if (!isMatch) {
-    throw new Error("Invalid login credentials");
+    throw new Error("Invalid Email or Password");
   }
 
   return user;
