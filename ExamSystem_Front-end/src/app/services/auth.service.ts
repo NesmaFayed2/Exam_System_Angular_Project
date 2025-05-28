@@ -16,6 +16,10 @@ export class AuthService {
   userData$ = this.userDataSubject.asObservable();
 
   constructor(private http: HttpClient, private router: Router) {}
+  updateUserData(userData: any): void {
+    localStorage.setItem(this.USER_DATA, JSON.stringify(userData));
+    this.userDataSubject.next(userData);
+  }
 
   register(userData: any): Observable<any> {
     const registerData = {

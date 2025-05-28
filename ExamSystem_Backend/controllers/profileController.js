@@ -22,7 +22,7 @@ const getProfile = asyncWrapper(async (req, res) => {
 
 const editProfile = asyncWrapper(async (req, res) => {
   const userId = req.user.id;
-  const { first_name, last_name, profile_image, major } = req.body;
+  const { first_name, last_name, profile_image, major, email } = req.body;
 
   const updateFields = {};
   if (first_name) updateFields.first_name = first_name;
@@ -30,9 +30,11 @@ const editProfile = asyncWrapper(async (req, res) => {
   if (req.file) {
     updateFields.profile_image = req.file.path;
   }
+  if (email) {
+    updateFields.email = email;
+  }
 
   if (major) {
-    // Find the Major document by name to get its ObjectId
     const majorDoc = await Major.findOne({ name: major });
     if (!majorDoc) {
       return res.status(400).json({
@@ -40,7 +42,7 @@ const editProfile = asyncWrapper(async (req, res) => {
         data: { message: `Major '${major}' not found` },
       });
     }
-    updateFields.major = majorDoc._id; // Use ObjectId, not string
+    updateFields.major = majorDoc._id;
   }
 
   const updatedUser = await User.findByIdAndUpdate(

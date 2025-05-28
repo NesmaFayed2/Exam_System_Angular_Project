@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import {
+  RouterLink,
+  RouterLinkActive,
+  NavigationEnd,
+  Router,
+} from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -7,10 +12,20 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   templateUrl: './sidebaar.component.html',
   styleUrls: ['./sidebaar.component.css'],
-  imports: [RouterLink, RouterLinkActive]
+  imports: [RouterLink, RouterLinkActive],
 })
 export class SidebaarComponent {
-  constructor(private authService: AuthService) {}
+  showSideBar = true;
+
+  constructor(private authService: AuthService, private router: Router) {
+    this.showSideBar = !this.router.url.includes('/student/exam/');
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.showSideBar = !event.urlAfterRedirects.includes('/student/exam/');
+      }
+    });
+  }
 
   onLogOut(): void {
     this.authService.logout();

@@ -1,6 +1,10 @@
 <nav class="navbar">
   <div class="container">
-    <button class="sidebar-toggle" (click)="toggleSidebar.emit()">
+    <button
+      class="sidebar-toggle"
+      (click)="toggleSidebar.emit()"
+      aria-label="Toggle sidebar"
+    >
       <i class="bi bi-list"></i>
     </button>
 
@@ -9,17 +13,20 @@
       <span>Exam System</span>
     </a>
 
-    <div class="user-menu">
-      <div class="user-info">
+    <div class="user-menu" *ngIf="showUserMenu">
+      <a class="user-info-link" [routerLink]="['/student/profile']">
         <img
-          [src]="userData?.image || defaultImage"
+          [src]="getProfileImage()"
           alt="User"
           class="user-avatar"
+          (error)="onImageError($event)"
         />
-        <span>{{ userData?.email }}</span>
-      </div>
+        <span>
+          {{ getFullName() }}
+        </span>
+      </a>
       <button class="logout-btn" (click)="onLogOut()">
-        <i class="bi bi-box-arrow-right"></i> Logout
+        <i class="bi bi-box-arrow-right"></i>
       </button>
     </div>
   </div>
