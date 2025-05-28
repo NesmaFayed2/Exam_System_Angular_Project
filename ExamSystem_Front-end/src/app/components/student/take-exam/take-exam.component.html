@@ -1,0 +1,140 @@
+<!-- Loading State -->
+<div *ngIf="isLoading" class="text-center my-5">
+  <div class="spinner-border text-muted" role="status"></div>
+  <p>Loading exam...</p>
+</div>
+
+<!-- Submitting State -->
+<div *ngIf="isSubmitting">
+  <div class="text-center my-5">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p>Submitting your exam and calculating result...</p>
+  </div>
+</div>
+
+<!-- Exam Taking Interface -->
+<div *ngIf="!isLoading && !isSubmitting && !submitted">
+  <div class="exam-container">
+    <div class="exam-header mb-4 text-center">
+      <h2 style="color: #000039">{{ exam.title }}</h2>
+      <app-countdown [timeLeft]="timeLeft"></app-countdown>
+    </div>
+
+    <div class="question-container">
+      <div class="progress-bar mb-3">
+        <div
+          class="progress"
+          [style.width.%]="
+            ((currentQuestionIndex + 1) / questions.length) * 100
+          "
+        >
+          Question {{ currentQuestionIndex + 1 }} of {{ questions.length }}
+        </div>
+      </div>
+
+      <div class="question-card p-4 mb-4 border rounded-4 shadow-sm bg-white">
+        <h3 class="mb-3" style="color: #000039">
+          {{ currentQuestion.question_text }}
+        </h3>
+        <div class="options">
+          <label
+            class="option d-block mb-2"
+            *ngFor="
+              let option of currentQuestion.options;
+              trackBy: trackByOption
+            "
+          >
+            <input
+              type="radio"
+              [name]="'q' + currentQuestion._id"
+              [value]="option.option_label"
+              [(ngModel)]="answers[currentQuestion._id]"
+              class="form-check-input me-2"
+            />
+            <span class="option-text"
+              >{{ option.option_label }}. {{ option.option_text }}</span
+            >
+          </label>
+        </div>
+      </div>
+
+      <div class="navigation-buttons d-flex justify-content-between">
+        <button
+          class="btn btn-outline-secondary"
+          (click)="prevQuestion()"
+          [disabled]="currentQuestionIndex === 0"
+        >
+          <i class="bi bi-chevron-left"></i> Previous
+        </button>
+
+        <div>
+          <button
+            *ngIf="currentQuestionIndex < questions.length - 1"
+            class="btn btn-primary"
+            (click)="nextQuestion()"
+            style="background: #000039; border: none"
+          >
+            Next <i class="bi bi-chevron-right"></i>
+          </button>
+          <button
+            *ngIf="currentQuestionIndex === questions.length - 1"
+            class="btn btn-success"
+            (click)="submitExam()"
+            style="background: #000039; border: none"
+          >
+            Submit Exam <i class="bi bi-send-check"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Results Display -->
+<div *ngIf="submitted && examResult">
+  <div
+    class="result-container d-flex justify-content-center align-items-center"
+    style="min-height: 60vh"
+  >
+    <div class="result-card text-center p-5 rounded-4 shadow">
+      <div class="result-icon mb-3">
+        <i
+          class="bi"
+          style="font-size: 3rem"
+          [ngClass]="{
+            'bi-check-circle-fill text-success': score >= 50,
+            'bi-x-circle-fill text-danger': score < 50
+          }"
+        ></i>
+      </div>
+      <h2 class="mb-3" style="color: #000039">Exam Submitted!</h2>
+      <p class="score-text fs-4 mb-3">
+        Your Score: <span class="fw-bold">{{ score }}%</span>
+      </p>
+      <div class="result-details d-flex justify-content-center gap-4 mb-4">
+        <div class="detail">
+          <span class="text-muted">Correct Answers</span>
+          <div class="fw-bold">
+            {{ ((score * questions.length) / 100).toFixed(0) }}
+          </div>
+        </div>
+        <div class="detail">
+          <span class="text-muted">Total Questions</span>
+          <div class="fw-bold">{{ questions.length }}</div>
+        </div>
+      </div>
+      <div class="result-actions d-flex justify-content-center gap-3">
+        <button
+          class="btn btn-secondary px-4"
+          (click)="goToDashboard()"
+          style="background: #000039; border: none"
+        >
+          <i class="bi bi-house-door"></i> Back to Dashboard
+        </button>
+        <button class="btn btn-outline-primary px-4" (click)="goToResults()">
+          <i class="bi bi-list-check"></i> View Results
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

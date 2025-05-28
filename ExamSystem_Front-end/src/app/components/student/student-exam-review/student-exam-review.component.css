@@ -1,0 +1,51 @@
+.exam-review-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.review-header h2 {
+  letter-spacing: 0.5px;
+}
+
+.score-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  font-size: 1.7rem;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0, 0, 39, 0.07);
+}
+
+.summary-box {
+  border: 2px solid #000039;
+  background: #f8f9fa;
+}
+
+.question-review {
+  border-left: 6px solid #000039;
+  background: #f4f7fa;
+}
+
+.question-review ul {
+  margin-bottom: 0;
+}
+
+.badge {
+  font-size: 0.95rem;
+  border-radius: 1rem;
+}
+
+.btn-secondary {
+  background: #000039 !important;
+  border: none !important;
+  color: #fff !important;
+  font-weight: 500;
+}
+.btn-secondary:hover,
+.btn-secondary:focus {
+  background: #23235b !important;
+  color: #fff !important;
+}

@@ -1,0 +1,23 @@
+<div class="dashboard">
+  <div class="header">
+    <h2><i class="bi bi-journal-bookmark"></i> Available Exams</h2>
+  </div>
+
+  <div *ngIf="isLoading" class="text-center my-5">
+    <div class="spinner-border text-muted" role="status"></div>
+    <p>Loading exams...</p>
+  </div>
+
+  @if (!isLoading && exams.length > 0) {
+  <div class="exams-grid">
+    @for (exam of exams; track exam.id) {
+    <app-exam-card [exam]="exam"></app-exam-card>
+    }
+  </div>
+  } @else {
+  <div class="no-exams">
+    <i class="bi bi-emoji-frown"></i>
+    <p>No exams available at the moment</p>
+  </div>
+  }
+</div>

@@ -1,0 +1,48 @@
+/* student-dashboard.component.scss */
+.dashboard {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: 30px;
+  text-align: center;
+  
+  h2 {
+    color: #000039;
+    font-weight: 600;
+    margin-bottom: 10px;
+    
+    i {
+      margin-right: 10px;
+    }
+  }
+  
+  p {
+    color: #666;
+    font-size: 1.1rem;
+  }
+}
+
+.exams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.no-exams {
+  text-align: center;
+  padding: 50px 0;
+  
+  i {
+    font-size: 3rem;
+    color: #666;
+    margin-bottom: 20px;
+  }
+  
+  p {
+    font-size: 1.2rem;
+    color: #666;
+  }
+}

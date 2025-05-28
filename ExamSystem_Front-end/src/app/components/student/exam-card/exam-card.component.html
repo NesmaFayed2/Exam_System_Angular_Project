@@ -1,0 +1,26 @@
+<div class="exam-card">
+  <div class="card-header">
+    <h3>{{ exam.title }}</h3>
+    <span class="badge">{{ exam.duration }} mins</span>
+  </div>
+
+  <div class="card-body">
+    <p>{{ exam.description }}</p>
+    <div class="details">
+      <div class="detail-item">
+        <i class="bi bi-question-circle"></i>
+        <span>{{ exam.questions_count }} Question</span>
+      </div>
+      <div class="detail-item">
+        <i class="bi bi-calendar"></i>
+        <span>Due: {{ exam.startDate | date }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-footer">
+    <a [routerLink]="['/student/exam', exam.id]" class="start-btn">
+      Start Exam <i class="bi bi-arrow-right"></i>
+    </a>
+  </div>
+</div>

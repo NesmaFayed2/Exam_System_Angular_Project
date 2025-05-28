@@ -1,0 +1,127 @@
+<div
+  class="container mt-4 exam-review-container"
+  *ngIf="!isLoading; else loading"
+>
+  <div class="review-header text-center mb-4">
+    <h2 class="fw-bold" style="color: #000039">
+      <i class="bi bi-eye"></i> Exam Review: {{ result?.exam?.title }}
+    </h2>
+    <div class="score-status my-3">
+      <span
+        class="score-circle"
+        [ngStyle]="{
+          background: result?.is_passed ? '#000039' : '#dc3545',
+          color: '#fff'
+        }"
+      >
+        {{ result?.percentage }}%
+      </span>
+      <span
+        class="ms-3 fs-5"
+        [ngClass]="{
+          'text-success': result?.is_passed,
+          'text-danger': !result?.is_passed
+        }"
+      >
+        <i
+          class="bi"
+          [ngClass]="result?.is_passed ? 'bi-emoji-smile' : 'bi-emoji-frown'"
+        ></i>
+        {{ result?.is_passed ? "Passed" : "Failed" }}
+      </span>
+    </div>
+    <div class="text-muted small">
+      <i class="bi bi-calendar"></i>
+      Submitted: {{ result?.submitted_at | date : "medium" }}
+    </div>
+  </div>
+
+  <div *ngIf="result; else noResult">
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-6">
+        <div class="summary-box p-3 rounded-3 shadow-sm bg-light text-center">
+          <div>
+            <strong>Score:</strong> {{ result.total_marks_obtained }} /
+            {{ result.total_possible_marks }}
+          </div>
+          <div><strong>Percentage:</strong> {{ result.percentage }}%</div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngFor="let answer of result.answers; let i = index" class="mb-4">
+      <div class="question-review p-4 rounded-4 border shadow-sm bg-white">
+        <p class="fw-semibold mb-2" style="color: #000039">
+          Q{{ i + 1 }}: {{ answer.question.question_text }}
+        </p>
+        <ul class="list-unstyled ms-2">
+          <li
+            *ngFor="let option of answer.question.options"
+            [ngClass]="{
+              'text-success fw-bold':
+                option.option_label === answer.question.correct_answer,
+              'text-danger fw-semibold':
+                option.option_label === answer.selected_answer &&
+                option.option_label !== answer.question.correct_answer
+            }"
+            style="margin-bottom: 0.25rem"
+          >
+            <span class="badge bg-light border me-2" style="color: #000039">{{
+              option.option_label
+            }}</span>
+            {{ option.option_text }}
+            <span
+              *ngIf="option.option_label === answer.question.correct_answer"
+              class="ms-2 text-success"
+            >
+              <i class="bi bi-check-circle-fill"></i> Correct
+            </span>
+            <span
+              *ngIf="
+                option.option_label === answer.selected_answer &&
+                option.option_label !== answer.question.correct_answer
+              "
+              class="ms-2 text-danger"
+            >
+              <i class="bi bi-x-circle-fill"></i> Your Answer
+            </span>
+          </li>
+        </ul>
+        <div class="mt-2">
+          <span
+            class="badge"
+            [ngStyle]="{
+              background: answer.marks_obtained > 0 ? '#000039' : '#dc3545',
+              color: '#fff'
+            }"
+          >
+            Marks: {{ answer.marks_obtained }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-4">
+      <button
+        class="btn btn-secondary px-4 py-2"
+        (click)="goBack()"
+        style="background: #000039; border: none"
+      >
+        <i class="bi bi-arrow-left"></i> Back to Results
+      </button>
+    </div>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="text-center my-5">
+    <div class="spinner-border text-muted" role="status"></div>
+    <p>Loading exam review...</p>
+  </div>
+</ng-template>
+
+<ng-template #noResult>
+  <div class="alert alert-warning text-center">
+    No result found for this exam.
+  </div>
+</ng-template>
