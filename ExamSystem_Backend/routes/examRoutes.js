@@ -8,6 +8,7 @@ const {
   updateExam,
   deleteExam,
   getAllStudentsResults,
+  getResultsForSpecificExam,
 } = require("../controllers/examController");
 
 const {
@@ -84,4 +85,13 @@ router.get(
   authorizeRoles("admin"),
   getAllStudentsResults
 );
+
+// Admin: Get results for a specific exam
+router.get(
+  "/admin/results/:examId",
+  authenticateToken,
+  authorizeRoles("admin"),
+  getResultsForSpecificExam
+);
+
 module.exports = router;

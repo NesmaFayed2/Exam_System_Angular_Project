@@ -28,7 +28,7 @@ const editProfile = asyncWrapper(async (req, res) => {
   if (first_name) updateFields.first_name = first_name;
   if (last_name) updateFields.last_name = last_name;
   if (req.file) {
-    updateFields.profile_image = req.file.path;
+    updateFields.profile_image = req.file.filename;
   }
   if (email) {
     updateFields.email = email;

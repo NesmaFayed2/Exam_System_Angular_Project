@@ -47,12 +47,12 @@ export class ViewExamComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private adminExamService: AdminExamService // Updated service
+    private adminExamService: AdminExamService
   ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
-      this.examId = params.get('id'); // Now string, not number
+      this.examId = params.get('id');
 
       if (this.examId) {
         this.loadExamDetails();
@@ -100,14 +100,13 @@ export class ViewExamComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           console.error('Error fetching questions:', error);
-          // Don't redirect on questions error, just log it
         },
       });
   }
 
   editExam(): void {
     if (this.examId) {
-      this.router.navigate(['/admin/edit-exam', this.examId]);
+      this.router.navigate(['/admin/exam-questions', this.examId]);
     }
   }
 
@@ -146,7 +145,6 @@ export class ViewExamComponent implements OnInit, OnDestroy {
     if (confirm('Are you sure you want to delete this question?')) {
       this.adminExamService.deleteQuestion(questionId).subscribe({
         next: () => {
-          // Remove question from local array
           this.questions = this.questions.filter((q) => q._id !== questionId);
           console.log('Question deleted successfully');
         },

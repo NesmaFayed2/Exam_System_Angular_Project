@@ -78,7 +78,7 @@
           [disabled]="!isEditMode"
         />
       </div>
-      <div class="mb-4">
+      <div class="mb-4" *ngIf="userRole !== 'admin'">
         <label class="form-label">Track</label>
         <select
           class="form-select"
@@ -91,6 +91,7 @@
           <option value="dotnet">.NET Track</option>
         </select>
       </div>
+
       <button
         type="button"
         class="btn btn-outline-warning mb-5"
@@ -112,7 +113,7 @@
           class="btn"
           style="background: #000039; color: #fff"
           *ngIf="isEditMode"
-          [disabled]="!profileForm.valid || isLoading"
+          [disabled]="!profileForm.valid || profileForm.pristine || isLoading"
         >
           <span
             *ngIf="isLoading"

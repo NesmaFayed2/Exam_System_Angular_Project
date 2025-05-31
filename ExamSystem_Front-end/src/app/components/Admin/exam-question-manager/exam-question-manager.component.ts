@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { AdminExamService } from '../../../services/admin-exam.service'; // Updated import
+import { AdminExamService } from '../../../services/admin-exam.service';
 import { Subscription } from 'rxjs';
 
 interface QuestionData {
@@ -26,28 +26,29 @@ interface QuestionData {
   styleUrls: ['./exam-question-manager.component.css'],
 })
 export class ExamQuestionManagerComponent implements OnInit, OnDestroy {
-  examId: string | null = null; // Changed to string for MongoDB ObjectId
+  examId: string | null = null;
   examTitle: string = '';
   questions: QuestionData[] = [];
   isLoading: boolean = false;
   errorMessage: string = '';
 
   private subscriptions: Subscription = new Subscription();
+  readonly optionLabels = ['A', 'B', 'C', 'D'];
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private adminExamService: AdminExamService // Updated service
+    private adminExamService: AdminExamService
   ) {}
 
   ngOnInit(): void {
     this.subscriptions.add(
       this.route.paramMap.subscribe((params) => {
-        this.examId = params.get('id'); // Now string, not number
+        this.examId = params.get('id');
         if (this.examId) {
           this.loadExamDetailsAndQuestions();
         } else {
-          console.error('Invalid exam ID provided for question manager.');
+          this.errorMessage = 'Invalid exam ID provided for question manager.';
           this.router.navigate(['/admin/examlist']);
         }
       })
@@ -60,7 +61,6 @@ export class ExamQuestionManagerComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.errorMessage = '';
 
-    // Load exam details
     this.subscriptions.add(
       this.adminExamService.getExamById(this.examId).subscribe({
         next: (exam) => {
@@ -68,12 +68,11 @@ export class ExamQuestionManagerComponent implements OnInit, OnDestroy {
             this.examTitle = exam.title;
             this.loadQuestions();
           } else {
-            console.warn(`Exam with ID ${this.examId} not found.`);
+            this.errorMessage = `Exam with ID ${this.examId} not found.`;
             this.router.navigate(['/admin/examlist']);
           }
         },
         error: (err) => {
-          console.error('Error loading exam details:', err);
           this.errorMessage = err;
           this.isLoading = false;
         },
@@ -88,10 +87,8 @@ export class ExamQuestionManagerComponent implements OnInit, OnDestroy {
       this.adminExamService.getExamQuestions(this.examId).subscribe({
         next: (questions) => {
           this.questions = questions || [];
-          console.log('Questions loaded:', this.questions);
         },
         error: (err) => {
-          console.error('Error loading questions:', err);
           this.errorMessage = err;
         },
         complete: () => {
@@ -104,11 +101,12 @@ export class ExamQuestionManagerComponent implements OnInit, OnDestroy {
   addQuestion(): void {
     const newQuestion: QuestionData = {
       question_text: '',
-      options: [
-        { option_text: '', option_label: 'A', is_correct: false },
-        { option_text: '', option_label: 'B', is_correct: false },
-      ],
-      correct_answer: '',
+      options: this.optionLabels.map((label) => ({
+        option_text: '',
+        option_label: label,
+        is_correct: false,
+      })),
+      correct_answer: 'A',
       marks: 1,
       order: this.questions.length + 1,
     };
@@ -118,24 +116,19 @@ export class ExamQuestionManagerComponent implements OnInit, OnDestroy {
   removeQuestion(index: number): void {
     if (confirm('Are you sure you want to remove this question?')) {
       const questionToRemove = this.questions[index];
-
       if (this.examId && questionToRemove._id) {
-        // Delete from backend if it exists
         this.subscriptions.add(
           this.adminExamService.deleteQuestion(questionToRemove._id).subscribe({
             next: () => {
               this.questions.splice(index, 1);
               this.updateQuestionOrders();
-              console.log('Question deleted from backend.');
             },
             error: (err) => {
-              console.error('Error deleting question:', err);
               alert('Error deleting question: ' + err);
             },
           })
         );
       } else {
-        // Remove from local array if not saved yet
         this.questions.splice(index, 1);
         this.updateQuestionOrders();
       }
@@ -143,19 +136,21 @@ export class ExamQuestionManagerComponent implements OnInit, OnDestroy {
   }
 
   addChoice(question: QuestionData): void {
-    const nextLabel = String.fromCharCode(65 + question.options.length); // A, B, C, D...
-    question.options.push({
-      option_text: '',
-      option_label: nextLabel,
-      is_correct: false,
-    });
+    if (question.options.length < 4) {
+      const nextLabel = this.optionLabels[question.options.length];
+      question.options.push({
+        option_text: '',
+        option_label: nextLabel,
+        is_correct: false,
+      });
+    }
   }
 
   removeChoice(question: QuestionData, choiceIndex: number): void {
     if (question.options.length > 2) {
       const removedOption = question.options[choiceIndex];
       if (question.correct_answer === removedOption.option_label) {
-        question.correct_answer = '';
+        question.correct_answer = question.options[0].option_label;
       }
       question.options.splice(choiceIndex, 1);
       this.updateOptionLabels(question);
@@ -166,7 +161,7 @@ export class ExamQuestionManagerComponent implements OnInit, OnDestroy {
 
   updateOptionLabels(question: QuestionData): void {
     question.options.forEach((option, index) => {
-      option.option_label = String.fromCharCode(65 + index);
+      option.option_label = this.optionLabels[index];
     });
   }
 
@@ -177,18 +172,15 @@ export class ExamQuestionManagerComponent implements OnInit, OnDestroy {
   }
 
   saveQuestion(question: QuestionData): void {
-    if (!this.examId) {
-      console.error('Exam ID is missing. Cannot save question.');
-      return;
-    }
+    if (!this.examId) return;
 
     // Validation
     if (!question.question_text.trim()) {
       alert('Question text cannot be empty.');
       return;
     }
-    if (question.options.length < 2) {
-      alert('A question must have at least two choices.');
+    if (question.options.length !== 4) {
+      alert('Each question must have exactly four choices (A, B, C, D).');
       return;
     }
     if (question.options.some((o) => !o.option_text.trim())) {
@@ -223,12 +215,10 @@ export class ExamQuestionManagerComponent implements OnInit, OnDestroy {
           const index = this.questions.findIndex((q) => q === question);
           if (index !== -1) {
             this.questions[index] = savedQuestion;
-            console.log('Question saved successfully:', savedQuestion);
           }
           alert('Question saved successfully!');
         },
         error: (err) => {
-          console.error('Error saving question:', err);
           alert('Error saving question: ' + err);
         },
       })
@@ -236,19 +226,15 @@ export class ExamQuestionManagerComponent implements OnInit, OnDestroy {
   }
 
   saveAllQuestions(): void {
-    if (!this.examId) {
-      console.error('Exam ID is missing. Cannot save all questions.');
-      return;
-    }
+    if (!this.examId) return;
 
-    // Validate all questions first
     for (const question of this.questions) {
       if (!question.question_text.trim()) {
         alert('Cannot save: Question text cannot be empty for all questions.');
         return;
       }
-      if (question.options.length < 2) {
-        alert('Cannot save: All questions must have at least two choices.');
+      if (question.options.length !== 4) {
+        alert('Cannot save: Each question must have exactly four choices.');
         return;
       }
       if (question.options.some((o) => !o.option_text.trim())) {
@@ -276,12 +262,10 @@ export class ExamQuestionManagerComponent implements OnInit, OnDestroy {
       }
     }
 
-    // Save each question
     let saveCount = 0;
     const totalQuestions = this.questions.length;
 
     for (const question of this.questions) {
-      // Update is_correct flags
       question.options.forEach((option) => {
         option.is_correct = option.option_label === question.correct_answer;
       });
@@ -300,7 +284,6 @@ export class ExamQuestionManagerComponent implements OnInit, OnDestroy {
             }
           },
           error: (err) => {
-            console.error('Error saving question:', err);
             alert('Error saving some questions. Please try again.');
           },
         })

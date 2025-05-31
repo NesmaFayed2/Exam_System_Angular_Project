@@ -20,6 +20,14 @@ const createExam = asyncWrapper(async (req, res) => {
     end_date,
   } = req.body;
 
+  // Validate date logic BEFORE saving
+  if (start_date && end_date && new Date(end_date) <= new Date(start_date)) {
+    return res.status(400).json({
+      status: httpStatusText.FAIL,
+      data: { message: "End date must be after start date" },
+    });
+  }
+
   let majorId = major;
   if (!mongoose.isValidObjectId(major)) {
     const majorDoc = await Major.findOne({ name: major.toLowerCase() });
@@ -53,7 +61,7 @@ const createExam = asyncWrapper(async (req, res) => {
     data: { exam },
   });
 });
-///////////////////////////////////////////////////////////////////////
+
 // Get All Exams (Admin)
 const getAllExams = asyncWrapper(async (req, res) => {
   const limit = parseInt(req.query.limit, 10) || 10;
@@ -128,6 +136,16 @@ const updateExam = asyncWrapper(async (req, res) => {
     return res.status(404).json({
       status: httpStatusText.FAIL,
       data: { message: "Exam not found" },
+    });
+  }
+
+  start_date = start_date || exam.start_date;
+  end_date = end_date || exam.end_date;
+
+  if (start_date && end_date && new Date(end_date) <= new Date(start_date)) {
+    return res.status(400).json({
+      status: httpStatusText.FAIL,
+      data: { message: "End date must be after start date" },
     });
   }
 
@@ -241,6 +259,55 @@ const getAllStudentsResults = asyncWrapper(async (req, res) => {
   });
 });
 
+const getResultsForSpecificExam = asyncWrapper(async (req, res, next) => {
+  const { examId } = req.params;
+
+  if (!examId || !mongoose.Types.ObjectId.isValid(examId)) {
+    const error = new Error("Invalid or missing exam ID");
+    error.statusCode = 400;
+    error.status = httpStatusText.FAIL;
+    return next(error);
+  }
+
+  const results = await ExamResult.find({ exam: examId })
+    .populate({
+      path: "student",
+      select: "first_name last_name email",
+    })
+    .populate({
+      path: "exam",
+      select: "title",
+    })
+    .sort({ submitted_at: -1 });
+
+  if (!results || results.length === 0) {
+    return res.status(200).json({
+      status: httpStatusText.SUCCESS,
+      data: { results: [], message: "No results found for this exam." },
+    });
+  }
+
+  const formattedResults = results.map((result) => ({
+    result_id: result._id,
+    student_id: result.student ? result.student._id : null,
+    student_name: result.student
+      ? `${result.student.first_name} ${result.student.last_name}`
+      : "N/A",
+    student_email: result.student ? result.student.email : "N/A",
+    exam_title: result.exam ? result.exam.title : "N/A",
+    total_score: result.total_marks_obtained,
+    max_marks: result.total_exam_marks,
+    percentage: result.percentage_obtained,
+    status: result.status,
+    submitted_at: result.submitted_at,
+  }));
+
+  res.status(200).json({
+    status: httpStatusText.SUCCESS,
+    data: { results: formattedResults },
+  });
+});
+
 module.exports = {
   createExam,
   getAllExams,
@@ -249,4 +316,5 @@ module.exports = {
   deleteExam,
   getAvailableExams,
   getAllStudentsResults,
+  getResultsForSpecificExam,
 };

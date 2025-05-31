@@ -1,7 +1,7 @@
 <div class="container mt-4">
   <div class="card p-4 shadow-sm">
-    <h2 class="card-title text-center mb-4 text-primary">
-      {{ isEditMode ? "✏️ Edit Exam " : "➕ Add New Exam" }}
+    <h2 class="card-title text-center mb-4 text-navy">
+      {{ isEditMode ? " Edit Exam " : " + Add New Exam" }}
     </h2>
 
     <!-- Loading State -->
@@ -151,14 +151,15 @@
         </button>
         <button
           type="submit"
-          class="btn btn-success px-5 py-2"
+          class="btn back-navy text-light py-2"
           [disabled]="isLoading"
         >
           <span
             *ngIf="isLoading"
             class="spinner-border spinner-border-sm me-2"
           ></span>
-          💾 {{ isEditMode ? "Update Details" : "Save Exam" }}
+          <i class="bi bi-floppy"></i>
+          {{ isEditMode ? "Update Exam" : "Save Exam" }}
         </button>
       </div>
     </form>

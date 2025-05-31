@@ -41,6 +41,13 @@ const examSchema = new mongoose.Schema({
   end_date: {
     type: Date,
     required: [true, "End date is required"],
+    validate: {
+      validator: function (value) {
+        // `this` refers to the document
+        return !this.start_date || value > this.start_date;
+      },
+      message: "End date must be after start date",
+    },
   },
   created_by: {
     type: mongoose.Schema.Types.ObjectId,
@@ -55,14 +62,6 @@ const examSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-});
-
-examSchema.pre("save", function (next) {
-  if (this.end_date <= this.start_date) {
-    next(new Error("End date must be after start date"));
-  }
-  this.updated_at = Date.now();
-  next();
 });
 
 module.exports = mongoose.model("Exam", examSchema);

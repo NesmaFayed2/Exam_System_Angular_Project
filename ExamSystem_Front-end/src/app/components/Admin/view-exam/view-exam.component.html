@@ -18,9 +18,7 @@
     <div class="card p-4 shadow-sm">
       <!-- Header with Status -->
       <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="card-title text-primary mb-0">
-          <i class="bi bi-eye"></i> Exam Details
-        </h2>
+        <h2 class="card-title text-muted mb-0">Exam Details</h2>
         <span class="badge fs-6" [class]="examStatusClass">{{
           examStatus
         }}</span>
@@ -40,7 +38,7 @@
           <div class="exam-detail-section mb-3">
             <label class="detail-label">Track:</label>
             <p class="detail-value">
-              <span class="badge bg-info">{{
+              <span class="badge back-navy">{{
                 exam.major.name | uppercase
               }}</span>
             </p>
@@ -88,9 +86,15 @@
       <div class="questions-section">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <h3 class="text-secondary mb-0">Questions ({{ questionsCount }})</h3>
-          <button class="btn btn-success btn-sm" (click)="addQuestion()">
-            <i class="bi bi-plus"></i> Add Question
-          </button>
+          <div class="question-actions d-flex gap-2">
+            <button
+              *ngIf="examStatus !== 'Inactive' && examStatus !== 'Ended'"
+              class="btn btn-success text-light btn-sm"
+              (click)="editExam()"
+            >
+              <i class="bi bi-pencil"></i> Edit Questions
+            </button>
+          </div>
         </div>
 
         <!-- No Questions -->
@@ -100,7 +104,12 @@
         >
           <i class="bi bi-question-circle display-1 text-muted"></i>
           <p class="mt-2">No questions have been added to this exam yet.</p>
-          <button class="btn btn-success" (click)="addQuestion()">
+          <!-- Show Add First Question button only if not Inactive or Ended -->
+          <button
+            *ngIf="examStatus !== 'Inactive' && examStatus !== 'Ended'"
+            class="btn back-navy text-light"
+            (click)="addQuestion()"
+          >
             <i class="bi bi-plus"></i> Add First Question
           </button>
         </div>
@@ -120,22 +129,23 @@
                 Q{{ i + 1 }}: {{ question.question_text }}
               </h5>
               <div>
-                <span class="badge bg-primary me-2"
+                <span class="badge back-navy me-2"
                   >{{ question.marks }} marks</span
                 >
+              </div>
+
+              <div class="question-actions-buttons">
                 <button
-                  class="btn btn-outline-primary btn-sm me-1"
-                  (click)="editQuestion(question._id)"
-                >
-                  <i class="bi bi-pencil"></i>
-                </button>
-                <button
-                  class="btn btn-outline-danger btn-sm"
+                  type="button"
+                  class="btn btn-sm btn-outline-danger"
+                  title="Remove Question"
                   (click)="deleteQuestion(question._id)"
+                  *ngIf="examStatus !== 'Inactive' && examStatus !== 'Ended'"
                 >
-                  <i class="bi bi-trash"></i>
+                  <i class="bi bi-trash"></i> Remove
                 </button>
               </div>
+              <!-- Show edit/delete only if not Inactive or Ended -->
             </div>
 
             <!-- Options -->
@@ -170,12 +180,6 @@
       <div class="text-center mt-4">
         <button (click)="goBack()" class="btn btn-secondary px-4 py-2 me-3">
           <i class="bi bi-arrow-left"></i> Back to Exams
-        </button>
-        <button class="btn btn-warning px-4 py-2 me-3" (click)="editExam()">
-          <i class="bi bi-pencil-square"></i> Edit Exam
-        </button>
-        <button class="btn btn-danger px-4 py-2" (click)="deleteExam()">
-          <i class="bi bi-trash"></i> Delete Exam
         </button>
       </div>
     </div>

@@ -164,3 +164,11 @@ h3 {
   border-bottom: 1px solid #e9ecef;
   padding-bottom: 0.5rem;
 }
+
+.back-navy {
+  background-color: #151550;
+}
+
+.text-navy {
+  color: #151550;
+}

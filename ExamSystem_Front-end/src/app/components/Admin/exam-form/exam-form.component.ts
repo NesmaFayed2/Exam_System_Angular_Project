@@ -116,10 +116,8 @@ export class ExamFormComponent implements OnInit, OnDestroy {
         const savedExam = response.data?.exam || response;
 
         if (!this.isEditMode) {
-          // If a new exam was added, navigate to the questions page for it
           this.router.navigate(['/admin/exam-questions', savedExam._id]);
         } else {
-          // If edited, go back to the exam list
           this.router.navigate(['/admin/examlist']);
         }
       },

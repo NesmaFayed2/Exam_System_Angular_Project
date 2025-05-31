@@ -18,7 +18,7 @@ export class ExamListComponent implements OnInit, OnDestroy {
 
   private examsSubscription: Subscription | undefined;
 
-  constructor(private adminExamService: AdminExamService) {} // Updated service
+  constructor(private adminExamService: AdminExamService) {}
 
   ngOnInit(): void {
     this.loadExams();
@@ -30,7 +30,6 @@ export class ExamListComponent implements OnInit, OnDestroy {
 
     this.examsSubscription = this.adminExamService.getAllExams().subscribe({
       next: (data: any[]) => {
-        // Map backend data to frontend format
         this.exams = data.map((exam) => ({
           id: exam._id,
           title: exam.title,
@@ -63,7 +62,6 @@ export class ExamListComponent implements OnInit, OnDestroy {
     ) {
       this.adminExamService.deleteExam(id).subscribe({
         next: () => {
-          // Remove deleted exam from the list
           this.exams = this.exams.filter((exam) => exam.id !== id);
           console.log(`Exam with ID ${id} deleted successfully.`);
         },

@@ -27,6 +27,7 @@ export class ProfileComponent implements OnInit {
   defaultImage = '/default-avatar.png';
   previewImage: string | null = null;
   user: any = null;
+  userRole: string = '';
 
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
@@ -36,10 +37,11 @@ export class ProfileComponent implements OnInit {
     private authService: AuthService
   ) {
     this.profileForm = this.fb.group({
-      firstName: ['', [Validators.required, Validators.minLength(2)]],
-      lastName: ['', [Validators.required, Validators.minLength(2)]],
-      email: ['', [Validators.required, Validators.email]],
-      major: ['', Validators.required],
+      firstName: ['', [, Validators.minLength(2)]],
+      lastName: ['', [, Validators.minLength(2)]],
+      email: ['', [, Validators.email]],
+      major: [''],
+      profile_image: [null],
     });
 
     this.passwordForm = this.fb.group(
@@ -53,6 +55,8 @@ export class ProfileComponent implements OnInit {
 
     this.profileForm.disable();
     this.passwordForm.disable();
+    const userData = this.authService.getUserData();
+    this.userRole = userData?.role || 'student';
   }
 
   ngOnInit(): void {
@@ -77,10 +81,9 @@ export class ProfileComponent implements OnInit {
           email: user.email,
           major: user.major?.name || user.major,
         });
-        this.previewImage =
-          user.profile_image && user.profile_image.trim() !== ''
-            ? 'http://localhost:5000/' + user.profile_image
-            : this.defaultImage;
+        user.profile_image && user.profile_image.trim() !== ''
+          ? 'http://localhost:5000/' + user.profile_image
+          : this.defaultImage;
 
         this.isLoading = false;
       },
@@ -116,18 +119,33 @@ export class ProfileComponent implements OnInit {
   onSubmitProfile(): void {
     if (this.profileForm.valid) {
       this.isLoading = true;
-      const profileData = {
-        first_name: this.profileForm.value.firstName,
-        last_name: this.profileForm.value.lastName,
-        email: this.profileForm.value.email,
-        major: this.profileForm.value.major,
-        image: this.previewImage,
-      };
-      this.profileService.updateProfile(profileData).subscribe({
+      const formData = new FormData();
+      formData.append('first_name', this.profileForm.value.firstName);
+      formData.append('last_name', this.profileForm.value.lastName);
+      formData.append('email', this.profileForm.value.email);
+      if (this.profileForm.value.major) {
+        formData.append('major', this.profileForm.value.major);
+      }
+      if (this.profileForm.value.profile_image) {
+        formData.append('profile_image', this.profileForm.value.profile_image);
+      }
+
+      this.profileService.updateProfile(formData).subscribe({
         next: (response) => {
           const updatedUser = response.data.user;
           localStorage.setItem('user_data', JSON.stringify(updatedUser));
+          if (
+            updatedUser.profile_image &&
+            updatedUser.profile_image.trim() !== ''
+          ) {
+            this.previewImage = `http://localhost:5000/uploads/${
+              updatedUser.profile_image
+            }?t=${Date.now()}`;
+          } else {
+            this.previewImage = this.defaultImage;
+          }
 
+          this.profileForm.markAsPristine();
           this.authService.updateUserData(updatedUser);
           this.successMessage = 'Profile updated successfully!';
           this.toggleEdit();
@@ -176,6 +194,8 @@ export class ProfileComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = () => {
         this.previewImage = reader.result as string;
+        this.profileForm.patchValue({ profile_image: file });
+        this.profileForm.get('profile_image')?.markAsDirty();
       };
       reader.readAsDataURL(file);
     }

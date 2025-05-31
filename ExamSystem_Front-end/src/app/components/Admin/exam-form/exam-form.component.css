@@ -169,6 +169,13 @@ h3 {
   font-size: 0.875rem;
   border-radius: 4px;
 }
+.back-navy {
+  background-color: #151550;
+}
+
+.text-navy {
+  color: #151550;
+}
 
 /* Margin adjustments for internal elements */
 .d-flex {

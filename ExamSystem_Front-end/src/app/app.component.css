@@ -12,3 +12,11 @@ main {
 .sidebar {
   min-height: 100vh;
 }
+
+.back-navy {
+  background-color: #151550;
+}
+
+.text-navy {
+  color: #151550;
+}

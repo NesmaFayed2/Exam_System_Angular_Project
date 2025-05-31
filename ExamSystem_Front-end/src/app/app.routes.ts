@@ -16,6 +16,7 @@ import { AdminProfileComponent } from './components/Admin/admin-profile/admin-pr
 import { ExamQuestionManagerComponent } from './components/Admin/exam-question-manager/exam-question-manager.component';
 import { StudentTableComponent } from './components/Admin/student-table/student-table.component';
 import { StudentExamReviewComponent } from './components/student/student-exam-review/student-exam-review.component';
+import { AuthGuard } from './auth.guard';
 
 export const routes: Routes = [
   {
@@ -33,13 +34,14 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: AdminLayoutComponent,
+    canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'examlist', pathMatch: 'full' },
       { path: 'examlist', component: ExamListComponent },
       { path: 'add-exam', component: ExamFormComponent },
       { path: 'edit-exam/:id', component: ExamFormComponent },
       { path: 'view-exam/:id', component: ViewExamComponent },
-      { path: 'profile', component: AdminProfileComponent },
+      { path: 'profile', component: ProfileComponent },
       { path: 'exam-questions/:id', component: ExamQuestionManagerComponent },
       { path: 'results', component: StudentTableComponent },
     ],
@@ -47,6 +49,7 @@ export const routes: Routes = [
   {
     path: 'student',
     component: DashboardLayoutComponent,
+    canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: StudentDashboardComponent },

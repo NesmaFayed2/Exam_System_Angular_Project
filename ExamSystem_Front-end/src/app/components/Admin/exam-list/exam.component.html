@@ -1,7 +1,7 @@
 <div class="container mt-4">
   <div class="text-center mb-4">
     <button [routerLink]="['/admin/add-exam']" class="btn-add-new">
-      ➕ Add New Exam
+      + Add New Exam
     </button>
   </div>
 
@@ -58,15 +58,6 @@
           <div class="detail-item exam-track">
             <strong>Track:</strong>
             <span class="badge">{{ exam.track }}</span>
-          </div>
-          <div class="detail-item">
-            <strong>Status:</strong>
-            <span
-              class="badge"
-              [class]="exam.isActive ? 'bg-success' : 'bg-secondary'"
-            >
-              {{ exam.isActive ? "Active" : "Inactive" }}
-            </span>
           </div>
         </div>
 
