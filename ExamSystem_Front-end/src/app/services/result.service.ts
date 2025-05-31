@@ -1,67 +1,86 @@
-// src/app/services/result.service.ts
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs'; // 'of' is used for creating an observable from mock data
-// import { HttpClient } from '@angular/common/http'; // Uncomment if using HttpClient
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 import { ExamResult } from '../models/exam-result.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ResultService {
-  private mockResults: ExamResult[] = [
-    {
-      id: 'res001',
-      studentName: 'Alice Johnson',
-      examTitle: 'Introduction to Programming',
-      totalScore: 85,
-      submittedAt: new Date('2024-03-10T10:00:00Z'), // Use ISO 8601 format for dates
-    },
-    {
-      id: 'res002',
-      studentName: 'Bob Smith',
-      examTitle: 'Data Structures Exam',
-      totalScore: 72,
-      submittedAt: new Date('2024-03-12T14:30:00Z'),
-    },
-    {
-      id: 'res003',
-      studentName: 'Alice Johnson',
-      examTitle: 'Data Structures Exam',
-      totalScore: 91,
-      submittedAt: new Date('2024-03-12T15:15:00Z'),
-    },
-    {
-      id: 'res004',
-      studentName: 'Charlie Brown',
-      examTitle: 'Introduction to Programming',
-      totalScore: 68,
-      submittedAt: new Date('2024-03-10T11:00:00Z'),
-    },
-    {
-      id: 'res005',
-      studentName: 'Bob Smith',
-      examTitle: 'Web Development Basics',
-      totalScore: 79,
-      submittedAt: new Date('2024-03-15T09:00:00Z'),
-    },
-    {
-      id: 'res006',
-      studentName: 'David Lee',
-      examTitle: 'Database Management',
-      totalScore: 95,
-      submittedAt: new Date('2024-03-18T16:00:00Z'),
-    },
-    {
-      id: 'res007',
-      studentName: 'Eve Davis',
-      examTitle: 'Database Management',
-      totalScore: 88,
-      submittedAt: new Date('2024-03-18T17:20:00Z'),
-    },
-  ];
+  private readonly API_URL = 'http://localhost:5000/api';
 
+  constructor(private http: HttpClient) {}
+
+  private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('exam_auth_token');
+    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  }
+
+  /**
+   * GET /admin/results - Get all students' exam results
+   */
   getAllExamResults(): Observable<ExamResult[]> {
-    // Simulate API call with a delay
-    return of(this.mockResults); // In a real app: return this.http.get<ExamResult[]>('/api/exam-results');
+    return this.http
+      .get<any>(`${this.API_URL}/admin/results`, {
+        headers: this.getHeaders(),
+      })
+      .pipe(
+        map((response) => {
+          return response.data.results.map((result: any) => ({
+            id: result.result_id || result.id,
+            studentName: result.student_name,
+            examTitle: result.exam_title,
+            totalScore: result.total_score,
+            submittedAt: new Date(result.submitted_at),
+            studentEmail: result.student_email,
+            maxMarks: result.max_marks,
+            percentage: result.percentage,
+            status: result.status,
+          }));
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  /**
+   * GET /admin/results/:examId - Get results for a specific exam
+   */
+  getResultsForSpecificExam(examId: string): Observable<ExamResult[]> {
+    return this.http
+      .get<any>(`${this.API_URL}/admin/results/${examId}`, {
+        headers: this.getHeaders(),
+      })
+      .pipe(
+        map((response) => {
+          // Map the API response to your ExamResult model
+          return response.data.results.map((result: any) => ({
+            id: result.result_id || result.id,
+            studentName: result.student_name,
+            examTitle: result.exam_title,
+            totalScore: result.total_score,
+            submittedAt: new Date(result.submitted_at),
+            // Optional: Include additional fields if needed
+            studentEmail: result.student_email,
+            maxMarks: result.max_marks,
+            percentage: result.percentage,
+            status: result.status,
+          }));
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  /**
+   * Error handler for HTTP requests
+   */
+  private handleError(error: any): Observable<never> {
+    console.error('ResultService Error:', error);
+    const errorMessage =
+      error.error?.data?.message ||
+      error.error?.message ||
+      error.message ||
+      'An error occurred while fetching results';
+    throw new Error(errorMessage);
   }
 }
