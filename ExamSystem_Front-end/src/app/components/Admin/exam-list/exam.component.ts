@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RouterLink, RouterModule } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
-import { AdminExamService } from '../../../services/admin-exam.service'; // Updated import
+import { AdminExamService } from '../../../services/admin-exam.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -15,8 +15,10 @@ export class ExamListComponent implements OnInit, OnDestroy {
   exams: any[] = [];
   isLoading = false;
   errorMessage = '';
+  examToDeleteId: string | null = null;
+  showConfirmModal = false;
 
-  private examsSubscription: Subscription | undefined;
+  private examsSubscription?: Subscription;
 
   constructor(private adminExamService: AdminExamService) {}
 
@@ -29,8 +31,8 @@ export class ExamListComponent implements OnInit, OnDestroy {
     this.errorMessage = '';
 
     this.examsSubscription = this.adminExamService.getAllExams().subscribe({
-      next: (data: any[]) => {
-        this.exams = data.map((exam) => ({
+      next: (data) => {
+        this.exams = data.map((exam: any) => ({
           id: exam._id,
           title: exam.title,
           description: exam.description,
@@ -42,11 +44,10 @@ export class ExamListComponent implements OnInit, OnDestroy {
           passingMarks: exam.passing_marks,
           isActive: exam.is_active,
         }));
-        console.log('Exams loaded successfully:', this.exams);
       },
-      error: (error) => {
-        console.error('Error loading exams:', error);
-        this.errorMessage = error;
+      error: (err) => {
+        this.errorMessage = 'Failed to load exams. Please try again.';
+        console.error(err);
       },
       complete: () => {
         this.isLoading = false;
@@ -54,23 +55,31 @@ export class ExamListComponent implements OnInit, OnDestroy {
     });
   }
 
-  deleteExam(id: string): void {
-    if (
-      confirm(
-        'Are you sure you want to delete this exam? This action cannot be undone.'
-      )
-    ) {
-      this.adminExamService.deleteExam(id).subscribe({
-        next: () => {
-          this.exams = this.exams.filter((exam) => exam.id !== id);
-          console.log(`Exam with ID ${id} deleted successfully.`);
-        },
-        error: (error) => {
-          console.error(`Error deleting exam with ID ${id}:`, error);
-          alert('Error deleting exam: ' + error);
-        },
-      });
-    }
+  confirmDelete(id: string): void {
+    this.examToDeleteId = id;
+    this.showConfirmModal = true;
+  }
+
+  cancelDelete(): void {
+    this.examToDeleteId = null;
+    this.showConfirmModal = false;
+  }
+
+  deleteExamConfirmed(): void {
+    if (!this.examToDeleteId) return;
+
+    this.adminExamService.deleteExam(this.examToDeleteId).subscribe({
+      next: () => {
+        this.exams = this.exams.filter(exam => exam.id !== this.examToDeleteId);
+      },
+      error: (err) => {
+        alert('Error deleting exam: ' + err.message);
+      },
+      complete: () => {
+        this.showConfirmModal = false;
+        this.examToDeleteId = null;
+      },
+    });
   }
 
   trackById(index: number, exam: any): string {

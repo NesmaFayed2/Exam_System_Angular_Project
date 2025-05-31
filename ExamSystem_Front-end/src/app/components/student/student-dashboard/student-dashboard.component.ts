@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { StudentExamService } from '../../../services/exam.service';
 import { ExamCardComponent } from '../exam-card/exam-card.component';
 import { StudentExam } from '../../../models/exam';
+import { LoadComponent } from '../../../shared/load/load.component';
 
 @Component({
   selector: 'app-student-dashboard',
   standalone: true,
-  imports: [CommonModule, ExamCardComponent],
+  imports: [LoadComponent,CommonModule, ExamCardComponent],
   templateUrl: './student-dashboard.component.html',
   styleUrls: ['./student-dashboard.component.css'],
 })

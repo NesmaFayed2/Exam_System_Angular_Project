@@ -2,9 +2,12 @@
   <app-navbar (toggleSidebar)="toggleSidebar()"></app-navbar>
 
   <div class="dashboard-container">
-    <div class="sidebar" [class.collapsed]="isSidebarCollapsed && isSmallScreen">
-      <app-sidebaar></app-sidebaar>
-    </div>
+    <div class="sidebar" 
+     [class.collapsed]="isSidebarCollapsed && isSmallScreen"
+     *ngIf="!hideSidebar">
+  <app-sidebaar></app-sidebaar>
+</div>
+
 
     <div class="main-content">
       <div class="content-container">

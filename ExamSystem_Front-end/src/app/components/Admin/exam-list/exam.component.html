@@ -1,7 +1,7 @@
 <div class="container mt-4">
   <div class="text-center mb-4">
     <button [routerLink]="['/admin/add-exam']" class="btn-add-new">
-      + Add New Exam
+      ➕ Add New Exam
     </button>
   </div>
 
@@ -59,6 +59,15 @@
             <strong>Track:</strong>
             <span class="badge">{{ exam.track }}</span>
           </div>
+          <div class="detail-item">
+            <strong>Status:</strong>
+            <span
+              class="badge"
+              [class]="exam.isActive ? 'bg-success' : 'bg-secondary'"
+            >
+              {{ exam.isActive ? "Active" : "Inactive" }}
+            </span>
+          </div>
         </div>
 
         <div class="exam-actions">
@@ -74,11 +83,34 @@
           >
             <i class="bi bi-pencil-square"></i> Edit
           </button>
-          <button (click)="deleteExam(exam.id)" class="btn btn-delete">
+         <button (click)="confirmDelete(exam.id)" class="btn btn-outline-danger btn-sm">
             <i class="bi bi-trash"></i> Delete
           </button>
         </div>
       </li>
     </ul>
+  </div>
+
+  <div
+    class="modal fade show d-block"
+    tabindex="-1"
+    *ngIf="showConfirmModal"
+    style="background-color: rgba(0, 0, 0, 0.5);"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content animate-pop-in">
+        <div class="modal-header">
+          <h5 class="modal-title text-danger">Confirm Deletion</h5>
+          <button type="button" class="btn-close" (click)="cancelDelete()"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this exam? This action cannot be undone.</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="cancelDelete()">Cancel</button>
+          <button class="btn btn-danger" (click)="deleteExamConfirmed()">Yes, Delete</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

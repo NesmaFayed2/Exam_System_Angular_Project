@@ -1,41 +1,41 @@
 <div class="sidebar-content">
-  <div class="sidebar-header">
-    <h3>Exam Student</h3>
-  </div>
+  <ng-container *ngIf="user?.role === 'student'">
+    <div class="sidebar-header">
+      <h3>Exam Student</h3>
+    </div>
+    <div class="sidebar-menu">
+      <a routerLink="/student/dashboard" routerLinkActive="active" class="menu-item">
+        <i class="bi bi-house-door"></i><span>Dashboard</span>
+      </a>
+      <a routerLink="/student/results" routerLinkActive="active" class="menu-item">
+        <i class="bi bi-journal-check"></i><span>Results</span>
+      </a>
+      <a routerLink="/student/profile" routerLinkActive="active" class="menu-item">
+        <i class="bi bi-person"></i><span>Profile</span>
+      </a>
+    </div>
+  </ng-container>
 
-  <div class="sidebar-menu">
-    <a
-      routerLink="/student/dashboard"
-      routerLinkActive="active"
-      class="menu-item"
-    >
-      <i class="bi bi-house-door"></i>
-      <span>Dashboard</span>
-    </a>
-
-    <a
-      routerLink="/student/results"
-      routerLinkActive="active"
-      class="menu-item"
-    >
-      <i class="bi bi-journal-check"></i>
-      <span>Results</span>
-    </a>
-
-    <a
-      routerLink="/student/profile"
-      routerLinkActive="active"
-      class="menu-item"
-    >
-      <i class="bi bi-person"></i>
-      <span>Profile</span>
-    </a>
-  </div>
+  <ng-container *ngIf="user?.role === 'admin'">
+    <div class="sidebar-header">
+      <h3>Admin Dashboard</h3>
+    </div>
+    <div class="sidebar-menu">
+      <a routerLink="/admin/examlist" routerLinkActive="active" class="menu-item">
+        <i class="bi bi-house-door"></i><span>Dashboard</span>
+      </a>
+      <a routerLink="/admin/results" routerLinkActive="active" class="menu-item">
+        <i class="bi bi-journal-check"></i><span>Results</span>
+      </a>
+      <a routerLink="/admin/profile" routerLinkActive="active" class="menu-item">
+        <i class="bi bi-person"></i><span>Profile</span>
+      </a>
+    </div>
+  </ng-container>
 
   <div class="sidebar-footer">
     <div class="help-item">
-      <i class="bi bi-question-circle"></i>
-      <span>Help Center</span>
+      <i class="bi bi-question-circle"></i><span>Help Center</span>
     </div>
   </div>
 </div>

@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+
 import { ExamFormComponent } from './components/Admin/exam-form/exam-form.component';
 import { ExamListComponent } from './components/Admin/exam-list/exam.component';
 import { AccountComponent } from './components/account/account.component';
@@ -16,7 +17,8 @@ import { AdminProfileComponent } from './components/Admin/admin-profile/admin-pr
 import { ExamQuestionManagerComponent } from './components/Admin/exam-question-manager/exam-question-manager.component';
 import { StudentTableComponent } from './components/Admin/student-table/student-table.component';
 import { StudentExamReviewComponent } from './components/student/student-exam-review/student-exam-review.component';
-import { AuthGuard } from './auth.guard';
+import { NotFoundComponent } from './shared/not-found/not-found.component';
+import { AdminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
   {
@@ -34,22 +36,22 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: AdminLayoutComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AdminGuard], // حماية جميع المسارات تحت admin
     children: [
       { path: '', redirectTo: 'examlist', pathMatch: 'full' },
       { path: 'examlist', component: ExamListComponent },
       { path: 'add-exam', component: ExamFormComponent },
       { path: 'edit-exam/:id', component: ExamFormComponent },
       { path: 'view-exam/:id', component: ViewExamComponent },
-      { path: 'profile', component: ProfileComponent },
+      { path: 'profile', component: AdminProfileComponent },
       { path: 'exam-questions/:id', component: ExamQuestionManagerComponent },
       { path: 'results', component: StudentTableComponent },
     ],
+  
   },
   {
     path: 'student',
     component: DashboardLayoutComponent,
-    canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: StudentDashboardComponent },
@@ -61,5 +63,8 @@ export const routes: Routes = [
       },
       { path: 'profile', component: ProfileComponent },
     ],
+
   },
+    { path: '**', component: NotFoundComponent },
+
 ];
