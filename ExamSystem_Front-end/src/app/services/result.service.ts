@@ -60,7 +60,6 @@ export class ResultService {
             examTitle: result.exam_title,
             totalScore: result.total_score,
             submittedAt: new Date(result.submitted_at),
-            // Optional: Include additional fields if needed
             studentEmail: result.student_email,
             maxMarks: result.max_marks,
             percentage: result.percentage,

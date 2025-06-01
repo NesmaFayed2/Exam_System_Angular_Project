@@ -8,7 +8,7 @@ import { LoadComponent } from '../../../shared/load/load.component';
 @Component({
   selector: 'app-student-dashboard',
   standalone: true,
-  imports: [LoadComponent,CommonModule, ExamCardComponent],
+  imports: [LoadComponent, CommonModule, ExamCardComponent],
   templateUrl: './student-dashboard.component.html',
   styleUrls: ['./student-dashboard.component.css'],
 })
@@ -34,7 +34,7 @@ export class StudentDashboardComponent implements OnInit {
           this.isLoading = false;
 
           this.exams = response.data.exams
-            .filter((exam: any) => !exam.is_taken)
+            .filter((exam: any) => !exam.is_taken && exam.questions_count > 0)
             .map((exam: any) => ({
               id: exam._id,
               title: exam.title,

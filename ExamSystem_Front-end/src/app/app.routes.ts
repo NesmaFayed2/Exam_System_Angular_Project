@@ -45,6 +45,10 @@ export const routes: Routes = [
       { path: 'profile', component: ProfileComponent },
       { path: 'exam-questions/:id', component: ExamQuestionManagerComponent },
       { path: 'results', component: StudentTableComponent },
+      {
+        path: 'exam-results/:examId',
+        component: StudentTableComponent,
+      },
     ],
   },
   {

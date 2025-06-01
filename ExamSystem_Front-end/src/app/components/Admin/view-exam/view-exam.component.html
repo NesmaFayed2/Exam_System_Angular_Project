@@ -89,10 +89,16 @@
           <div class="question-actions d-flex gap-2">
             <button
               *ngIf="examStatus !== 'Inactive' && examStatus !== 'Ended'"
-              class="btn btn-success text-light btn-sm"
+              class="btn btn-success text-light mt-3 btn-sm"
               (click)="editExam()"
             >
               <i class="bi bi-pencil"></i> Edit Questions
+            </button>
+            <button
+              class="btn back-navy text-light mt-3 btn-sm"
+              (click)="viewExamResults()"
+            >
+              <i class="bi bi-bar-chart"></i> View Student Results
             </button>
           </div>
         </div>

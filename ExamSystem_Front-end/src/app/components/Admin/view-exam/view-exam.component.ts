@@ -64,6 +64,9 @@ export class ViewExamComponent implements OnInit, OnDestroy {
     });
   }
 
+  viewExamResults(): void {
+    this.router.navigate(['/admin/exam-results', this.examId]);
+  }
   loadExamDetails(): void {
     if (!this.examId) return;
 

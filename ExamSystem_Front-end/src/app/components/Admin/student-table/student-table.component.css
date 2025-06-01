@@ -99,3 +99,19 @@
   border-width: 0.3rem;
   margin-bottom: 10px;
 }
+
+.back-navy {
+  background-color: #000039;
+}
+
+.dark-color {
+  color: #000039;
+}
+
+.badge {
+  background-color: #000039; /* Dark blue background for badges */
+  color: white; /* White text for better contrast */
+  padding: 5px 10px;
+  border-radius: 12px; /* Rounded corners for badges */
+  font-size: 0.85rem; /* Slightly smaller font size */
+}

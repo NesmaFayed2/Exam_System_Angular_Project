@@ -213,6 +213,7 @@ const deleteExam = asyncWrapper(async (req, res) => {
 // Get Available Exams for Students
 const getAvailableExams = asyncWrapper(async (req, res) => {
   const studentMajor = req.user.major;
+  const examIdsWithQuestions = await Question.find().distinct("exam");
 
   const currentDate = new Date();
 
@@ -221,6 +222,7 @@ const getAvailableExams = asyncWrapper(async (req, res) => {
     is_active: true,
     start_date: { $lte: currentDate },
     end_date: { $gte: currentDate },
+    _id: { $in: examIdsWithQuestions },
   }).populate("major", "name description");
 
   res.status(200).json({
