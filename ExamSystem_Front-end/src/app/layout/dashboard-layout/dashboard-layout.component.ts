@@ -1,10 +1,17 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import {
+  NavigationEnd,
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
+} from '@angular/router';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { SidebaarComponent } from '../../shared/sidebaar/sidebaar.component';
 import { FooterComponent } from '../../shared/footer/footer.component';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard-layout',
@@ -18,19 +25,31 @@ import { FooterComponent } from '../../shared/footer/footer.component';
     RouterLinkActive,
     NavbarComponent,
     SidebaarComponent,
-    FooterComponent
-  ]
+    FooterComponent,
+  ],
 })
-export class DashboardLayoutComponent {
+export class DashboardLayoutComponent implements OnInit {
   isSidebarCollapsed = false;
   isSmallScreen = false;
+  hideSidebar = false;
+
+  constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event: any) => {
+        // Check if route includes exam taking path
+        this.hideSidebar = event.url.includes('/student/exam');
+      });
+  }
+
+  toggleSidebar() {
+    this.isSidebarCollapsed = !this.isSidebarCollapsed;
+  }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: Event) {
-    this.checkScreenSize();
-  }
-
-  ngOnInit() {
     this.checkScreenSize();
   }
 
@@ -40,9 +59,4 @@ export class DashboardLayoutComponent {
       this.isSidebarCollapsed = false;
     }
   }
-
-  toggleSidebar() {
-    this.isSidebarCollapsed = !this.isSidebarCollapsed;
-  }
 }
-

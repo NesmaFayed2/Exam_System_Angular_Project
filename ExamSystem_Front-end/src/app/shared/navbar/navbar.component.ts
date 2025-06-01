@@ -23,19 +23,34 @@ import { Subscription } from 'rxjs';
   imports: [CommonModule, RouterLink, RouterLinkActive],
 })
 export class NavbarComponent implements OnInit {
+ constructor(private router: Router, private authService: AuthService) {
+  this.updateNavbarVisibility(this.router.url);
+
+  this.router.events.subscribe((event) => {
+    if (event instanceof NavigationEnd) {
+      this.updateNavbarVisibility(event.urlAfterRedirects);
+    }
+  });
+}
+
+updateNavbarVisibility(url: string): void {
+  this.showUserMenu = !url.includes('/student/exam/');
+}
+
+ 
   @Output() toggleSidebar = new EventEmitter<void>();
 
   userData: any;
   defaultImage = '/default-avatar.png';
   showUserMenu = true;
   private userSub!: Subscription;
-  constructor(private router: Router, private authService: AuthService) {
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this.showUserMenu = !event.urlAfterRedirects.includes('student/exam/');
-      }
-    });
-  }
+  // constructor(private router: Router, private authService: AuthService) {
+  //   this.router.events.subscribe((event) => {
+  //     if (event instanceof NavigationEnd) {
+  //       this.showUserMenu = !event.urlAfterRedirects.includes('student/exam/');
+  //     }
+  //   });
+  // }
 
   ngOnInit(): void {
     this.userSub = this.authService.userData$.subscribe((user) => {

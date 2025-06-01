@@ -4,8 +4,7 @@
   </div>
 
   <div *ngIf="isLoading" class="text-center my-5">
-    <div class="spinner-border text-muted" role="status"></div>
-    <p>Loading exams...</p>
+   <app-load/>
   </div>
 
   @if (!isLoading && exams.length > 0) {

@@ -15,6 +15,8 @@ export class ExamListComponent implements OnInit, OnDestroy {
   exams: any[] = [];
   isLoading = false;
   errorMessage = '';
+  examToDeleteId: string | null = null;
+  showConfirmModal = false;
 
   private examsSubscription: Subscription | undefined;
 
@@ -53,21 +55,36 @@ export class ExamListComponent implements OnInit, OnDestroy {
       },
     });
   }
+  confirmDelete(id: string): void {
+    this.examToDeleteId = id;
+    this.showConfirmModal = true;
+  }
+  cancelDelete(): void {
+    this.examToDeleteId = null;
+    this.showConfirmModal = false;
+  }
 
-  deleteExam(id: string): void {
-    if (
-      confirm(
-        'Are you sure you want to delete this exam? This action cannot be undone.'
-      )
-    ) {
-      this.adminExamService.deleteExam(id).subscribe({
+  deleteExam(): void {
+    if (this.examToDeleteId) {
+      this.adminExamService.deleteExam(this.examToDeleteId).subscribe({
         next: () => {
-          this.exams = this.exams.filter((exam) => exam.id !== id);
-          console.log(`Exam with ID ${id} deleted successfully.`);
+          this.exams = this.exams.filter(
+            (exam) => exam.id !== this.examToDeleteId
+          );
+          console.log(
+            `Exam with ID ${this.examToDeleteId} deleted successfully.`
+          );
         },
         error: (error) => {
-          console.error(`Error deleting exam with ID ${id}:`, error);
+          console.error(
+            `Error deleting exam with ID ${this.examToDeleteId}:`,
+            error
+          );
           alert('Error deleting exam: ' + error);
+        },
+        complete: () => {
+          this.showConfirmModal = false;
+          this.examToDeleteId = null;
         },
       });
     }

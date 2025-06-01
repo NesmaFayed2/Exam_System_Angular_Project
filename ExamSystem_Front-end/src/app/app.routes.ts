@@ -17,6 +17,7 @@ import { ExamQuestionManagerComponent } from './components/Admin/exam-question-m
 import { StudentTableComponent } from './components/Admin/student-table/student-table.component';
 import { StudentExamReviewComponent } from './components/student/student-exam-review/student-exam-review.component';
 import { AuthGuard } from './auth.guard';
+import { NotFoundComponent } from './shared/not-found/not-found.component';
 
 export const routes: Routes = [
   {
@@ -62,4 +63,5 @@ export const routes: Routes = [
       { path: 'profile', component: ProfileComponent },
     ],
   },
+  { path: '**', component: NotFoundComponent },
 ];
