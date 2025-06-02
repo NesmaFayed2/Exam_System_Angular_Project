@@ -4,11 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ResultService } from '../../../services/result.service';
 import { ExamResult } from '../../../models/exam-result.model';
+import { LoadComponent } from '../../../shared/load/load.component';
 
 @Component({
   selector: 'app-student-table',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, DatePipe,LoadComponent],
   templateUrl: './student-table.component.html',
   styleUrls: ['./student-table.component.css'],
 })

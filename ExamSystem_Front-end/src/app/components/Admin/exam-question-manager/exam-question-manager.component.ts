@@ -1,3 +1,4 @@
+import { LoadComponent } from './../../../shared/load/load.component';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -21,7 +22,7 @@ interface QuestionData {
 @Component({
   selector: 'app-exam-question-manager',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [LoadComponent, CommonModule, FormsModule, RouterLink],
   templateUrl: './exam-question-manager.component.html',
   styleUrls: ['./exam-question-manager.component.css'],
 })
@@ -31,6 +32,14 @@ export class ExamQuestionManagerComponent implements OnInit, OnDestroy {
   questions: QuestionData[] = [];
   isLoading: boolean = false;
   errorMessage: string = '';
+  
+  // Modal properties
+  showConfirmModal: boolean = false;
+  showErrorModal: boolean = false;
+  showSuccessModal: boolean = false;
+  errorModalMessage: string = '';
+  successModalMessage: string = '';
+  questionToRemoveIndex: number | null = null;
 
   private subscriptions: Subscription = new Subscription();
   readonly optionLabels = ['A', 'B', 'C', 'D'];
@@ -113,154 +122,85 @@ export class ExamQuestionManagerComponent implements OnInit, OnDestroy {
     this.questions.push(newQuestion);
   }
 
-  removeQuestion(index: number): void {
-    if (confirm('Are you sure you want to remove this question?')) {
-      const questionToRemove = this.questions[index];
-      if (this.examId && questionToRemove._id) {
-        this.subscriptions.add(
-          this.adminExamService.deleteQuestion(questionToRemove._id).subscribe({
-            next: () => {
-              this.questions.splice(index, 1);
-              this.updateQuestionOrders();
-            },
-            error: (err) => {
-              alert('Error deleting question: ' + err);
-            },
-          })
-        );
-      } else {
-        this.questions.splice(index, 1);
-        this.updateQuestionOrders();
-      }
-    }
+  confirmRemoveQuestion(index: number): void {
+    this.questionToRemoveIndex = index;
+    this.showConfirmModal = true;
   }
 
-  addChoice(question: QuestionData): void {
-    if (question.options.length < 4) {
-      const nextLabel = this.optionLabels[question.options.length];
-      question.options.push({
-        option_text: '',
-        option_label: nextLabel,
-        is_correct: false,
-      });
-    }
+  cancelDelete(): void {
+    this.questionToRemoveIndex = null;
+    this.showConfirmModal = false;
   }
 
-  removeChoice(question: QuestionData, choiceIndex: number): void {
-    if (question.options.length > 2) {
-      const removedOption = question.options[choiceIndex];
-      if (question.correct_answer === removedOption.option_label) {
-        question.correct_answer = question.options[0].option_label;
-      }
-      question.options.splice(choiceIndex, 1);
-      this.updateOptionLabels(question);
+  removeQuestion(): void {
+    if (this.questionToRemoveIndex === null) return;
+    
+    const questionToRemove = this.questions[this.questionToRemoveIndex];
+    if (this.examId && questionToRemove._id) {
+      this.subscriptions.add(
+        this.adminExamService.deleteQuestion(questionToRemove._id).subscribe({
+          next: () => {
+            this.questions.splice(this.questionToRemoveIndex!, 1);
+            this.updateQuestionOrders();
+            this.showSuccessModal = true;
+            this.successModalMessage = 'Question removed successfully!';
+          },
+          error: (err) => {
+            this.showErrorModal = true;
+            this.errorModalMessage = 'Error deleting question: ' + err;
+          },
+          complete: () => {
+            this.questionToRemoveIndex = null;
+            this.showConfirmModal = false;
+          }
+        })
+      );
     } else {
-      alert('A question must have at least two choices.');
+      this.questions.splice(this.questionToRemoveIndex, 1);
+      this.updateQuestionOrders();
+      this.questionToRemoveIndex = null;
+      this.showConfirmModal = false;
     }
   }
 
-  updateOptionLabels(question: QuestionData): void {
-    question.options.forEach((option, index) => {
-      option.option_label = this.optionLabels[index];
-    });
-  }
-
-  updateQuestionOrders(): void {
-    this.questions.forEach((question, index) => {
-      question.order = index + 1;
-    });
-  }
-
-  saveQuestion(question: QuestionData): void {
+  validateAndSaveQuestions(): void {
     if (!this.examId) return;
 
-    // Validation
-    if (!question.question_text.trim()) {
-      alert('Question text cannot be empty.');
-      return;
-    }
-    if (question.options.length !== 4) {
-      alert('Each question must have exactly four choices (A, B, C, D).');
-      return;
-    }
-    if (question.options.some((o) => !o.option_text.trim())) {
-      alert('All choice texts must be filled.');
-      return;
-    }
-    if (
-      !question.correct_answer ||
-      !question.options.some((o) => o.option_label === question.correct_answer)
-    ) {
-      alert('A valid correct answer must be selected.');
-      return;
-    }
-    if (!question.marks || question.marks <= 0) {
-      alert('Score for the question must be a positive number.');
-      return;
+    // Validate all questions
+    for (const question of this.questions) {
+      if (!question.question_text.trim()) {
+        this.showErrorModal = true;
+        this.errorModalMessage = 'Question text cannot be empty for all questions.';
+        return;
+      }
+      if (question.options.length !== 4) {
+        this.showErrorModal = true;
+        this.errorModalMessage = 'Each question must have exactly four choices.';
+        return;
+      }
+      if (question.options.some((o) => !o.option_text.trim())) {
+        this.showErrorModal = true;
+        this.errorModalMessage = 'All choice texts must be filled for all questions.';
+        return;
+      }
+      if (!question.correct_answer || !question.options.some((o) => o.option_label === question.correct_answer)) {
+        this.showErrorModal = true;
+        this.errorModalMessage = 'A valid correct answer must be selected for all questions.';
+        return;
+      }
+      if (!question.marks || question.marks <= 0) {
+        this.showErrorModal = true;
+        this.errorModalMessage = 'Score for all questions must be a positive number.';
+        return;
+      }
     }
 
-    // Update is_correct flags
-    question.options.forEach((option) => {
-      option.is_correct = option.option_label === question.correct_answer;
-    });
-
-    const saveOperation = question._id
-      ? this.adminExamService.updateQuestion(question._id, question)
-      : this.adminExamService.addQuestion(this.examId, question);
-
-    this.subscriptions.add(
-      saveOperation.subscribe({
-        next: (response) => {
-          const savedQuestion = response.data?.question || response;
-          const index = this.questions.findIndex((q) => q === question);
-          if (index !== -1) {
-            this.questions[index] = savedQuestion;
-          }
-          alert('Question saved successfully!');
-        },
-        error: (err) => {
-          alert('Error saving question: ' + err);
-        },
-      })
-    );
+    // If validation passes, save all questions
+    this.saveAllQuestions();
   }
 
   saveAllQuestions(): void {
     if (!this.examId) return;
-
-    for (const question of this.questions) {
-      if (!question.question_text.trim()) {
-        alert('Cannot save: Question text cannot be empty for all questions.');
-        return;
-      }
-      if (question.options.length !== 4) {
-        alert('Cannot save: Each question must have exactly four choices.');
-        return;
-      }
-      if (question.options.some((o) => !o.option_text.trim())) {
-        alert(
-          'Cannot save: All choice texts must be filled for all questions.'
-        );
-        return;
-      }
-      if (
-        !question.correct_answer ||
-        !question.options.some(
-          (o) => o.option_label === question.correct_answer
-        )
-      ) {
-        alert(
-          'Cannot save: A valid correct answer must be selected for all questions.'
-        );
-        return;
-      }
-      if (!question.marks || question.marks <= 0) {
-        alert(
-          'Cannot save: Score for all questions must be a positive number.'
-        );
-        return;
-      }
-    }
 
     let saveCount = 0;
     const totalQuestions = this.questions.length;
@@ -279,16 +219,34 @@ export class ExamQuestionManagerComponent implements OnInit, OnDestroy {
           next: () => {
             saveCount++;
             if (saveCount === totalQuestions) {
-              alert('All questions saved successfully!');
+              this.showSuccessModal = true;
+              this.successModalMessage = 'All questions saved successfully!';
               this.router.navigate(['/admin/examlist']);
             }
           },
           error: (err) => {
-            alert('Error saving some questions. Please try again.');
+            this.showErrorModal = true;
+            this.errorModalMessage = 'Error saving some questions. Please try again.';
           },
         })
       );
     }
+  }
+
+  closeErrorModal(): void {
+    this.showErrorModal = false;
+    this.errorModalMessage = '';
+  }
+
+  closeSuccessModal(): void {
+    this.showSuccessModal = false;
+    this.successModalMessage = '';
+  }
+
+  updateQuestionOrders(): void {
+    this.questions.forEach((question, index) => {
+      question.order = index + 1;
+    });
   }
 
   trackQuestionById(index: number, question: QuestionData): string {

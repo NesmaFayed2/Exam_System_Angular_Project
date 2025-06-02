@@ -1,3 +1,4 @@
+import { LoadComponent } from './../../../shared/load/load.component';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RouterLink, RouterModule } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
@@ -7,7 +8,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-exam-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterModule, DatePipe],
+  imports: [LoadComponent,CommonModule, RouterLink, RouterModule, DatePipe],
   templateUrl: './exam.component.html',
   styleUrls: ['./exam.component.css'],
 })

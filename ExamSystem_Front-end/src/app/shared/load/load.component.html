@@ -1,1 +1,29 @@
-<div class="loader"></div>
+<div class="spinner-overlay" [class.show]="isLoading">
+  <div class="spinner-container">
+    <!-- Spinner rings -->
+    <div class="exam-spinner">
+      <div class="spinner-ring"></div>
+      <div class="spinner-ring"></div>
+      <div class="spinner-ring"></div>
+      <div class="spinner-inner">
+        <!-- Bootstrap book icon -->
+        <i class="bi bi-book" style="font-size: 32px; color: currentColor;"></i>
+      </div>
+    </div>
+
+    <!-- Loading text -->
+    <div class="loading-text">
+      {{ loadingMessage }}
+      <span class="dots">
+        <span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
+      </span>
+    </div>
+
+    <div class="progress-container" *ngIf="showProgress">
+      <div class="progress-bar">
+<div class="progress-fill" [style.width.%]="progress"></div>
+      </div>
+<span class="progress-text">{{ progress }}%</span>
+    </div>
+  </div>
+</div>

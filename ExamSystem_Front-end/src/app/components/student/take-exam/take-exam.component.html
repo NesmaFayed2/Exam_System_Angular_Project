@@ -1,8 +1,4 @@
-<!-- Loading State -->
-<div *ngIf="isLoading" class="text-center my-5">
-  <div class="spinner-border text-muted" role="status"></div>
-  <p>Loading exam...</p>
-</div>
+@if(!isLoading) {
 
 <!-- Submitting State -->
 <div *ngIf="isSubmitting">
@@ -138,3 +134,9 @@
     </div>
   </div>
 </div>
+}
+ @else {
+  <app-load
+    [isLoading]="isLoading"
+    [loadingMessage]="'Exam will start ....'"  />
+}

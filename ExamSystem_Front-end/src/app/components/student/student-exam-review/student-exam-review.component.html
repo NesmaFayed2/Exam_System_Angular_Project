@@ -1,6 +1,6 @@
+@if(!isLoading) {
 <div
   class="container mt-4 exam-review-container"
-  *ngIf="!isLoading; else loading"
 >
   <div class="review-header text-center mb-4">
     <h2 class="fw-bold" style="color: #000039">
@@ -111,14 +111,18 @@
       </button>
     </div>
   </div>
-</div>
+</div>}
+ @else {
+  <app-load
+  [isLoading]="isLoading"
+  [loadingMessage]="'Reviewing your exam ...'"
+  [showProgress]="true"
+  [progress]="progress"
+/>
 
-<ng-template #loading>
-  <div class="text-center my-5">
-    <div class="spinner-border text-muted" role="status"></div>
-    <p>Loading exam review...</p>
-  </div>
-</ng-template>
+}
+
+
 
 <ng-template #noResult>
   <div class="alert alert-warning text-center">

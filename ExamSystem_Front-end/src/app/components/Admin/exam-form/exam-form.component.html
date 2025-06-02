@@ -1,167 +1,182 @@
 <div class="container mt-4">
   <div class="card p-4 shadow-sm">
     <h2 class="card-title text-center mb-4 text-navy">
-      {{ isEditMode ? " Edit Exam " : " + Add New Exam" }}
+      <i class="bi" [class.bi-pencil-square]="isEditMode" [class.bi-plus-circle]="!isEditMode"></i>
+      {{ isEditMode ? " Edit Exam " : " Add New Exam" }}
     </h2>
 
     <!-- Loading State -->
-    <div *ngIf="isLoading" class="text-center my-3">
-      <div class="spinner-border text-muted" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-      <p class="mt-2">
-        {{ isEditMode ? "Loading exam..." : "Saving exam..." }}
-      </p>
-    </div>
+    @if (isLoading) {
+       <app-load [isLoading]="isLoading" [loadingMessage]="'admin Dashboard ....'" />
+
+    }
 
     <!-- Error Message -->
-    <div *ngIf="errorMessage" class="alert alert-danger">
-      <i class="bi bi-exclamation-triangle"></i>
-      Error: {{ errorMessage }}
-    </div>
-
-    <form (ngSubmit)="saveExam()" class="exam-form" *ngIf="!isLoading">
-      <div class="form-group mb-3">
-        <label for="title" class="form-label">Title</label>
-        <input
-          id="title"
-          [(ngModel)]="exam.title"
-          name="title"
-          placeholder="e.g., Angular Fundamentals Exam"
-          required
-          class="form-control"
-        />
+    @if (errorMessage) {
+      <div class="alert alert-danger">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        Error: {{ errorMessage }}
       </div>
+    }
 
-      <div class="form-group mb-3">
-        <label for="description" class="form-label">Description</label>
-        <textarea
-          id="description"
-          [(ngModel)]="exam.description"
-          name="description"
-          placeholder="Brief description of the exam content"
-          required
-          rows="3"
-          class="form-control"
-        ></textarea>
-      </div>
+    @if (!isLoading) {
+      <form (ngSubmit)="saveExam()" class="exam-form">
+        <div class="form-group mb-3">
+          <label for="title" class="form-label">
+            <i class="bi bi-card-heading"></i> Title
+          </label>
+          <input
+            id="title"
+            [(ngModel)]="exam.title"
+            name="title"
+            placeholder="e.g., Angular Fundamentals Exam"
+            required
+            class="form-control"
+          />
+        </div>
 
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group mb-3">
-            <label for="startDate" class="form-label">Start Date</label>
-            <input
-              id="startDate"
-              type="date"
-              [(ngModel)]="exam.startDate"
-              name="startDate"
-              required
-              class="form-control"
-            />
+        <div class="form-group mb-3">
+          <label for="description" class="form-label">
+            <i class="bi bi-text-paragraph"></i> Description
+          </label>
+          <textarea
+            id="description"
+            [(ngModel)]="exam.description"
+            name="description"
+            placeholder="Brief description of the exam content"
+            required
+            rows="3"
+            class="form-control"
+          ></textarea>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group mb-3">
+              <label for="startDate" class="form-label">
+                <i class="bi bi-calendar-event"></i> Start Date
+              </label>
+              <input
+                id="startDate"
+                type="date"
+                [(ngModel)]="exam.startDate"
+                name="startDate"
+                required
+                class="form-control"
+              />
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group mb-3">
+              <label for="endDate" class="form-label">
+                <i class="bi bi-calendar-check"></i> End Date
+              </label>
+              <input
+                id="endDate"
+                type="date"
+                [(ngModel)]="exam.endDate"
+                name="endDate"
+                required
+                class="form-control"
+              />
+            </div>
           </div>
         </div>
 
-        <div class="col-md-6">
-          <div class="form-group mb-3">
-            <label for="endDate" class="form-label">End Date</label>
-            <input
-              id="endDate"
-              type="date"
-              [(ngModel)]="exam.endDate"
-              name="endDate"
-              required
-              class="form-control"
-            />
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group mb-3">
+              <label for="duration" class="form-label">
+                <i class="bi bi-clock"></i> Duration (minutes)
+              </label>
+              <input
+                id="duration"
+                type="number"
+                [(ngModel)]="exam.duration"
+                name="duration"
+                placeholder="e.g., 60"
+                required
+                min="1"
+                class="form-control"
+              />
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group mb-3">
+              <label for="total_marks" class="form-label">
+                <i class="bi bi-award"></i> Total Marks
+              </label>
+              <input
+                id="total_marks"
+                type="number"
+                [(ngModel)]="exam.total_marks"
+                name="total_marks"
+                placeholder="e.g., 100"
+                required
+                min="1"
+                class="form-control"
+              />
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group mb-3">
+              <label for="passing_marks" class="form-label">
+                <i class="bi bi-check-circle"></i> Passing Marks
+              </label>
+              <input
+                id="passing_marks"
+                type="number"
+                [(ngModel)]="exam.passing_marks"
+                name="passing_marks"
+                placeholder="e.g., 50"
+                required
+                min="0"
+                class="form-control"
+              />
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group mb-3">
-            <label for="duration" class="form-label">Duration (minutes)</label>
-            <input
-              id="duration"
-              type="number"
-              [(ngModel)]="exam.duration"
-              name="duration"
-              placeholder="e.g., 60"
-              required
-              min="1"
-              class="form-control"
-            />
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="form-group mb-3">
-            <label for="total_marks" class="form-label">Total Marks</label>
-            <input
-              id="total_marks"
-              type="number"
-              [(ngModel)]="exam.total_marks"
-              name="total_marks"
-              placeholder="e.g., 100"
-              required
-              min="1"
-              class="form-control"
-            />
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="form-group mb-3">
-            <label for="passing_marks" class="form-label">Passing Marks</label>
-            <input
-              id="passing_marks"
-              type="number"
-              [(ngModel)]="exam.passing_marks"
-              name="passing_marks"
-              placeholder="e.g., 50"
-              required
-              min="0"
-              class="form-control"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div class="form-group mb-4">
-        <label for="track" class="form-label">Track</label>
-        <select
-          id="track"
-          [(ngModel)]="exam.track"
-          name="track"
-          required
-          class="form-select"
-        >
-          <option value="" disabled>Select a Track</option>
-          <option
-            *ngFor="let trackOption of availableTracks"
-            [value]="trackOption"
+        <div class="form-group mb-4">
+          <label for="track" class="form-label">
+            <i class="bi bi-diagram-3"></i> Track
+          </label>
+          <select
+            id="track"
+            [(ngModel)]="exam.track"
+            name="track"
+            required
+            class="form-select"
           >
-            {{ trackOption | uppercase }}
-          </option>
-        </select>
-      </div>
+            <option value="" disabled>Select a Track</option>
+            @for (trackOption of availableTracks; track trackOption) {
+              <option [value]="trackOption">
+                {{ trackOption | uppercase }}
+              </option>
+            }
+          </select>
+        </div>
 
-      <div class="text-center mt-4">
-        <button type="button" class="btn btn-secondary me-2" (click)="goBack()">
-          <i class="bi bi-arrow-left"></i> Cancel
-        </button>
-        <button
-          type="submit"
-          class="btn back-navy text-light py-2"
-          [disabled]="isLoading"
-        >
-          <span
-            *ngIf="isLoading"
-            class="spinner-border spinner-border-sm me-2"
-          ></span>
-          <i class="bi bi-floppy"></i>
-          {{ isEditMode ? "Update Exam" : "Save Exam" }}
-        </button>
-      </div>
-    </form>
+        <div class="text-center mt-4">
+          <button type="button" class="btn btn-secondary me-2" (click)="goBack()">
+            <i class="bi bi-arrow-left"></i> Cancel
+          </button>
+          <button
+            type="submit"
+            class="btn back-navy text-light py-2"
+            [disabled]="isLoading"
+          >
+            @if (isLoading) {
+              <span class="spinner-border spinner-border-sm me-2"></span>
+            }
+            <i class="bi" [class.bi-floppy]="!isEditMode" [class.bi-floppy-fill]="isEditMode"></i>
+            {{ isEditMode ? "Update Exam" : "Save Exam" }}
+          </button>
+        </div>
+      </form>
+    }
   </div>
 </div>
