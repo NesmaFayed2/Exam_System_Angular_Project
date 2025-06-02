@@ -8,11 +8,12 @@ import {
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth.service';
+import { LoadComponent } from '../../../shared/load/load.component';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [LoadComponent,ReactiveFormsModule, CommonModule, RouterLink],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
 })

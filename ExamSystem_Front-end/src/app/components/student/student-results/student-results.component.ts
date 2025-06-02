@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { StudentExamService } from '../../../services/exam.service';
+import { LoadComponent } from '../../../shared/load/load.component';
 
 @Component({
   selector: 'app-student-results',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [LoadComponent,CommonModule, RouterLink],
   templateUrl: './student-results.component.html',
   styleUrls: ['./student-results.component.css'],
 })

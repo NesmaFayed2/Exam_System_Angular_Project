@@ -1,3 +1,5 @@
+ @if (!isLoading) {
+      
 <div class="w-75">
   <h3 class="text-center mb-4" style="color: var(--primary-color)">Welcome!</h3>
 
@@ -60,13 +62,7 @@
       class="btn w-100 py-2"
       [disabled]="!loginForm.valid || isLoading"
     >
-      @if (isLoading) {
-      <span
-        class="spinner-border spinner-border-sm me-2"
-        role="status"
-        aria-hidden="true"
-      ></span>
-      Logging In... } @else { Log In }
+    Log In 
     </button>
 
     <p class="mt-3 text-center">
@@ -78,4 +74,12 @@
       >
     </p>
   </form>
-</div>
+</div>}
+ @else {
+     <app-load
+  [isLoading]="isLoading"
+  [loadingMessage]="'Preparing your dashboard'"
+  [showProgress]="true"
+  [progress]="progress" 
+/>
+} 

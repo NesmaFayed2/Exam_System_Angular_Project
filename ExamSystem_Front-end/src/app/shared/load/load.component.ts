@@ -1,12 +1,18 @@
-import { Component } from '@angular/core';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatIconModule } from '@angular/material/icon';
+import { Component, Input } from '@angular/core';
+
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-load',
   standalone: true,
-  imports: [MatProgressSpinnerModule, MatIconModule],
+  imports: [CommonModule],
   templateUrl: './load.component.html',
   styleUrl: './load.component.css'
 })
-export class LoadComponent {}
+export class LoadComponent {
+  @Input() isLoading: boolean = false;
+  @Input() loadingMessage: string = 'Loading exam';
+  @Input() showProgress: boolean = false;
+  @Input() progress: number = 0;
+
+}

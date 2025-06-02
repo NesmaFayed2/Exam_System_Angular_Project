@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AdminExamService } from '../../../services/admin-exam.service'; // Updated import
 import { Subscription } from 'rxjs';
+import { LoadComponent } from '../../../shared/load/load.component';
 
 @Component({
   selector: 'app-exam-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [LoadComponent,CommonModule, FormsModule, RouterLink],
   templateUrl: './exam-form.component.html',
   styleUrls: ['./exam-form.component.css'],
 })

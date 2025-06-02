@@ -8,11 +8,12 @@ import {
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth.service';
+import { LoadComponent } from "../../../shared/load/load.component";
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, CommonModule],
+  imports: [ReactiveFormsModule, RouterLink, CommonModule, LoadComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
@@ -20,6 +21,7 @@ export class LoginComponent {
   loginForm: FormGroup;
   isLoading = false;
   errorMessage = '';
+progress = 0; 
 
   constructor(
     private fb: FormBuilder,
@@ -36,7 +38,8 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.isLoading = true;
       this.errorMessage = '';
-
+this.progress = 0;
+    this.simulateProgress(); 
       const credentials = {
         email: this.loginForm.value.email,
         password: this.loginForm.value.password,
@@ -59,6 +62,8 @@ export class LoginComponent {
           this.isLoading = false;
         },
         complete: () => {
+                  this.progress = 100;
+
           this.isLoading = false;
         },
       });
@@ -66,4 +71,14 @@ export class LoginComponent {
       this.loginForm.markAllAsTouched();
     }
   }
+  simulateProgress(): void {
+  const interval = setInterval(() => {
+    if (this.progress < 90) {
+      this.progress += 10;
+    } else {
+      clearInterval(interval);
+    }
+  }, 200);
+}
+
 }

@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CountdownComponent } from '../countdown/countdown.component';
+import { LoadComponent } from '../../../shared/load/load.component';
 
 interface Question {
   _id: string;
@@ -29,7 +30,7 @@ interface ExamData {
 @Component({
   selector: 'app-take-exam',
   standalone: true,
-  imports: [CountdownComponent, CommonModule, FormsModule],
+  imports: [LoadComponent,CountdownComponent, CommonModule, FormsModule],
   templateUrl: './take-exam.component.html',
   styleUrls: ['./take-exam.component.css'],
 })

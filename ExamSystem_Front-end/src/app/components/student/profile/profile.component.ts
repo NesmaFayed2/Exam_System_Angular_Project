@@ -8,11 +8,12 @@ import {
 import { CommonModule } from '@angular/common';
 import { ProfileService } from '../../../services/profile.service';
 import { AuthService } from '../../../services/auth.service';
+import { LoadComponent } from '../../../shared/load/load.component';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [LoadComponent,ReactiveFormsModule, CommonModule],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
 })

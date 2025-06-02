@@ -1,22 +1,26 @@
-<div class="dashboard">
-  <div class="header">
-    <h2><i class="bi bi-journal-bookmark"></i> Available Exams</h2>
-  </div>
+@if (!isLoading) {
+  <div class="dashboard">
+    <div class="header">
+      <h2><i class="bi bi-journal-bookmark"></i> Available Exams</h2>
+    </div>
 
-  <div *ngIf="isLoading" class="text-center my-5">
-   <app-load/>
-  </div>
-
-  @if (!isLoading && exams.length > 0) {
-  <div class="exams-grid">
-    @for (exam of exams; track exam.id) {
-    <app-exam-card [exam]="exam"></app-exam-card>
+    @if (exams.length > 0) {
+      <div class="exams-grid">
+        @for (exam of exams; track exam.id) {
+          <app-exam-card [exam]="exam"></app-exam-card>
+        }
+      </div>
+    } @else {
+      <div class="no-exams">
+        <i class="bi bi-emoji-frown"></i>
+        <p>No exams available at the moment</p>
+      </div>
     }
   </div>
-  } @else {
-  <div class="no-exams">
-    <i class="bi bi-emoji-frown"></i>
-    <p>No exams available at the moment</p>
-  </div>
-  }
-</div>
+} @else {
+  <app-load
+    [isLoading]="isLoading"
+    [loadingMessage]="'Preparing your exams'"
+    [showProgress]="true"
+  />
+}
