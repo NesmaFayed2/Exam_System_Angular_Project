@@ -34,7 +34,7 @@ interface ExamDetails {
   standalone: true,
   imports: [LoadComponent, CommonModule, DatePipe],
   templateUrl: './view-exam.component.html',
-  styleUrls: ['./view-exam.component.css']
+  styleUrls: ['./view-exam.component.css'],
 })
 export class ViewExamComponent implements OnInit, OnDestroy {
   exam: ExamDetails | undefined;
@@ -51,11 +51,11 @@ export class ViewExamComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private adminExamService: AdminExamService,
+    private adminExamService: AdminExamService
   ) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe((params) => {
       this.examId = params.get('id');
       if (this.examId) {
         this.loadExamDetails();
@@ -83,13 +83,16 @@ export class ViewExamComponent implements OnInit, OnDestroy {
 
     this.adminExamService.deleteQuestion(this.questionToDelete).subscribe({
       next: () => {
-        this.questions = this.questions.filter(q => q._id !== this.questionToDelete);
+        this.questions = this.questions.filter(
+          (q) => q._id !== this.questionToDelete
+        );
         this.closeDeleteModal();
       },
       error: (error) => {
-        this.errorMessage = 'Failed to delete question: ' + (error.message || error);
+        this.errorMessage =
+          'Failed to delete question: ' + (error.message || error);
         this.closeDeleteModal();
-      }
+      },
     });
   }
 
@@ -112,11 +115,16 @@ export class ViewExamComponent implements OnInit, OnDestroy {
 
   get examStatusClass(): string {
     switch (this.examStatus) {
-      case 'Active': return 'bg-success';
-      case 'Upcoming': return 'bg-warning text-dark';
-      case 'Ended': return 'bg-secondary';
-      case 'Inactive': return 'bg-danger';
-      default: return 'bg-secondary';
+      case 'Active':
+        return 'bg-success';
+      case 'Upcoming':
+        return 'bg-warning ';
+      case 'Ended':
+        return 'bg-secondary';
+      case 'Inactive':
+        return 'bg-danger';
+      default:
+        return 'bg-secondary';
     }
   }
 
@@ -126,31 +134,35 @@ export class ViewExamComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.examSubscription = this.adminExamService.getExamById(this.examId).subscribe({
-      next: (examData: ExamDetails) => {
-        this.exam = examData;
-      },
-      error: (error) => {
-        this.errorMessage = error.message || 'Failed to load exam details.';
-        this.router.navigate(['/admin/examlist']);
-      },
-      complete: () => {
-        this.isLoading = false;
-      }
-    });
+    this.examSubscription = this.adminExamService
+      .getExamById(this.examId)
+      .subscribe({
+        next: (examData: ExamDetails) => {
+          this.exam = examData;
+        },
+        error: (error) => {
+          this.errorMessage = error.message || 'Failed to load exam details.';
+          this.router.navigate(['/admin/examlist']);
+        },
+        complete: () => {
+          this.isLoading = false;
+        },
+      });
   }
 
   private loadExamQuestions(): void {
     if (!this.examId) return;
 
-    this.questionsSubscription = this.adminExamService.getExamQuestions(this.examId).subscribe({
-      next: (questions: any[]) => {
-        this.questions = questions;
-      },
-      error: (error) => {
-        console.error('Error loading questions:', error);
-      }
-    });
+    this.questionsSubscription = this.adminExamService
+      .getExamQuestions(this.examId)
+      .subscribe({
+        next: (questions: any[]) => {
+          this.questions = questions;
+        },
+        error: (error) => {
+          console.error('Error loading questions:', error);
+        },
+      });
   }
 
   editExam(): void {
@@ -161,7 +173,7 @@ export class ViewExamComponent implements OnInit, OnDestroy {
 
   addQuestion(): void {
     if (this.examId) {
-      this.router.navigate(['/admin/add-question', this.examId]);
+      this.router.navigate(['/admin/exam-questions', this.examId]);
     }
   }
 

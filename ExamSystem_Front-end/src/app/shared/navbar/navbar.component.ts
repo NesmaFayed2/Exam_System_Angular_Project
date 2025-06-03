@@ -4,6 +4,8 @@ import {
   OnInit,
   Output,
   OnDestroy,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -21,70 +23,91 @@ import { Subscription } from 'rxjs';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
   imports: [CommonModule, RouterLink, RouterLinkActive],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NavbarComponent implements OnInit {
- constructor(private router: Router, private authService: AuthService) {
-  this.updateNavbarVisibility(this.router.url);
-
-  this.router.events.subscribe((event) => {
-    if (event instanceof NavigationEnd) {
-      this.updateNavbarVisibility(event.urlAfterRedirects);
-    }
-  });
-}
-
-updateNavbarVisibility(url: string): void {
-  this.showUserMenu = !url.includes('/student/exam/');
-}
-
- 
+export class NavbarComponent implements OnInit, OnDestroy {
   @Output() toggleSidebar = new EventEmitter<void>();
 
-  userData: any;
-  defaultImage = '/default-avatar.png';
+  userData: any = null;
+  readonly defaultImage = '/default-avatar.png';
   showUserMenu = true;
   private userSub!: Subscription;
-  // constructor(private router: Router, private authService: AuthService) {
-  //   this.router.events.subscribe((event) => {
-  //     if (event instanceof NavigationEnd) {
-  //       this.showUserMenu = !event.urlAfterRedirects.includes('student/exam/');
-  //     }
-  //   });
-  // }
+  profileImageUrl: string = this.defaultImage;
+
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private cdRef: ChangeDetectorRef
+  ) {
+    this.updateNavbarVisibility(this.router.url);
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.updateNavbarVisibility(event.urlAfterRedirects);
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.userSub = this.authService.userData$.subscribe((user) => {
       this.userData = user;
+      Promise.resolve().then(() => {
+        // Defer update
+        this.updateProfileImageUrl();
+        this.cdRef.markForCheck();
+      });
     });
   }
 
   ngOnDestroy(): void {
-    if (this.userSub) this.userSub.unsubscribe();
-  }
-  getFullName(): string {
-    if (!this.userData) return '';
-    if (this.userData.first_name && this.userData.last_name) {
-      return `${this.userData.first_name} ${this.userData.last_name}`;
+    if (this.userSub) {
+      this.userSub.unsubscribe();
     }
-    return this.userData.name || this.userData.email || '';
   }
 
-  getProfileImage(): string {
+  private updateNavbarVisibility(url: string): void {
+    this.showUserMenu = !url.includes('/student/exam/');
+    // No need to call cdRef.markForCheck() here if profileImageUrl isn't changing
+    // But if showUserMenu itself is bound and causing issues, you might add it.
+    // For now, the main issue is with profileImageUrl.
+  }
+
+  private updateProfileImageUrl(): void {
     if (
       this.userData &&
       this.userData.profile_image &&
       this.userData.profile_image.trim() !== ''
     ) {
-      if (this.userData.profile_image.startsWith('http')) {
-        return this.userData.profile_image;
+      const filenameOrPath = this.userData.profile_image;
+
+      if (filenameOrPath.startsWith('http')) {
+        // Absolute URL
+        this.profileImageUrl = filenameOrPath;
+      } else {
+        // Assuming filenameOrPath should be just the filename, e.g., "user.png"
+        // Remove potential leading "uploads/" if backend accidentally includes it
+        const cleanFilename = filenameOrPath.startsWith('uploads/')
+          ? filenameOrPath.substring('uploads/'.length)
+          : filenameOrPath;
+        this.profileImageUrl = `http://localhost:5000/uploads/${cleanFilename}?t=${Date.now()}`;
       }
-      return 'http://localhost:5000/' + this.userData.profile_image;
+    } else {
+      this.profileImageUrl = this.defaultImage;
     }
-    return this.defaultImage;
+  }
+
+  getFullName(): string {
+    if (!this.userData) return 'User';
+    if (this.userData.first_name && this.userData.last_name) {
+      return `${this.userData.first_name} ${this.userData.last_name}`;
+    }
+    return this.userData.name || this.userData.email || 'User';
   }
 
   onImageError(event: any): void {
-    event.target.src = this.defaultImage;
+    if (event.target.src !== this.defaultImage) {
+      event.target.src = this.defaultImage;
+    }
   }
 
   onToggleClick(): void {

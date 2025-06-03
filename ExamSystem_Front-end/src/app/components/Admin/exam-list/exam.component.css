@@ -215,6 +215,14 @@
   color: white;
 }
 
+.back-navy {
+  background-color: #151550;
+}
+
+.text-navy {
+  color: #151550;
+}
+
 /* Responsive Adjustments */
 @media (max-width: 768px) {
   .exam-list {

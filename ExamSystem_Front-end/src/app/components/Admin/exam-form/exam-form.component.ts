@@ -9,7 +9,7 @@ import { LoadComponent } from '../../../shared/load/load.component';
 @Component({
   selector: 'app-exam-form',
   standalone: true,
-  imports: [LoadComponent,CommonModule, FormsModule, RouterLink],
+  imports: [LoadComponent, CommonModule, FormsModule, RouterLink],
   templateUrl: './exam-form.component.html',
   styleUrls: ['./exam-form.component.css'],
 })
@@ -20,9 +20,9 @@ export class ExamFormComponent implements OnInit, OnDestroy {
     _id: '',
     title: '',
     description: '',
-    startDate: '', // Will map to start_date
-    endDate: '', // Will map to end_date
-    track: 'mern', // Will map to major
+    startDate: '',
+    endDate: '',
+    track: 'mern',
     duration: 60,
     total_marks: 100,
     passing_marks: 50,
@@ -51,6 +51,15 @@ export class ExamFormComponent implements OnInit, OnDestroy {
     });
   }
 
+  private formatDateForDateTimeLocalInput(date: Date): string {
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2); // Months are 0-indexed
+    const day = ('0' + date.getDate()).slice(-2);
+    const hours = ('0' + date.getHours()).slice(-2);
+    const minutes = ('0' + date.getMinutes()).slice(-2);
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  }
+
   loadExam(examId: string): void {
     this.isLoading = true;
     this.errorMessage = '';
@@ -64,11 +73,16 @@ export class ExamFormComponent implements OnInit, OnDestroy {
             title: examData.title,
             description: examData.description,
             startDate: examData.start_date
-              ? new Date(examData.start_date).toISOString().split('T')[0]
+              ? this.formatDateForDateTimeLocalInput(
+                  new Date(examData.start_date)
+                )
               : '',
             endDate: examData.end_date
-              ? new Date(examData.end_date).toISOString().split('T')[0]
+              ? this.formatDateForDateTimeLocalInput(
+                  new Date(examData.end_date)
+                )
               : '',
+
             track: examData.major?.name || 'mern',
             duration: examData.duration,
             total_marks: examData.total_marks,
@@ -99,8 +113,12 @@ export class ExamFormComponent implements OnInit, OnDestroy {
     const examData = {
       title: this.exam.title,
       description: this.exam.description,
-      start_date: this.exam.startDate,
-      end_date: this.exam.endDate,
+      start_date: this.exam.startDate
+        ? new Date(this.exam.startDate).toISOString()
+        : null,
+      end_date: this.exam.endDate
+        ? new Date(this.exam.endDate).toISOString()
+        : null,
       major: this.exam.track, // Backend expects major name
       duration: this.exam.duration,
       total_marks: this.exam.total_marks,
