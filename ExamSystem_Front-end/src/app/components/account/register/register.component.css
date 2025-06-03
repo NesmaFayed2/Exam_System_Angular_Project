@@ -1,15 +1,33 @@
-form {
-  background-color: #f8f9fa;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.05);
+.form-group {
+  margin-bottom: 1.25rem;
+}
+.links {
+  color: #000059;
+}
+.links:hover {
+  color: #fff;
+}
+.text-link {
+  color: #000059;
+  text-decoration: none;
+  font-weight: bold;
+}
+button {
+  width: 100%;
+  padding: 14px;
+  background-color: #000059;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-label {
-  color: #555;
-}
-
-.form-control:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 0.2rem rgba(0,0,57,0.25);
+button:hover {
+  background-color: #000039;
+  color: white;
+  transform: translateY(-2px);
 }

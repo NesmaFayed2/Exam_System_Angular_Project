@@ -195,6 +195,9 @@ textarea:focus {
 .back-navy {
   background-color: #151550;
 }
+.back-navy:hover {
+  background-color: #000039;
+}
 
 .text-navy {
   color: #151550;

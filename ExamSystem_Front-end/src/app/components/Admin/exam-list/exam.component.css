@@ -182,37 +182,32 @@
   color: white;
 }
 .btn-add-new:hover {
-  background-color: #2c3280;
+  background-color: #000039;
   border-color: #25115c;
 }
 
 .btn-view {
   background-color: #0d2238;
-  border-color: #007bff;
   color: white;
 }
 .btn-view:hover {
-  background-color: #0056b3;
-  border-color: #004085;
+  background-color: #000039;
 }
 
 .btn-edit {
-  border-color: #ffc107;
+  border-color: #d1d1d1;
   color: #000000;
 }
 .btn-edit:hover {
-  background-color: #e0a800;
   border-color: #cc9b00;
 }
 
 .btn-delete {
-  border-color: #dc3545;
+  border-color: #d1d1d1;
   color: rgb(0, 0, 0);
 }
 .btn-delete:hover {
-  background-color: #c82333;
   border-color: #bd2130;
-  color: white;
 }
 
 .back-navy {
@@ -221,6 +216,21 @@
 
 .text-navy {
   color: #151550;
+}
+.no-exams {
+  text-align: center;
+  padding: 50px 0;
+
+  i {
+    font-size: 3rem;
+    color: #666;
+    margin-bottom: 20px;
+  }
+
+  p {
+    font-size: 1.2rem;
+    color: #666;
+  }
 }
 
 /* Responsive Adjustments */
