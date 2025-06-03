@@ -13,7 +13,7 @@ import { LoadComponent } from '../../../shared/load/load.component';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [LoadComponent,ReactiveFormsModule, CommonModule],
+  imports: [LoadComponent, ReactiveFormsModule, CommonModule],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
 })
@@ -82,9 +82,13 @@ export class ProfileComponent implements OnInit {
           email: user.email,
           major: user.major?.name || user.major,
         });
-        user.profile_image && user.profile_image.trim() !== ''
-          ? 'http://localhost:5000/' + user.profile_image
-          : this.defaultImage;
+        console.log(user.profile_image);
+        this.previewImage =
+          user.profile_image && user.profile_image.trim() !== ''
+            ? `http://localhost:5000/uploads/${
+                user.profile_image
+              }?t=${Date.now()}`
+            : this.defaultImage;
 
         this.isLoading = false;
       },

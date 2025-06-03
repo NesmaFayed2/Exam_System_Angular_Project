@@ -32,7 +32,7 @@ export class ExamQuestionManagerComponent implements OnInit, OnDestroy {
   questions: QuestionData[] = [];
   isLoading: boolean = false;
   errorMessage: string = '';
-  
+
   // Modal properties
   showConfirmModal: boolean = false;
   showErrorModal: boolean = false;
@@ -134,7 +134,7 @@ export class ExamQuestionManagerComponent implements OnInit, OnDestroy {
 
   removeQuestion(): void {
     if (this.questionToRemoveIndex === null) return;
-    
+
     const questionToRemove = this.questions[this.questionToRemoveIndex];
     if (this.examId && questionToRemove._id) {
       this.subscriptions.add(
@@ -152,7 +152,7 @@ export class ExamQuestionManagerComponent implements OnInit, OnDestroy {
           complete: () => {
             this.questionToRemoveIndex = null;
             this.showConfirmModal = false;
-          }
+          },
         })
       );
     } else {
@@ -170,27 +170,37 @@ export class ExamQuestionManagerComponent implements OnInit, OnDestroy {
     for (const question of this.questions) {
       if (!question.question_text.trim()) {
         this.showErrorModal = true;
-        this.errorModalMessage = 'Question text cannot be empty for all questions.';
+        this.errorModalMessage =
+          'Question text cannot be empty for all questions.';
         return;
       }
       if (question.options.length !== 4) {
         this.showErrorModal = true;
-        this.errorModalMessage = 'Each question must have exactly four choices.';
+        this.errorModalMessage =
+          'Each question must have exactly four choices.';
         return;
       }
       if (question.options.some((o) => !o.option_text.trim())) {
         this.showErrorModal = true;
-        this.errorModalMessage = 'All choice texts must be filled for all questions.';
+        this.errorModalMessage =
+          'All choice texts must be filled for all questions.';
         return;
       }
-      if (!question.correct_answer || !question.options.some((o) => o.option_label === question.correct_answer)) {
+      if (
+        !question.correct_answer ||
+        !question.options.some(
+          (o) => o.option_label === question.correct_answer
+        )
+      ) {
         this.showErrorModal = true;
-        this.errorModalMessage = 'A valid correct answer must be selected for all questions.';
+        this.errorModalMessage =
+          'A valid correct answer must be selected for all questions.';
         return;
       }
       if (!question.marks || question.marks <= 0) {
         this.showErrorModal = true;
-        this.errorModalMessage = 'Score for all questions must be a positive number.';
+        this.errorModalMessage =
+          'Score for all questions must be a positive number.';
         return;
       }
     }
@@ -221,12 +231,13 @@ export class ExamQuestionManagerComponent implements OnInit, OnDestroy {
             if (saveCount === totalQuestions) {
               this.showSuccessModal = true;
               this.successModalMessage = 'All questions saved successfully!';
-              this.router.navigate(['/admin/examlist']);
+              this.router.navigate(['/admin/view-exam/', this.examId]);
             }
           },
           error: (err) => {
             this.showErrorModal = true;
-            this.errorModalMessage = 'Error saving some questions. Please try again.';
+            this.errorModalMessage =
+              'Error saving some questions. Please try again.';
           },
         })
       );

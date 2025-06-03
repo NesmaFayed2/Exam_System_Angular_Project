@@ -1,219 +1,256 @@
 <div class="container mt-4">
   <div class="card p-4 shadow-sm">
     <h2 class="card-title text-center mb-4 text-navy">
-      <i class="bi bi-patch-question"></i> Manage Questions for: <br />"{{ examTitle }}"
+      <i class="bi bi-patch-question"></i> Manage Questions for: <br />"{{
+        examTitle
+      }}"
     </h2>
 
     @if (isLoading) {
-      <app-load [isLoading]="isLoading" [loadingMessage]="'exam questions ....'" />
+    <app-load
+      [isLoading]="isLoading"
+      [loadingMessage]="'exam questions ....'"
+    />
     } @else if (errorMessage) {
-      <div class="alert alert-danger">
-        <i class="bi bi-exclamation-triangle-fill"></i>
-        Error: {{ errorMessage }}
-      </div>
+    <div class="alert alert-danger">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      Error: {{ errorMessage }}
+    </div>
+    } @else { @if (examId === null) {
+    <div class="alert alert-danger text-center">
+      <i class="bi bi-x-circle-fill"></i> Error: No exam ID provided.
+    </div>
     } @else {
-      @if (examId === null) {
-        <div class="alert alert-danger text-center">
-          <i class="bi bi-x-circle-fill"></i> Error: No exam ID provided.
-        </div>
-      } @else {
-        <h3 class="mb-3 text-center text-secondary">
-          <i class="bi bi-list-ol"></i> Questions ({{ questions.length }})
-        </h3>
+    <h3 class="mb-3 text-center text-secondary">
+      <i class="bi bi-list-ol"></i> Questions ({{ questions.length }})
+    </h3>
 
-        @if (questions.length === 0) {
-          <div class="alert alert-info text-center my-4">
-            <i class="bi bi-question-circle-fill display-1 text-muted"></i>
-            <p class="mt-2">
-              No questions added yet. Click "Add New Question" to get started!
-            </p>
-          </div>
-        }
-
-        @for (question of questions; track question._id; let i = $index) {
-          <div class="question-block p-3 mb-4 border rounded bg-white shadow-sm">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <h5 class="text-dark m-0">
-                <i class="bi bi-question-lg"></i> Question {{ i + 1 }}
-              </h5>
-              <div class="question-actions-buttons">
-                <button
-                  type="button"
-                  (click)="confirmRemoveQuestion(i)"
-                  class="btn btn-sm btn-outline-danger"
-                  title="Remove Question"
-                >
-                  <i class="bi bi-trash-fill"></i> Remove Question
-                </button>
-              </div>
-            </div>
-
-            <!-- Question Text -->
-            <div class="form-group mb-3">
-              <label [for]="'questionText-' + i" class="form-label">
-                <i class="bi bi-card-text"></i> Question Text
-              </label>
-              <input
-                [id]="'questionText-' + i"
-                type="text"
-                [(ngModel)]="question.question_text"
-                placeholder="Enter question here"
-                [name]="'questionText-' + i + '-text'"
-                required
-                class="form-control"
-              />
-            </div>
-
-            <!-- Question Score -->
-            <div class="form-group mb-3">
-              <label [for]="'questionScore-' + i" class="form-label">
-                <i class="bi bi-award"></i> Marks for this Question
-              </label>
-              <input
-                [id]="'questionScore-' + i"
-                type="number"
-                [(ngModel)]="question.marks"
-                placeholder="e.g., 5"
-                [name]="'questionScore-' + i + '-score'"
-                required
-                min="1"
-                class="form-control"
-              />
-            </div>
-
-            <!-- Choices/Options -->
-            <h6><i class="bi bi-list-check"></i> Choices</h6>
-            @for (option of question.options; track option.option_label; let j = $index) {
-              <div class="input-group mb-2">
-                <div class="input-group-text">
-                  <input
-                    type="radio"
-                    [id]="'correctChoice-' + i + '-' + j"
-                    [value]="option.option_label"
-                    [(ngModel)]="question.correct_answer"
-                    [name]="'correctAnswer-' + i"
-                    class="form-check-input mt-0"
-                    required
-                  />
-                  <label [for]="'correctChoice-' + i + '-' + j" class="ms-1">
-                    {{ option.option_label }}
-                  </label>
-                </div>
-                <input
-                  type="text"
-                  [(ngModel)]="option.option_text"
-                  placeholder="Choice text"
-                  [name]="'choiceText-' + i + '-' + j"
-                  required
-                  class="form-control"
-                />
-              </div>
-            }
-          </div>
-        }
-
-        <!-- Action Buttons -->
-        <div class="text-center mb-4">
+    @if (questions.length === 0) {
+    <div class="alert alert-info text-center my-4">
+      <i class="bi bi-question-circle-fill display-1 text-muted"></i>
+      <p class="mt-2">
+        No questions added yet. Click "Add New Question" to get started!
+      </p>
+    </div>
+    } @for (question of questions; track question._id; let i = $index) {
+    <div class="question-block p-3 mb-4 border rounded bg-white shadow-sm">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="text-dark m-0">
+          <i class="bi bi-question-lg"></i> Question {{ i + 1 }}
+        </h5>
+        <div class="question-actions-buttons">
           <button
             type="button"
-            (click)="addQuestion()"
-            class="btn back-navy text-light px-4 py-2 me-3"
+            (click)="confirmRemoveQuestion(i)"
+            class="btn btn-sm btn-outline-danger"
+            title="Remove Question"
           >
-            <i class="bi bi-plus-circle-fill"></i> Add New Question
-          </button>
-          <button
-            type="button"
-            (click)="validateAndSaveQuestions()"
-            class="btn btn-success px-4 py-2"
-            [disabled]="questions.length === 0"
-          >
-            <i class="bi bi-save-fill"></i> Save All Questions
+            <i class="bi bi-trash-fill"></i> Remove Question
           </button>
         </div>
+      </div>
 
-        <div class="text-center mt-4">
-          <a
-            [routerLink]="['/admin/examlist']"
-            class="btn btn-secondary px-4 py-2"
-          >
-            <i class="bi bi-arrow-left-circle-fill"></i> Back to Exam List
-          </a>
+      <!-- Question Text -->
+      <div class="form-group mb-3">
+        <label [for]="'questionText-' + i" class="form-label">
+          <i class="bi bi-card-text"></i> Question Text
+        </label>
+        <input
+          [id]="'questionText-' + i"
+          type="text"
+          [(ngModel)]="question.question_text"
+          placeholder="Enter question here"
+          [name]="'questionText-' + i + '-text'"
+          required
+          class="form-control"
+        />
+      </div>
+
+      <!-- Question Score -->
+      <div class="form-group mb-3">
+        <label [for]="'questionScore-' + i" class="form-label">
+          <i class="bi bi-award"></i> Marks for this Question
+        </label>
+        <input
+          [id]="'questionScore-' + i"
+          type="number"
+          [(ngModel)]="question.marks"
+          placeholder="e.g., 5"
+          [name]="'questionScore-' + i + '-score'"
+          required
+          min="1"
+          class="form-control"
+        />
+      </div>
+
+      <!-- Choices/Options -->
+      <h6><i class="bi bi-list-check"></i> Choices</h6>
+      @for (option of question.options; track option.option_label; let j =
+      $index) {
+      <div class="input-group mb-2">
+        <div class="input-group-text">
+          <input
+            type="radio"
+            [id]="'correctChoice-' + i + '-' + j"
+            [value]="option.option_label"
+            [(ngModel)]="question.correct_answer"
+            [name]="'correctAnswer-' + i"
+            class="form-check-input mt-0"
+            required
+          />
+          <label [for]="'correctChoice-' + i + '-' + j" class="ms-1">
+            {{ option.option_label }}
+          </label>
         </div>
+        <input
+          type="text"
+          [(ngModel)]="option.option_text"
+          placeholder="Choice text"
+          [name]="'choiceText-' + i + '-' + j"
+          required
+          class="form-control"
+        />
+      </div>
       }
+    </div>
     }
+
+    <!-- Action Buttons -->
+    <div class="text-center mb-4">
+      <button
+        type="button"
+        (click)="addQuestion()"
+        class="btn back-navy text-light px-4 py-2 me-3"
+      >
+        <i class="bi bi-plus-circle-fill"></i> Add New Question
+      </button>
+      <button
+        type="button"
+        (click)="validateAndSaveQuestions()"
+        class="btn btn-success px-4 py-2"
+        [disabled]="questions.length === 0"
+      >
+        <i class="bi bi-save-fill"></i> Save All Questions
+      </button>
+    </div>
+
+    <div class="text-center mt-4">
+      <a [routerLink]="['/admin/examlist']" class="btn btn-secondary px-4 py-2">
+        <i class="bi bi-arrow-left-circle-fill"></i> Back to Exam List
+      </a>
+    </div>
+    } }
   </div>
 </div>
 
 <!-- Confirmation Modal -->
 @if (showConfirmModal) {
-  <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.5)">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">
-            <i class="bi bi-exclamation-octagon-fill text-danger"></i> Confirm Deletion
-          </h5>
-          <button type="button" class="btn-close" (click)="cancelDelete()"></button>
-        </div>
-        <div class="modal-body">
-          <p>Are you sure you want to remove this question?</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="cancelDelete()">
-            <i class="bi bi-x-circle"></i> Cancel
-          </button>
-          <button type="button" class="btn btn-danger" (click)="removeQuestion()">
-            <i class="bi bi-trash-fill"></i> Remove
-          </button>
-        </div>
+<div
+  class="modal fade show d-block"
+  tabindex="-1"
+  style="background-color: rgba(0, 0, 0, 0.5)"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content animate-pop-in">
+      <div class="modal-header">
+        <h5 class="modal-title text-danger">
+          <i class="bi bi-exclamation-octagon-fill"></i> Confirm Deletion
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          (click)="cancelDelete()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to remove this question?</p>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="cancelDelete()"
+        >
+          <i class="bi bi-x-circle"></i> Cancel
+        </button>
+        <button
+          type="button"
+          class="btn back-navy text-light"
+          (click)="removeQuestion()"
+        >
+          <i class="bi bi-trash-fill"></i> Remove
+        </button>
       </div>
     </div>
   </div>
-}
-
-@if (showErrorModal) {
-  <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.5)">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header bg-danger text-white">
-          <h5 class="modal-title">
-            <i class="bi bi-exclamation-triangle-fill"></i> Validation Error
-          </h5>
-          <button type="button" class="btn-close" (click)="closeErrorModal()"></button>
-        </div>
-        <div class="modal-body">
-          <p>{{ errorModalMessage }}</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="closeErrorModal()">
-            <i class="bi bi-x-circle"></i> Close
-          </button>
-        </div>
+</div>
+} @if (showErrorModal) {
+<div
+  class="modal fade show d-block"
+  tabindex="-1"
+  style="background-color: rgba(0, 0, 0, 0.5)"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">
+          <i class="bi bi-exclamation-triangle-fill"></i> Validation Error
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          (click)="closeErrorModal()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ errorModalMessage }}</p>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeErrorModal()"
+        >
+          <i class="bi bi-x-circle"></i> Close
+        </button>
       </div>
     </div>
   </div>
+</div>
 }
 
 <!-- Success Modal -->
 @if (showSuccessModal) {
-  <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.5)">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header bg-success text-white">
-          <h5 class="modal-title">
-            <i class="bi bi-check-circle-fill"></i> Success
-          </h5>
-          <button type="button" class="btn-close" (click)="closeSuccessModal()"></button>
-        </div>
-        <div class="modal-body">
-          <p>{{ successModalMessage }}</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" (click)="closeSuccessModal()">
-            <i class="bi bi-check-circle"></i> OK
-          </button>
-        </div>
+<div
+  class="modal fade show d-block"
+  tabindex="-1"
+  style="background-color: rgba(0, 0, 0, 0.5)"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title">
+          <i class="bi bi-check-circle-fill"></i> Success
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          (click)="closeSuccessModal()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ successModalMessage }}</p>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="closeSuccessModal()"
+        >
+          <i class="bi bi-check-circle"></i> OK
+        </button>
       </div>
     </div>
   </div>
+</div>
 }

@@ -1,194 +1,249 @@
 <div class="container mt-4">
   <!-- Loading Indicator -->
   @if (isLoading) {
-    <app-load [isLoading]="isLoading" [loadingMessage]="'Loading exam details...'" />
+  <app-load
+    [isLoading]="isLoading"
+    [loadingMessage]="'Loading exam details...'"
+  />
   }
 
   <!-- Error Message -->
   @if (errorMessage && !isLoading) {
-    <div class="alert alert-danger">
-      <i class="bi bi-exclamation-triangle-fill"></i>
-      Error: {{ errorMessage }}
-    </div>
+  <div class="alert alert-danger">
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    Error: {{ errorMessage }}
+  </div>
   }
 
   <!-- Exam Details -->
   @if (exam && !isLoading) {
-    <div class="card p-4 shadow-sm">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="card-title text-muted mb-0">
-          <i class="bi bi-file-earmark-text"></i> Exam Details
-        </h2>
-        <span class="badge fs-6" [ngClass]="examStatusClass">
-          {{ examStatus }}
-        </span>
-      </div>
+  <div class="card p-4 shadow-sm">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="card-title text-muted mb-0">
+        <i class="bi bi-file-earmark-text"></i> Exam Details
+      </h2>
+      <span class="badge fs-6" [ngClass]="examStatusClass">
+        {{ examStatus }}
+      </span>
+    </div>
 
-      <!-- Exam Metadata -->
-      <div class="row">
-        <div class="col-md-6">
-          <div class="exam-detail-section mb-3">
-            <label class="detail-label"><i class="bi bi-card-heading"></i> Title:</label>
-            <p class="detail-value">{{ exam.title }}</p>
-          </div>
-          <div class="exam-detail-section mb-3">
-            <label class="detail-label"><i class="bi bi-text-paragraph"></i> Description:</label>
-            <p class="detail-value">{{ exam.description }}</p>
-          </div>
-          <div class="exam-detail-section mb-3">
-            <label class="detail-label"><i class="bi bi-diagram-3"></i> Track:</label>
-            <p class="detail-value">
-              <span class="badge bg-primary">
-                {{ exam.major.name | uppercase }}
-              </span>
-            </p>
-          </div>
-          <div class="exam-detail-section mb-3">
-            <label class="detail-label"><i class="bi bi-clock"></i> Duration:</label>
-            <p class="detail-value">{{ exam.duration }} minutes</p>
-          </div>
+    <!-- Exam Metadata -->
+    <div class="row">
+      <div class="col-md-6">
+        <div class="exam-detail-section mb-3">
+          <label class="detail-label"
+            ><i class="bi bi-card-heading"></i> Title:</label
+          >
+          <p class="detail-value">{{ exam.title }}</p>
         </div>
-
-        <div class="col-md-6">
-          <div class="exam-detail-section mb-3">
-            <label class="detail-label"><i class="bi bi-calendar-event"></i> Start Date:</label>
-            <p class="detail-value">{{ exam.start_date | date : "medium" }}</p>
-          </div>
-          <div class="exam-detail-section mb-3">
-            <label class="detail-label"><i class="bi bi-calendar-check"></i> End Date:</label>
-            <p class="detail-value">{{ exam.end_date | date : "medium" }}</p>
-          </div>
-          <div class="exam-detail-section mb-3">
-            <label class="detail-label"><i class="bi bi-award"></i> Total Marks:</label>
-            <p class="detail-value">{{ exam.total_marks }}</p>
-          </div>
-          <div class="exam-detail-section mb-3">
-            <label class="detail-label"><i class="bi bi-check-circle"></i> Passing Marks:</label>
-            <p class="detail-value">{{ exam.passing_marks }}</p>
-          </div>
+        <div class="exam-detail-section mb-3">
+          <label class="detail-label"
+            ><i class="bi bi-text-paragraph"></i> Description:</label
+          >
+          <p class="detail-value">{{ exam.description }}</p>
+        </div>
+        <div class="exam-detail-section mb-3">
+          <label class="detail-label"
+            ><i class="bi bi-diagram-3"></i> Track:</label
+          >
+          <p class="detail-value">
+            <span class="badge back-navy">
+              {{ exam.major.name | uppercase }}
+            </span>
+          </p>
+        </div>
+        <div class="exam-detail-section mb-3">
+          <label class="detail-label"
+            ><i class="bi bi-clock"></i> Duration:</label
+          >
+          <p class="detail-value">{{ exam.duration }} minutes</p>
         </div>
       </div>
 
-      <!-- Creator Info -->
-      <div class="exam-detail-section mb-4 p-3 bg-light rounded">
-        <label class="detail-label"><i class="bi bi-person"></i> Created By:</label>
-        <p class="detail-value mb-1">
-          {{ exam.created_by.first_name }} {{ exam.created_by.last_name }}
-        </p>
-        <small class="text-muted">{{ exam.created_by.email }}</small>
-        <br />
-        <small class="text-muted">
-          <i class="bi bi-clock-history"></i> Created: {{ exam.created_at | date : "short" }}
-        </small>
-      </div>
-
-      <!-- Questions Section -->
-      <div class="questions-section">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h3 class="text-secondary mb-0">
-            <i class="bi bi-question-circle"></i> Questions ({{ questions.length }})
-          </h3>
-          <div class="question-actions d-flex gap-2">
-            @if (canEditExam) {
-              <button class="btn btn-success btn-sm" (click)="editExam()">
-                <i class="bi bi-pencil-fill"></i> Edit Questions
-              </button>
-            }
-            <button class="btn btn-primary btn-sm" (click)="viewExamResults()">
-              <i class="bi bi-bar-chart-fill"></i> View Results
-            </button>
-          </div>
+      <div class="col-md-6">
+        <div class="exam-detail-section mb-3">
+          <label class="detail-label"
+            ><i class="bi bi-calendar-event"></i> Start Date:</label
+          >
+          <p class="detail-value">{{ exam.start_date | date : "medium" }}</p>
         </div>
-
-        <!-- Empty State -->
-        @if (questions.length === 0) {
-          <div class="alert alert-info text-center">
-            <i class="bi bi-question-circle display-1 text-muted"></i>
-            <p class="mt-2">No questions found for this exam.</p>
-            @if (canEditExam) {
-              <button class="btn btn-primary" (click)="addQuestion()">
-                <i class="bi bi-plus-circle-fill"></i> Add First Question
-              </button>
-            }
-          </div>
-        }
-
-        <!-- Questions List -->
-        @if (questions.length > 0) {
-          @for (question of questions; track question._id; let i = $index) {
-            <div class="question-view-block p-3 mb-3 border rounded bg-light">
-              <div class="d-flex justify-content-between align-items-start mb-2">
-                <h5 class="text-dark mb-0">
-                  Q{{ i + 1 }}: {{ question.question_text }}
-                </h5>
-                <div>
-                  <span class="badge bg-primary me-2">
-                    {{ question.marks }} marks
-                  </span>
-                </div>
-
-                @if (canEditExam) {
-                  <div class="question-actions-buttons">
-                    <button type="button" class="btn btn-sm btn-outline-danger" 
-                            (click)="openDeleteQuestionModal(question._id)">
-                      <i class="bi bi-trash-fill"></i> Remove
-                    </button>
-                  </div>
-                }
-              </div>
-
-              <ul class="list-unstyled mb-0">
-                @for (option of question.options; track option._id) {
-                  <li class="mb-1" [class.text-success]="option.option_label === question.correct_answer">
-                    {{ option.option_label }}. {{ option.option_text }}
-                    @if (option.option_label === question.correct_answer) {
-                      <i class="bi bi-check-circle-fill ms-2"></i>
-                      <span class="fw-bold">(Correct Answer)</span>
-                    }
-                  </li>
-                }
-              </ul>
-            </div>
-          }
-        }
-      </div>
-
-      <!-- Back Button -->
-      <div class="text-center mt-4">
-        <button (click)="goBack()" class="btn btn-secondary px-4 py-2 me-3">
-          <i class="bi bi-arrow-left-circle-fill"></i> Back to Exams
-        </button>
+        <div class="exam-detail-section mb-3">
+          <label class="detail-label"
+            ><i class="bi bi-calendar-check"></i> End Date:</label
+          >
+          <p class="detail-value">{{ exam.end_date | date : "medium" }}</p>
+        </div>
+        <div class="exam-detail-section mb-3">
+          <label class="detail-label"
+            ><i class="bi bi-award"></i> Total Marks:</label
+          >
+          <p class="detail-value">{{ exam.total_marks }}</p>
+        </div>
+        <div class="exam-detail-section mb-3">
+          <label class="detail-label"
+            ><i class="bi bi-check-circle"></i> Passing Marks:</label
+          >
+          <p class="detail-value">{{ exam.passing_marks }}</p>
+        </div>
       </div>
     </div>
+
+    <!-- Creator Info -->
+    <div class="exam-detail-section mb-4 p-3 bg-light rounded">
+      <label class="detail-label"
+        ><i class="bi bi-person"></i> Created By:</label
+      >
+      <p class="detail-value mb-1">
+        {{ exam.created_by.first_name }} {{ exam.created_by.last_name }}
+      </p>
+      <small class="text-muted">{{ exam.created_by.email }}</small>
+      <br />
+      <small class="text-muted">
+        <i class="bi bi-clock-history"></i> Created:
+        {{ exam.created_at | date : "short" }}
+      </small>
+    </div>
+
+    <!-- Questions Section -->
+    <div class="questions-section">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="text-secondary mb-0">
+          <i class="bi bi-question-circle"></i> Questions ({{
+            questions.length
+          }})
+        </h3>
+        <div class="question-actions d-flex gap-2">
+          @if (canEditExam) {
+          <button class="btn btn-success btn-sm" (click)="editExam()">
+            <i class="bi bi-pencil-fill"></i> Edit Questions
+          </button>
+          }
+          <button
+            class="btn back-navy text-light btn-sm"
+            (click)="viewExamResults()"
+          >
+            <i class="bi bi-bar-chart-fill"></i> View Results
+          </button>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      @if (questions.length === 0) {
+      <div class="alert alert-info text-center">
+        <i class="bi bi-question-circle display-1 text-muted"></i>
+        <p class="mt-2">No questions found for this exam.</p>
+        @if (canEditExam) {
+        <button class="btn back-navy text-light" (click)="addQuestion()">
+          <i class="bi bi-plus-circle-fill"></i> Add First Question
+        </button>
+        }
+      </div>
+      }
+
+      <!-- Questions List -->
+      @if (questions.length > 0) { @for (question of questions; track
+      question._id; let i = $index) {
+      <div class="question-view-block p-3 mb-3 border rounded bg-light">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <h5 class="text-dark mb-0">
+            Q{{ i + 1 }}: {{ question.question_text }}
+          </h5>
+          <div>
+            <span class="badge back-navy text-light me-2">
+              {{ question.marks }} marks
+            </span>
+          </div>
+
+          @if (canEditExam) {
+          <div class="question-actions-buttons">
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-danger"
+              (click)="openDeleteQuestionModal(question._id)"
+            >
+              <i class="bi bi-trash-fill"></i> Remove
+            </button>
+          </div>
+          }
+        </div>
+
+        <ul class="list-unstyled mb-0">
+          @for (option of question.options; track option._id) {
+          <li
+            class="mb-1"
+            [class.text-success]="
+              option.option_label === question.correct_answer
+            "
+          >
+            {{ option.option_label }}. {{ option.option_text }}
+            @if (option.option_label === question.correct_answer) {
+            <i class="bi bi-check-circle-fill ms-2"></i>
+            <span class="fw-bold">(Correct Answer)</span>
+            }
+          </li>
+          }
+        </ul>
+      </div>
+      } }
+    </div>
+
+    <!-- Back Button -->
+    <div class="text-center mt-4">
+      <button (click)="goBack()" class="btn btn-secondary px-4 py-2 me-3">
+        <i class="bi bi-arrow-left-circle-fill"></i> Back to Exams
+      </button>
+    </div>
+  </div>
   }
 
   <!-- No Exam Found -->
   @if (!exam && !isLoading && !errorMessage) {
-    <div class="alert alert-warning text-center mt-5">
-      <i class="bi bi-exclamation-triangle-fill"></i>
-      Exam not found or you don't have permission to view it.
-    </div>
+  <div class="alert alert-warning text-center mt-5">
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    Exam not found or you don't have permission to view it.
+  </div>
   }
 </div>
 
 <!-- Question Delete Confirmation Modal -->
 @if (showDeleteModal) {
-  <div class="modal-backdrop fade show"></div>
-  <div class="modal fade show d-block" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header bg-danger text-white">
-          <h5 class="modal-title">Confirm Delete</h5>
-          <button type="button" class="btn-close btn-close-white" (click)="closeDeleteModal()" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          Are you sure you want to delete this question? This action cannot be undone.
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="closeDeleteModal()">Cancel</button>
-          <button type="button" class="btn btn-danger" (click)="confirmDeleteQuestion()">Delete</button>
-        </div>
+<div
+  class="modal fade show d-block"
+  tabindex="-1"
+  style="background-color: rgba(0, 0, 0, 0.5)"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content animate-pop-in">
+      <div class="modal-header">
+        <h5 class="modal-title text-danger">
+          <i class="bi bi-exclamation-octagon-fill"></i> Confirm Deletion
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          (click)="closeDeleteModal()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to remove this question?</p>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeDeleteModal()"
+        >
+          <i class="bi bi-x-circle"></i> Cancel
+        </button>
+        <button
+          type="button"
+          class="btn back-navy text-light"
+          (click)="confirmDeleteQuestion()"
+        >
+          <i class="bi bi-trash-fill"></i> Remove
+        </button>
       </div>
     </div>
   </div>
+</div>
 }
