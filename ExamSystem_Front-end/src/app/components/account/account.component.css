@@ -1,49 +1,150 @@
 :root {
-  --primary-color: #000039;
-  --primary-hover: #1a1a8f;
-  --accent-color: #4c6fff;
+  --primary-color: #1a1a8689;
 }
 
-.hero {
-  background-color: var(--primary-color);
+.login-box {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 1000px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+  background-color: white;
+}
+
+.left {
+  flex: 1;
+  padding: 50px 40px;
+  background: linear-gradient(to bottom right, var(--primary-color), #5d93e4);
   color: white;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-h2, h3 {
-  color: var(--primary-color);
+.left .brand {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 15px;
 }
 
-form {
-  max-width: 100%;
+.left h1 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
-button {
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  transition: all 0.3s ease;
+.left .welcome {
+  font-size: 14px;
+  margin-bottom: 20px;
 }
 
-button:hover {
-  background-color: var(--primary-hover);
-  color: white;
+.signup {
+  font-size: 13px;
+  margin-top: 15px;
 }
 
-a {
-  color: var(--accent-color);
-}
-
-a:hover {
+.signup a {
+  color: #fff;
   text-decoration: underline;
 }
 
-.fade-in {
-  animation: fadeIn 0.6s ease-in-out;
+.right {
+  flex: 1;
+  padding: 30px;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
+.right img {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 992px) {
+  .login-box {
+    max-width: 720px;
+  }
+
+  .left {
+    padding: 50px 40px;
+  }
+
+  .right {
+    padding: 30px 20px;
+  }
+
+  .left .brand {
+    font-size: 24px;
+  }
+
+  .left h1 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .login-box {
+    flex-direction: column;
+    max-width: 400px;
+    margin: 20px auto;
+    border-radius: 20px;
+  }
+
+  .left,
+  .right {
+    flex: none;
+    width: 100%;
+    padding: 35px 25px;
+    border-radius: 0;
+    text-align: center;
+  }
+
+  .left {
+    border-radius: 20px 20px 0 0;
+  }
+
+  .right {
+    border-radius: 0 0 20px 20px;
+  }
+
+  .left .brand {
+    font-size: 22px;
+    margin-bottom: 15px;
+  }
+
+  .left h1 {
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+
+  .right img {
+    max-width: 70%;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .left {
+    padding: 30px 20px;
+  }
+
+  .right {
+    padding: 25px 15px;
+  }
+
+  .left .brand {
+    font-size: 20px;
+  }
+
+  .left h1 {
+    font-size: 16px;
+  }
+
+  .right img {
+    max-width: 80%;
+  }
 }
