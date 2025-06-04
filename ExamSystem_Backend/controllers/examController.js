@@ -299,7 +299,7 @@ const getResultsForSpecificExam = asyncWrapper(async (req, res, next) => {
     exam_title: result.exam ? result.exam.title : "N/A",
     total_score: result.total_marks_obtained,
     max_marks: result.total_exam_marks,
-    percentage: result.percentage_obtained,
+    percentage: result.percentage,
     status: result.status,
     submitted_at: result.submitted_at,
   }));

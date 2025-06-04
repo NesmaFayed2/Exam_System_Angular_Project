@@ -1,166 +1,259 @@
 /* src/app/components/Admin/exam-question-manager/exam-question-manager.component.css */
 
+/* Overall Container & Card */
 .container {
-  max-width: 700px;
+  max-width: 800px;
   margin: 2rem auto;
-  padding: 1.5rem;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 0;
+  background-color: transparent;
+  border-radius: 12px;
 }
 
 .card {
   border: none;
   background-color: #ffffff;
-  border-radius: 10px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  padding: 2rem;
 }
 
-.card-title {
-  font-size: 2.2rem;
-  font-weight: 600;
-  color: #007bff;
-  line-height: 1.2; /* Adjust line height for wrapped titles */
-}
-
-h3 {
+.card-title.text-navy {
   font-size: 1.8rem;
-  color: #6c757d;
-  margin-top: 2rem;
+  font-weight: 700;
+  color: #151550 !important;
+  line-height: 1.3;
+  margin-bottom: 2rem !important;
+}
+.card-title i {
+  margin-right: 0.75rem;
+  font-size: 1.6rem;
+}
+
+/* "Questions (x)" Subheader */
+h3.text-secondary {
+  font-size: 1.5rem;
+  color: #495057 !important;
+  margin-top: 1.5rem;
   margin-bottom: 1.5rem;
-}
-
-.question-block {
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  background-color: #fcfcfc; /* Slightly different background for question blocks */
-}
-
-.question-block h5 {
-  font-size: 1.25rem;
   font-weight: 600;
+  border-bottom: 1px solid #e9ecef;
+  padding-bottom: 0.75rem;
+}
+h3.text-secondary i {
+  margin-right: 0.5rem;
 }
 
+/* Individual Question Block */
+.question-block {
+  border: 1px solid #dee2e6;
+  border-left: 4px solid #151550;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  margin-bottom: 2rem !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.question-block h5.text-dark {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #343a40 !important;
+}
+.question-block h5 i {
+  margin-right: 0.5rem;
+  color: #151550;
+}
+
+/* Form Elements Styling */
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem !important;
 }
 
 .form-label {
-  font-weight: 500;
+  font-weight: 600;
   margin-bottom: 0.5rem;
   display: block;
-  color: #343a40;
+  color: #212529;
+  font-size: 0.95rem;
+}
+.form-label i {
+  margin-right: 0.4rem;
+  color: #151550;
 }
 
 .form-control,
-textarea {
+textarea.form-control {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.65rem 1rem;
   border: 1px solid #ced4da;
   border-radius: 6px;
   font-size: 1rem;
+  background-color: #fff;
+  color: #495057;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
 .form-control:focus,
-textarea:focus {
-  border-color: #80bdff;
+textarea.form-control:focus {
+  border-color: #151550;
   outline: 0;
-  box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+  box-shadow: 0 0 0 0.2rem rgba(21, 21, 80, 0.25);
+}
+
+/* Choices/Options Styling (Input Group) */
+h6 {
+  /* "Choices" heading */
+  font-size: 1rem;
+  font-weight: 600;
+  color: #343a40;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+h6 i {
+  margin-right: 0.3rem;
+  color: #151550;
 }
 
 .input-group {
   display: flex;
   align-items: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem !important;
 }
 
 .input-group-text {
+  /* Container for custom radio + label text */
   background-color: #e9ecef;
   border: 1px solid #ced4da;
-  border-radius: 0.25rem 0 0 0.25rem;
-  padding: 0.375rem 0.75rem;
-}
-
-.input-group-text input[type="radio"] {
-  margin: 0;
+  border-right: none;
+  border-radius: 6px 0 0 6px;
+  padding: 0; /* Padding will be handled by the label inside */
+  display: flex; /* To make the label inside fill the height */
+  align-items: stretch; /* Make label stretch vertically */
 }
 
 .input-group .form-control {
-  border-radius: 0 0.25rem 0.25rem 0;
+  /* Text input for the choice */
+  border-radius: 0 6px 6px 0;
   flex-grow: 1;
+  border-left: 0; /* Remove left border if input-group-text provides it effectively */
+}
+.input-group:focus-within .input-group-text,
+.input-group:focus-within .form-control {
+  /* Highlight entire group on focus */
+  border-color: #151550;
+  box-shadow: 0 0 0 0.2rem rgba(21, 21, 80, 0.25) inset;
+}
+.input-group:focus-within .form-control {
+  /* Ensure input part also gets the outer ring if needed */
+  box-shadow: 0 0 0 0.2rem rgba(21, 21, 80, 0.25);
 }
 
-/* Buttons */
+/* --- CUSTOM RADIO BUTTON STYLES --- */
+.custom-radio-container {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  padding: 0.65rem 0.75rem; /* Same padding as original input-group-text */
+  height: 100%; /* Fill the .input-group-text */
+  width: 100%; /* Fill the .input-group-text */
+}
+
+.native-radio-hidden {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.custom-radio-visual {
+  position: relative;
+  display: inline-block;
+  width: 18px; /* Adjusted size */
+  height: 18px;
+  background-color: #fff;
+  border: 2px solid #adb5bd;
+  border-radius: 50%;
+  transition: all 0.2s ease-in-out;
+  margin-right: 8px;
+}
+
+.custom-radio-visual::after {
+  /* Inner dot for selected state */
+  content: "";
+  position: absolute;
+  display: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px; /* Adjusted size */
+  height: 8px;
+  border-radius: 50%;
+  background-color: #151550; /* Theme color */
+}
+
+.native-radio-hidden:checked + .custom-radio-visual {
+  border-color: #151550; /* Theme color border */
+}
+
+.native-radio-hidden:checked + .custom-radio-visual::after {
+  display: block;
+}
+
+.native-radio-hidden:focus-visible + .custom-radio-visual {
+  /* Accessibility: focus style */
+  outline: 2px solid #151550;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 0.2rem rgba(21, 21, 80, 0.25);
+}
+
+.custom-radio-container:hover .custom-radio-visual {
+  border-color: #151550; /* Theme color border on hover */
+}
+
+.custom-radio-option-label-text {
+  /* For A, B, C, D text */
+  font-weight: 600;
+  color: #151550; /* Theme color */
+  line-height: 1; /* Ensure consistent vertical alignment */
+}
+/* --- END CUSTOM RADIO BUTTON STYLES --- */
+
+/* Buttons Styling - General */
 .btn {
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
+  font-weight: 500;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  border: none;
+  border: 1px solid transparent;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
+  line-height: 1.5;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.btn i {
+  margin-right: 0.5rem;
+  font-size: 1em;
+  line-height: 1;
 }
 
-.btn-primary {
-  background-color: #007bff;
+/* Theme-specific buttons */
+.btn.back-navy {
+  background-color: #151550;
   color: white;
-  border-color: #007bff;
+  border-color: #151550;
 }
-.btn-primary:hover {
-  background-color: #0056b3;
-}
-
-.btn-outline-primary {
-  background-color: transparent;
-  color: #007bff;
-  border-color: #007bff;
-}
-.btn-outline-primary:hover {
-  background-color: #007bff;
-  color: white;
-}
-
-.btn-outline-danger {
-  background-color: transparent;
-  color: #dc3545;
-  border-color: #dc3545;
-}
-.btn-outline-danger:hover {
-  background-color: #dc3545;
-  color: white;
-}
-
-.btn-outline-info {
-  background-color: transparent;
-  color: #17a2b8;
-  border-color: #17a2b8;
-}
-.btn-outline-info:hover {
-  background-color: #17a2b8;
-  color: white;
-}
-
-.btn-outline-secondary {
-  background-color: transparent;
-  color: #6c757d;
-  border-color: #6c757d;
-}
-.btn-outline-secondary:hover {
-  background-color: #6c757d;
-  color: white;
-}
-
-.btn-outline-success {
-  background-color: transparent;
-  color: #28a745;
-  border-color: #28a745;
-}
-.btn-outline-success:hover {
-  background-color: #28a745;
-  color: white;
+.btn.back-navy:hover {
+  background-color: #000039;
+  border-color: #000039;
 }
 
 .btn-success {
@@ -170,40 +263,90 @@ textarea:focus {
 }
 .btn-success:hover {
   background-color: #218838;
+  border-color: #1e7e34;
+}
+.btn-success:disabled {
+  background-color: #28a745;
+  opacity: 0.65;
 }
 
 .btn-secondary {
   background-color: #6c757d;
   color: white;
+  border-color: #6c757d;
 }
 .btn-secondary:hover {
   background-color: #5a6268;
+  border-color: #545b62;
 }
 
-/* Specific button adjustments */
+.btn-outline-danger {
+  color: #dc3545;
+  border-color: #dc3545;
+}
+.btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
 .btn-sm {
-  padding: 0.25rem 0.5rem;
+  padding: 0.35rem 0.75rem;
   font-size: 0.875rem;
   border-radius: 4px;
 }
-
-.btn i {
-  margin-right: 0.4rem;
-  font-size: 1em;
-  line-height: 1;
-}
-.back-navy {
-  background-color: #151550;
-}
-.back-navy:hover {
-  background-color: #000039;
+.question-actions-buttons .btn-sm i {
+  margin-right: 0.3rem;
 }
 
-.text-navy {
-  color: #151550;
+/* Alert Messages */
+.alert {
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid transparent;
+  border-radius: 8px;
+}
+.alert i {
+  margin-right: 0.5rem;
+}
+.alert.alert-info .display-1 {
+  font-size: 4rem !important;
+  margin-bottom: 1rem;
+}
+.alert.alert-info p {
+  font-size: 1.1rem;
 }
 
-/* Utility classes for spacing */
+/* Modal Styling */
+.modal-content {
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+.modal-header {
+  border-bottom: 1px solid #e9ecef;
+  padding: 1rem 1.5rem;
+}
+.modal-header .btn-close {
+  padding: 0.75rem;
+}
+.modal-title i {
+  margin-right: 0.5rem;
+}
+
+.modal-body {
+  padding: 1.5rem;
+  font-size: 1.1rem;
+}
+.modal-footer {
+  border-top: 1px solid #e9ecef;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+.modal-footer .btn + .btn {
+  margin-left: 0.5rem;
+}
+
+/* Utility classes for spacing (from previous response, ensure they are available or Bootstrap is used) */
 .d-flex {
   display: flex;
 }
@@ -213,45 +356,4 @@ textarea:focus {
 .align-items-center {
   align-items: center;
 }
-.mb-2 {
-  margin-bottom: 0.5rem;
-}
-.mb-3 {
-  margin-bottom: 1rem;
-}
-.mb-4 {
-  margin-bottom: 1.5rem;
-}
-.mt-2 {
-  margin-top: 0.5rem;
-}
-.mt-4 {
-  margin-top: 1.5rem;
-}
-.p-3 {
-  padding: 1rem;
-}
-.px-4 {
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-}
-.py-2 {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-}
-.me-2 {
-  margin-right: 0.5rem;
-}
-.me-3 {
-  margin-right: 1rem;
-}
-.ms-2 {
-  margin-left: 0.5rem;
-}
-.ms-3 {
-  margin-left: 1rem;
-}
-
-.question-actions-buttons .btn-sm i {
-  margin-right: 0.2rem; /* Reduce margin for multiple buttons */
-}
+/* ... other utility classes as needed ... */

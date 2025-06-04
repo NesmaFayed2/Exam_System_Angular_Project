@@ -1,51 +1,226 @@
+/* exam-form.component.css (or a more specific review.component.css) */
+
 .exam-review-container {
   max-width: 900px;
-  margin: 0 auto;
+  margin: 30px auto; /* Increased top/bottom margin */
+  padding: 20px;
+  background-color: #f8f9fa; /* Light background for the page */
+  border-radius: 10px;
+}
+
+.review-header {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e0e0e0; /* Softer border */
 }
 
 .review-header h2 {
+  color: #000039 !important; /* Ensure theme color, override if necessary */
+  font-weight: 700 !important; /* Bolder title */
+  font-size: 1.8rem; /* Larger title */
   letter-spacing: 0.5px;
+  margin-bottom: 15px; /* Space below title */
+}
+
+.review-header h2 i.bi-eye {
+  margin-right: 10px;
+  color: #000039; /* Theme color for icon */
+}
+
+.score-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px; /* Space between circle and text */
 }
 
 .score-circle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 80px;
-  height: 80px;
+  width: 85px; /* Slightly larger */
+  height: 85px;
   border-radius: 50%;
-  font-size: 1.7rem;
+  font-size: 1.8rem; /* Larger percentage text */
   font-weight: bold;
-  box-shadow: 0 2px 8px rgba(0, 0, 39, 0.07);
+  color: #fff; /* Ensure text is white */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Softer shadow */
+  border: 3px solid white; /* White border for pop */
+}
+
+/* Dynamic background for score-circle can remain in ngStyle or use classes */
+.score-circle.passed {
+  background-color: #000039;
+}
+.score-circle.failed {
+  background-color: #dc3545;
+}
+
+.score-status .fs-5 {
+  /* Status text like "Passed" / "Failed" */
+  font-weight: 600;
+}
+.score-status .fs-5 i {
+  margin-right: 5px;
+  font-size: 1.4rem; /* Larger emoji icon */
+}
+
+.review-header .text-muted.small {
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+.review-header .text-muted.small i.bi-calendar {
+  margin-right: 5px;
 }
 
 .summary-box {
-  border: 2px solid #000039;
-  background: #f8f9fa;
+  border: 1px solid #e0e0e0; /* Softer border */
+  background: #ffffff; /* White background for summary */
+  padding: 20px !important; /* Ensure padding */
+  border-radius: 8px !important; /* More rounded */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
+.summary-box div {
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 8px;
+}
+.summary-box div strong {
+  color: #000039; /* Theme color for labels */
+  min-width: 120px; /* Align values */
+  display: inline-block;
+}
+
+/* Individual Question Review Card */
 .question-review {
-  border-left: 6px solid #000039;
-  background: #f4f7fa;
+  border-left: 5px solid #000039 !important; /* Theme accent */
+  background: #ffffff !important; /* White background */
+  border-radius: 8px !important; /* Consistent rounding */
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07); /* Softer shadow */
+  margin-bottom: 25px !important; /* More space between questions */
+  padding: 20px !important; /* Ensure padding */
+}
+
+.question-review p.fw-semibold {
+  /* Question text */
+  color: #000039 !important; /* Theme color */
+  font-size: 1.2rem; /* Slightly larger */
+  margin-bottom: 15px !important; /* More space below question */
 }
 
 .question-review ul {
   margin-bottom: 0;
+  padding-left: 5px; /* Slight indent for options list */
 }
 
-.badge {
-  font-size: 0.95rem;
-  border-radius: 1rem;
+.question-review ul li {
+  padding: 10px 0; /* Vertical padding for options */
+  border-bottom: 1px dashed #eee; /* Subtle separator */
+  position: relative; /* For absolute positioning of icons if needed */
+  display: flex; /* For alignment */
+  align-items: flex-start; /* Align items to top */
+}
+.question-review ul li:last-child {
+  border-bottom: none;
 }
 
+.question-review ul li .badge {
+  /* Option label A, B, C, D */
+  font-size: 0.9rem !important;
+  border-radius: 4px !important; /* Sharper badge */
+  padding: 0.3em 0.6em;
+  margin-right: 10px !important; /* More space after badge */
+  background-color: #e9ecef !important; /* Neutral badge background */
+  color: #000039 !important; /* Theme color text for badge */
+  border: 1px solid #dee2e6 !important;
+  align-self: flex-start; /* Align badge with top of text */
+  margin-top: 2px; /* Fine-tune vertical alignment */
+}
+
+/* Styling for correct/incorrect answers */
+.question-review ul li.text-success {
+  /* Correct answer */
+  /* background-color: rgba(40, 167, 69, 0.05); */ /* Very subtle green highlight for the whole li */
+  /* border-left: 3px solid #28a745; */
+  /* padding-left: 10px; */
+}
+.question-review ul li.text-success .fw-bold {
+  color: #28a745 !important; /* Explicit green for text */
+}
+
+.question-review ul li.text-danger {
+  /* User's incorrect answer */
+  /* background-color: rgba(220, 53, 69, 0.05); */ /* Very subtle red highlight */
+  /* border-left: 3px solid #dc3545; */
+  /* padding-left: 10px; */
+}
+.question-review ul li.text-danger .fw-semibold {
+  color: #dc3545 !important; /* Explicit red for text */
+}
+
+.question-review ul li .ms-2 {
+  /* For "Correct" and "Your Answer" text */
+  font-style: italic;
+  font-size: 0.85rem;
+}
+.question-review ul li .ms-2 i {
+  margin-right: 3px;
+}
+
+/* Marks Obtained Badge */
+.question-review .mt-2 .badge {
+  font-size: 0.9rem !important; /* Consistent badge size */
+  padding: 0.4em 0.8em;
+  border-radius: 4px !important;
+}
+/* Dynamic background for marks badge can stay in ngStyle or use classes */
+.marks-badge.correct {
+  background-color: #000039;
+  color: #fff;
+}
+.marks-badge.incorrect {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+/* Back Button */
 .btn-secondary {
+  /* From user's CSS, ensures it applies */
   background: #000039 !important;
   border: none !important;
   color: #fff !important;
   font-weight: 500;
+  padding: 10px 25px; /* More padding */
+  border-radius: 6px; /* Consistent rounding */
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 .btn-secondary:hover,
 .btn-secondary:focus {
-  background: #23235b !important;
+  background: #00002a !important; /* Darken theme color */
   color: #fff !important;
+  transform: translateY(-2px); /* Subtle lift */
+}
+.btn-secondary i {
+  margin-right: 8px;
+}
+
+/* No Result Template */
+.alert.alert-warning {
+  border-left: 5px solid #ffc107;
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+/* App Load Component Styling (if it uses Bootstrap classes) */
+app-load .spinner-border {
+  width: 3rem;
+  height: 3rem;
+  color: #000039; /* Theme color for spinner */
+}
+app-load p {
+  color: #6c757d;
+  font-size: 1.1rem;
+  margin-top: 1rem;
 }

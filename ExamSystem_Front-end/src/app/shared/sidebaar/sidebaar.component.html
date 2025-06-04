@@ -1,8 +1,5 @@
 <div class="sidebar-content">
   <ng-container *ngIf="user?.role === 'student'">
-    <div class="sidebar-header">
-      <h3>Exam Student</h3>
-    </div>
     <div class="sidebar-menu">
       <a
         routerLink="/student/dashboard"
@@ -29,9 +26,6 @@
   </ng-container>
 
   <ng-container *ngIf="user?.role === 'admin'">
-    <div class="sidebar-header">
-      <h3>Admin Dashboard</h3>
-    </div>
     <div class="sidebar-menu">
       <a
         routerLink="/admin/examlist"
