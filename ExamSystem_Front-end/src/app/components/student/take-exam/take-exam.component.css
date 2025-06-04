@@ -1,7 +1,10 @@
+/* General Container and Header Styles (mostly as provided) */
 .exam-container {
   max-width: 800px;
-  margin: 0 auto;
+  margin: 20px auto; /* Added top/bottom margin for better spacing */
   padding: 20px;
+  background-color: #f9fafb; /* Light background for the page */
+  border-radius: 10px; /* Rounded corners for the main container */
 }
 
 .exam-header {
@@ -9,253 +12,280 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #eee;
-
-  h2 {
-    color: #000039;
-    margin: 0;
-  }
+  padding-bottom: 20px; /* Increased padding */
+  border-bottom: 2px solid #e5e7eb; /* Softer border */
 }
 
+.exam-header h2 {
+  color: #000039;
+  margin: 0;
+  font-weight: 600; /* Slightly bolder title */
+  letter-spacing: 0.5px;
+}
+
+/* Progress Bar Styles (as provided) */
 .question-container {
   background: white;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Slightly softer shadow */
+  padding: 25px; /* Increased padding */
 }
 
 .progress-bar {
-  height: 30px;
-  background-color: #f0f0f0;
+  height: 28px; /* Adjusted height */
+  background-color: #e9ecef; /* Lighter background for progress bar */
   border-radius: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 25px; /* Increased margin */
   overflow: hidden;
-
-  .progress {
-    height: 100%;
-    background-color: #000039;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8rem;
-    font-weight: 500;
-    transition: width 0.3s ease;
-  }
 }
 
+.progress-bar .progress {
+  height: 100%;
+  background-color: #000039; /* Theme color for progress */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem; /* Slightly larger font */
+  font-weight: 500;
+  transition: width 0.4s ease-in-out; /* Smoother transition */
+}
+
+/* Question Card Enhancements */
 .question-card {
-  margin-bottom: 20px;
-
-  h3 {
-    color: #333;
-    margin-bottom: 20px;
-  }
+  margin-bottom: 25px; /* Increased margin */
+  padding: 20px; /* Added padding inside the card */
+  border-left: 5px solid #000039; /* Maintained theme accent */
+  background: #ffffff; /* Cleaner white background */
+  border-radius: 8px; /* Rounded corners for the card */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07); /* Subtle shadow */
 }
 
+.question-card h3 {
+  color: #000039; /* Theme color for question text */
+  margin-bottom: 20px;
+  font-size: 1.35rem; /* Larger question text */
+  font-weight: 500;
+}
+
+/* Options Styling Enhancements */
 .options {
   display: grid;
-  gap: 10px;
+  gap: 12px; /* Slightly increased gap */
 }
 
 .option {
   display: flex;
   align-items: center;
-  padding: 12px 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  padding: 15px; /* Increased padding for better touch area */
+  border: 1px solid #d1d5db; /* Softer border color */
+  border-radius: 6px; /* Slightly more rounded */
   cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    border-color: #000039;
-    background-color: rgba(0, 0, 57, 0.05);
-  }
-
-  input {
-    margin-right: 10px;
-    accent-color: #000039;
-  }
-
-  .option-text {
-    flex: 1;
-  }
+  transition: all 0.2s ease-in-out;
+  background-color: #f9fafb; /* Light background for options */
 }
 
+.option:hover {
+  border-color: #000039;
+  background-color: #eef2ff; /* Softer hover background related to theme */
+  transform: translateY(-2px); /* Subtle lift on hover */
+}
+
+.option input[type="radio"] {
+  margin-right: 12px; /* Increased margin */
+  accent-color: #000039; /* Theme color for radio button */
+  transform: scale(1.1); /* Slightly larger radio button */
+}
+
+/* Style for the label of the selected option */
+.option input[type="radio"]:checked + .option-text {
+  font-weight: 600;
+  color: #000039; /* Theme color for selected option text */
+}
+
+.option .option-text {
+  flex: 1;
+  font-size: 1rem; /* Clear font size */
+  color: #374151; /* Darker grey for better readability */
+}
+
+/* Navigation Buttons (using Bootstrap classes primarily with overrides) */
 .navigation-buttons {
   display: flex;
   justify-content: space-between;
   margin-top: 30px;
-
-  .nav-btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    transition: all 0.2s ease;
-
-    i {
-      margin: 0 5px;
-    }
-
-    &.prev {
-      background-color: #f0f0f0;
-      color: #333;
-
-      &:hover {
-        background-color: #e0e0e0;
-      }
-
-      &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-      }
-    }
-
-    &.next,
-    &.submit {
-      background-color: #000039;
-      color: white;
-
-      &:hover {
-        background-color: darken(#000039, 10%);
-      }
-    }
-  }
 }
 
+/* Ensure buttons use consistent sizing and theme colors */
+.navigation-buttons .btn {
+  padding: 10px 25px; /* Consistent padding */
+  font-weight: 500;
+  border-radius: 6px;
+  transition: all 0.2s ease-in-out;
+}
+.navigation-buttons .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.navigation-buttons .btn-primary,
+.navigation-buttons .btn-success {
+  background-color: #000039 !important; /* Override inline styles */
+  border-color: #000039 !important;
+  color: white;
+}
+.navigation-buttons .btn-primary:hover,
+.navigation-buttons .btn-success:hover {
+  background-color: #00002a !important; /* Darken theme color on hover */
+  border-color: #00002a !important;
+}
+
+/* Result Card Enhancements */
 .result-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 70vh;
+  padding: 20px;
 }
 
 .result-card {
-  background: white;
+  background: white; /* Cleaner white background */
   border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  padding: 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12); /* More pronounced shadow */
+  padding: 40px 30px; /* Adjusted padding */
   text-align: center;
-  max-width: 500px;
+  max-width: 450px; /* Slightly wider */
   width: 100%;
-
-  .result-icon {
-    font-size: 4rem;
-    margin-bottom: 20px;
-  }
-
-  h2 {
-    color: #000039;
-    margin-bottom: 15px;
-  }
-
-  .score-text {
-    font-size: 1.2rem;
-    margin-bottom: 25px;
-
-    span {
-      font-weight: bold;
-      font-size: 1.5rem;
-      color: #000039;
-    }
-  }
+  border-top: 5px solid #000039; /* Theme accent on top */
+  border-left: none; /* Remove other borders if top is primary */
+  border-right: none;
+  border-bottom: none;
 }
 
+.result-card .result-icon {
+  font-size: 3.5rem; /* Slightly adjusted icon size */
+  margin-bottom: 20px;
+}
+.result-card .result-icon .bi-check-circle-fill {
+  color: #28a745;
+} /* Bootstrap success green */
+.result-card .result-icon .bi-x-circle-fill {
+  color: #dc3545;
+} /* Bootstrap danger red */
+
+.result-card h2 {
+  color: #000039;
+  margin-bottom: 15px;
+  font-size: 1.75rem; /* Larger heading */
+  font-weight: 600;
+}
+
+.result-card .score-text {
+  font-size: 1.25rem; /* Adjusted font size */
+  margin-bottom: 25px;
+  color: #4b5563; /* Softer text color */
+}
+
+.result-card .score-text span.fw-bold {
+  font-weight: 700 !important; /* Ensure fw-bold applies */
+  font-size: 2rem; /* Prominent score */
+  color: #000039;
+}
+
+/* Result Details Grid Enhancements */
 .result-details {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 15px; /* Adjusted gap */
   margin: 30px 0;
-
-  .detail {
-    background-color: #f8f9fa;
-    padding: 15px;
-    border-radius: 8px;
-
-    span {
-      display: block;
-      color: #666;
-      font-size: 0.9rem;
-    }
-
-    strong {
-      display: block;
-      font-size: 1.5rem;
-      color: #000039;
-      margin-top: 5px;
-    }
-  }
 }
 
+.result-details .detail {
+  background-color: #f3f4f6; /* Lighter detail background */
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb; /* Soft border for detail boxes */
+}
+
+.result-details .detail span.text-muted {
+  /* Ensure text-muted applies */
+  display: block;
+  color: #6b7280 !important;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+}
+
+.result-details .detail .fw-bold {
+  /* Ensure fw-bold applies */
+  display: block;
+  font-size: 1.75rem; /* Larger detail numbers */
+  color: #000039;
+  font-weight: 600 !important;
+}
+
+/* Result Actions (Button Overrides from User CSS) */
 .result-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 15px;
   margin-top: 30px;
-
-  .action-btn {
-    padding: 12px;
-    border: none;
-    border-radius: 5px;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-
-    i {
-      margin: 0 5px;
-    }
-
-    &.back {
-      background-color: #f0f0f0;
-      color: #333;
-
-      &:hover {
-        background-color: #e0e0e0;
-      }
-    }
-
-    &.review {
-      background-color: #000039;
-      color: white;
-
-      &:hover {
-        background-color: darken(#000039, 10%);
-      }
-    }
-  }
 }
 
-.exam-header h2 {
-  letter-spacing: 0.5px;
+.result-actions .btn {
+  padding: 12px 20px; /* Consistent padding */
+  font-weight: 500;
+  border-radius: 6px;
+  transition: all 0.2s ease-in-out;
 }
-.question-card {
-  border-left: 6px solid #000039;
-  background: #f4f7fa;
+.result-actions .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-.result-card {
-  max-width: 420px;
-  margin: 0 auto;
-  background: #f8f9fa;
-  border: 2px solid #000039;
-}
-.result-icon i {
-  font-size: 3rem;
-}
+
 .btn-secondary {
+  /* User's override */
   background: #000039 !important;
   color: #fff !important;
   border: none !important;
 }
 .btn-secondary:hover,
 .btn-secondary:focus {
-  background: #23235b !important;
+  background: #00002a !important; /* Darken theme color */
   color: #fff !important;
+}
+
+.grey {
+  /* User's custom class */
+  background-color: #e9ecef !important; /* Lighter grey */
+  color: #000039 !important;
+  border: 1px solid #ced4da !important; /* Add a border for definition */
+}
+.grey:hover {
+  background-color: #d1d5db !important; /* Darken grey on hover */
+  color: #000039 !important;
+  border-color: #adb5bd !important;
+}
+
+/* App Load Component (Basic styling if needed) */
+app-load {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh; /* Ensure it takes up space */
+  color: #6b7280; /* Muted text color */
+}
+
+app-load .spinner-border {
+  /* If app-load uses this */
+  width: 3rem;
+  height: 3rem;
+  border-width: 0.3em;
+  color: #000039; /* Theme color for spinner */
+}
+
+app-load p {
+  margin-top: 1rem;
+  font-size: 1rem;
 }

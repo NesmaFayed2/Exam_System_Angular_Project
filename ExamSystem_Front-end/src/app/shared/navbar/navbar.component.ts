@@ -67,9 +67,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   private updateNavbarVisibility(url: string): void {
     this.showUserMenu = !url.includes('/student/exam/');
-    // No need to call cdRef.markForCheck() here if profileImageUrl isn't changing
-    // But if showUserMenu itself is bound and causing issues, you might add it.
-    // For now, the main issue is with profileImageUrl.
   }
 
   private updateProfileImageUrl(): void {

@@ -1,193 +1,234 @@
-<div class="profile-card mx-auto mt-5 p-4">
-  <h3 class="text-center mb-4" style="color: #000039">
-    <i class="bi bi-person-circle"></i> My Profile
-  </h3>
+<div class="container mt-4">
+  <div class="profile-card mx-auto mt-5 p-4">
+    <h3 class="text-center mb-4">
+      <i class="bi bi-person-circle"></i> My Profile
+    </h3>
 
-  @if(!isLoading) {
-  <div>
-    <div *ngIf="successMessage" class="alert alert-success text-center">
-      <i class="bi bi-check-circle"></i> {{ successMessage }}
-    </div>
-    <div *ngIf="errorMessage" class="alert alert-danger text-center">
-      <i class="bi bi-exclamation-triangle"></i> {{ errorMessage }}
-    </div>
+    @if(!isLoading) {
+    <div>
+      <!-- Success/Error Messages -->
+      <div *ngIf="successMessage" class="alert alert-success text-center mb-4">
+        <i class="bi bi-check-circle-fill"></i> {{ successMessage }}
+      </div>
+      <div *ngIf="errorMessage" class="alert alert-danger text-center mb-4">
+        <i class="bi bi-exclamation-triangle-fill"></i> {{ errorMessage }}
+      </div>
 
-    <!-- Profile Form -->
-    <div class="form-narrow">
-      <form
-        *ngIf="!isPasswordMode"
-        [formGroup]="profileForm"
-        (ngSubmit)="onSubmitProfile()"
-      >
-        <div class="mb-3 text-center position-relative profile-image-wrapper">
-          <img
-            [src]="previewImage"
-            alt="Profile"
-            class="profile-avatar mb-2"
-            (error)="onImageError($event)"
-            (click)="triggerImageEdit()"
-            style="cursor: pointer"
-          />
-          <span
-            class="profile-image-edit-icon"
-            *ngIf="isEditMode"
-            (click)="triggerImageEdit()"
-            title="Change profile photo"
-          >
-            <i class="bi bi-camera-fill"></i>
-          </span>
-          <input
-            type="file"
-            #fileInput
-            style="display: none"
-            accept="image/*"
-            (change)="onImageChange($event)"
-            [disabled]="!isEditMode"
-          />
-        </div>
-
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label">First Name</label>
-            <input
-              type="text"
-              class="form-control"
-              formControlName="firstName"
-              [disabled]="!isEditMode"
-            />
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Last Name</label>
-            <input
-              type="text"
-              class="form-control"
-              formControlName="lastName"
-              [disabled]="!isEditMode"
-            />
-          </div>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Email</label>
-          <input
-            type="email"
-            class="form-control"
-            formControlName="email"
-            [disabled]="!isEditMode"
-          />
-        </div>
-        <div class="mb-4" *ngIf="userRole !== 'admin'">
-          <label class="form-label">Track</label>
-          <select
-            class="form-select"
-            formControlName="major"
-            [disabled]="!isEditMode"
-          >
-            <option value="" disabled>Select your track</option>
-            <option value="mern">MERN Track</option>
-            <option value="python">Python Track</option>
-            <option value="dotnet">.NET Track</option>
-          </select>
-        </div>
-
-        <button
-          type="button"
-          class="btn btn-outline-warning mb-5"
-          (click)="togglePasswordMode()"
+      <!-- Profile Form -->
+      <div class="form-container">
+        <form
+          *ngIf="!isPasswordMode"
+          [formGroup]="profileForm"
+          (ngSubmit)="onSubmitProfile()"
         >
-          <i class="bi bi-key"></i> Change Password
-        </button>
-
-        <div class="d-flex align-items-center flex-wrap gap-2">
-          <button
-            type="button"
-            class="btn btn-outline-secondary mt-2"
-            (click)="toggleEdit()"
-          >
-            {{ isEditMode ? "Cancel" : "Edit Profile" }}
-          </button>
-          <button
-            type="submit"
-            class="btn mt-2"
-            style="background: #000039; color: #fff"
-            *ngIf="isEditMode"
-            [disabled]="!profileForm.valid || profileForm.pristine || isLoading"
-          >
-            Save Changes
-          </button>
-        </div>
-      </form>
-    </div>
-
-    <!-- Password Form -->
-    <div class="form-narrow">
-      <form
-        *ngIf="isPasswordMode"
-        [formGroup]="passwordForm"
-        (ngSubmit)="onSubmitPassword()"
-      >
-        <h4 class="mb-3" style="color: #000039">Change Password</h4>
-        <div class="mb-3">
-          <label class="form-label">Current Password</label>
-          <input
-            type="password"
-            class="form-control"
-            formControlName="currentPassword"
-          />
-        </div>
-        <div class="mb-3">
-          <label class="form-label">New Password</label>
-          <input
-            type="password"
-            class="form-control"
-            formControlName="newPassword"
-          />
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Confirm New Password</label>
-          <input
-            type="password"
-            class="form-control"
-            formControlName="confirmPassword"
-          />
-          <div
-            *ngIf="
-              passwordForm.hasError('mismatch') &&
-              passwordForm.get('confirmPassword')?.touched
-            "
-            class="text-danger mt-1"
-          >
-            <small>Passwords do not match</small>
+          <div class="mb-4 text-center profile-image-wrapper">
+            <img
+              [src]="previewImage"
+              alt="Profile"
+              class="profile-avatar"
+              (error)="onImageError($event)"
+              (click)="triggerImageEdit()"
+              [class.editable]="isEditMode"
+            />
+            <span
+              class="profile-image-edit-icon"
+              *ngIf="isEditMode"
+              (click)="triggerImageEdit()"
+              title="Change profile photo"
+            >
+              <i class="bi bi-camera-fill"></i>
+            </span>
+            <input
+              type="file"
+              #fileInput
+              class="visually-hidden"
+              accept="image/*"
+              (change)="onImageChange($event)"
+              [disabled]="!isEditMode"
+            />
           </div>
-        </div>
-        <div class="d-flex gap-2">
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="firstName" class="form-label">First Name</label>
+              <input
+                type="text"
+                id="firstName"
+                class="form-control"
+                formControlName="firstName"
+                [readOnly]="!isEditMode"
+                [ngClass]="{
+                  'form-control-plaintext':
+                    !isEditMode && profileForm.get('firstName')?.value
+                }"
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="lastName" class="form-label">Last Name</label>
+              <input
+                type="text"
+                id="lastName"
+                class="form-control"
+                formControlName="lastName"
+                [readOnly]="!isEditMode"
+                [ngClass]="{
+                  'form-control-plaintext':
+                    !isEditMode && profileForm.get('lastName')?.value
+                }"
+              />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="email"
+              id="email"
+              class="form-control"
+              formControlName="email"
+              [readOnly]="!isEditMode"
+              [ngClass]="{
+                'form-control-plaintext':
+                  !isEditMode && profileForm.get('email')?.value
+              }"
+            />
+          </div>
+          <div class="mb-4" *ngIf="userRole !== 'admin'">
+            <label for="major" class="form-label">Track</label>
+            <select
+              id="major"
+              class="form-select"
+              formControlName="major"
+              [disabled]="!isEditMode"
+              [ngClass]="{
+                'form-control-plaintext-select':
+                  !isEditMode && profileForm.get('major')?.value
+              }"
+            >
+              <option value="" disabled>Select your track</option>
+              <option value="mern">MERN Track</option>
+              <option value="python">Python Track</option>
+              <option value="dotnet">.NET Track</option>
+            </select>
+          </div>
+
           <button
             type="button"
-            class="btn btn-outline-secondary"
+            class="btn btn-outline-warning mb-5"
             (click)="togglePasswordMode()"
           >
-            Cancel
+            <i class="bi bi-key"></i> Change Password
           </button>
-          <button
-            type="submit"
-            class="btn"
-            style="background: #000039; color: #fff"
-            [disabled]="!passwordForm.valid || isLoading"
-          >
-            <span
-              *ngIf="isLoading"
-              class="spinner-border spinner-border-sm me-2"
-            ></span>
-            Change Password
-          </button>
-        </div>
-      </form>
+
+          <div class="action-buttons-group mt-4 d-flex gap-2 flex-row">
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              (click)="toggleEdit()"
+            >
+              <i
+                class="bi"
+                [ngClass]="isEditMode ? 'bi-x-circle' : 'bi-pencil-square'"
+              ></i>
+              {{ isEditMode ? "Cancel" : "Edit Profile" }}
+            </button>
+            <button
+              type="submit"
+              class="btn btn-save-changes"
+              *ngIf="isEditMode"
+              [disabled]="
+                !profileForm.valid || profileForm.pristine || isLoading
+              "
+            >
+              <i class="bi bi-check-lg"></i> Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Password Form -->
+      <div class="form-container">
+        <form
+          *ngIf="isPasswordMode"
+          [formGroup]="passwordForm"
+          (ngSubmit)="onSubmitPassword()"
+        >
+          <h4 class="mb-3 section-title">
+            <i class="bi bi-shield-lock-fill"></i> Change Password
+          </h4>
+          <div class="mb-3">
+            <label for="currentPassword" class="form-label"
+              >Current Password</label
+            >
+            <input
+              type="password"
+              id="currentPassword"
+              class="form-control"
+              formControlName="currentPassword"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="newPassword" class="form-label">New Password</label>
+            <input
+              type="password"
+              id="newPassword"
+              class="form-control"
+              formControlName="newPassword"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="confirmPassword" class="form-label"
+              >Confirm New Password</label
+            >
+            <input
+              type="password"
+              id="confirmPassword"
+              class="form-control"
+              formControlName="confirmPassword"
+            />
+            <div
+              *ngIf="
+                passwordForm.hasError('mismatch') &&
+                passwordForm.get('confirmPassword')?.touched
+              "
+              class="text-danger mt-1 form-text"
+            >
+              <small
+                ><i class="bi bi-exclamation-circle"></i> Passwords do not
+                match</small
+              >
+            </div>
+          </div>
+          <div class="d-flex justify-content-end gap-2">
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              (click)="togglePasswordMode()"
+            >
+              <i class="bi bi-x-circle"></i> Cancel
+            </button>
+            <button
+              type="submit"
+              class="btn btn-save-changes"
+              [disabled]="!passwordForm.valid || isLoading"
+            >
+              <span
+                *ngIf="isLoading"
+                class="spinner-border spinner-border-sm me-2"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              <i class="bi bi-check-lg"></i> Change Password
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
+    } @else {
+    <app-load
+      [isLoading]="isLoading"
+      [loadingMessage]="'Preparing your profile ...'"
+      [showProgress]="true"
+    />
+    }
   </div>
-  } @else {
-  <app-load
-    [isLoading]="isLoading"
-    [loadingMessage]="'Preparing your profile ...'"
-    [showProgress]="true"
-  />
-  }
 </div>

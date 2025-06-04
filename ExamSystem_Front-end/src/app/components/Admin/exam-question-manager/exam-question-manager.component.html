@@ -88,18 +88,26 @@
       @for (option of question.options; track option.option_label; let j =
       $index) {
       <div class="input-group mb-2">
+        <!-- The input-group-text now primarily holds our custom radio setup -->
         <div class="input-group-text">
-          <input
-            type="radio"
-            [id]="'correctChoice-' + i + '-' + j"
-            [value]="option.option_label"
-            [(ngModel)]="question.correct_answer"
-            [name]="'correctAnswer-' + i"
-            class="form-check-input mt-0"
-            required
-          />
-          <label [for]="'correctChoice-' + i + '-' + j" class="ms-1">
-            {{ option.option_label }}
+          <label
+            class="custom-radio-container"
+            [for]="'correctChoice-' + i + '-' + j"
+          >
+            <input
+              type="radio"
+              [id]="'correctChoice-' + i + '-' + j"
+              [value]="option.option_label"
+              [(ngModel)]="question.correct_answer"
+              [name]="'correctAnswer-' + i"
+              class="native-radio-hidden"
+            />
+            <span class="custom-radio-visual"></span>
+            <!-- Our styled visual radio -->
+            <span class="custom-radio-option-label-text">{{
+              option.option_label
+            }}</span>
+            <!-- A, B, C, D text -->
           </label>
         </div>
         <input

@@ -1,185 +1,262 @@
 /* results.component.scss */
+
+/* Overall Container */
 .results-container {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 30px auto; /* Increased top/bottom margin */
   padding: 20px;
+  background-color: #f4f7f9; /* Slightly off-white background for the page */
 }
 
+/* Header Section */
 .header {
-  margin-bottom: 30px;
+  margin-bottom: 40px; /* Increased spacing */
   text-align: center;
-
-  h2 {
-    color: #000039;
-    font-weight: 600;
-    margin-bottom: 10px;
-
-    i {
-      margin-right: 10px;
-    }
-  }
-
-  p {
-    color: #666;
-    font-size: 1.1rem;
-  }
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e0e0e0; /* Softer border */
 }
 
+.header h2 {
+  color: #000039; /* Theme color */
+  font-weight: 700; /* Bolder */
+  font-size: 2rem; /* Larger header */
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+.header h2 i {
+  margin-right: 12px; /* More space for icon */
+  color: #000039; /* Theme color for icon */
+}
+
+.header p {
+  color: #555; /* Darker grey for subtitle */
+  font-size: 1.1rem;
+  max-width: 600px; /* Limit width for readability */
+  margin: 0 auto; /* Center the paragraph */
+}
+
+/* Results Grid Layout */
 .results-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(320px, 1fr)
+  ); /* Slightly wider cards */
+  gap: 25px; /* Increased gap */
 }
 
+/* Individual Result Card */
 .result-card {
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: #ffffff; /* Clean white background */
+  border-radius: 12px; /* More pronounced rounding */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* Softer, more spread shadow */
   overflow: hidden;
-  transition: transform 0.3s ease;
-
-  &:hover {
-    transform: translateY(-5px);
-  }
-
-  &.excellent {
-    .score-circle {
-      background-color: #28a745;
-    }
-
-    .verdict {
-      color: #28a745;
-    }
-  }
-
-  &.good {
-    .score-circle {
-      background-color: #ffc107;
-      color: #333;
-    }
-
-    .verdict {
-      color: #ffc107;
-    }
-  }
-
-  &.poor {
-    .score-circle {
-      background-color: #dc3545;
-    }
-
-    .verdict {
-      color: #dc3545;
-    }
-  }
+  transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
+  display: flex; /* Flex column for better internal alignment */
+  flex-direction: column;
 }
 
-.card-header {
-  padding: 15px 20px;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #eee;
-
-  h3 {
-    margin: 0;
-    font-size: 1.1rem;
-    color: #333;
-  }
-
-  .date {
-    font-size: 0.8rem;
-    color: #666;
-  }
+.result-card:hover {
+  transform: translateY(-6px); /* Slightly more lift */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
-.card-body {
-  padding: 20px;
+/* Card Header Styling */
+.result-card .card-header {
+  padding: 18px 20px; /* Adjusted padding */
+  background-color: #f8f9fa; /* Light header background */
+  border-bottom: 1px solid #e9ecef; /* Softer border */
+}
+
+.result-card .card-header h3 {
+  margin: 0;
+  font-size: 1.2rem; /* Slightly larger exam title */
+  color: #000039; /* Theme color for title */
+  font-weight: 600;
+  white-space: nowrap; /* Prevent title wrapping if possible */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Add ellipsis for long titles */
+}
+
+.result-card .card-header .date {
+  font-size: 0.85rem; /* Slightly larger date */
+  color: #6c757d; /* Standard muted color */
+}
+
+/* Card Body Styling */
+.result-card .card-body {
+  padding: 25px 20px; /* Increased padding */
   text-align: center;
+  flex-grow: 1; /* Allow body to grow and push footer down */
 }
 
+/* Score Circle Styling */
 .score-circle {
-  width: 100px;
-  height: 100px;
+  width: 110px; /* Slightly larger */
+  height: 110px;
   border-radius: 50%;
-  background-color: #000039;
   color: white;
   display: flex;
+  flex-direction: column; /* Stack score and text */
   align-items: center;
   justify-content: center;
-  font-size: 1.8rem;
-  font-weight: bold;
-  margin: 0 auto 15px;
-}
-
-.verdict {
-  font-size: 1.1rem;
+  font-size: 1.2rem; /* Font size for "Score" text */
   font-weight: 500;
-  margin-bottom: 10px;
-
-  i {
-    margin-right: 5px;
-  }
+  margin: 0 auto 20px; /* Increased bottom margin */
+  border: 4px solid white; /* White border for contrast */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Inner shadow for depth */
+  line-height: 1.2;
 }
 
-.card-footer {
-  padding: 15px 20px;
+.score-circle .score-value {
+  /* New class for the number itself */
+  font-size: 2rem; /* Prominent score number */
+  font-weight: 700;
+  display: block;
+}
+.score-circle .score-text-label {
+  /* New class for "Score" */
+  font-size: 0.8rem;
+  opacity: 0.8;
+  display: block;
+  margin-top: -5px; /* Adjust spacing */
+}
+
+/* Verdict Text Styling */
+.verdict {
+  font-size: 1.15rem; /* Slightly larger */
+  font-weight: 600; /* Bolder */
+  margin-bottom: 15px; /* Increased margin */
+}
+
+.verdict i {
+  margin-right: 8px; /* More space for icon */
+  font-size: 1.3rem; /* Slightly larger emoji icon */
+}
+
+/* Color coding based on parent .result-card class */
+.result-card.excellent .score-circle {
+  background-color: #28a745;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+.result-card.excellent .verdict {
+  color: #28a745;
+}
+
+.result-card.good .score-circle {
+  background-color: #ffc107;
+  color: #212529;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+.result-card.good .verdict {
+  color: #dda000;
+} /* Darker yellow for text */
+
+.result-card.poor .score-circle {
+  background-color: #dc3545;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+.result-card.poor .verdict {
+  color: #dc3545;
+}
+
+/* Card Footer & Button Styling */
+.result-card .card-footer {
+  padding: 18px 20px;
   text-align: center;
-  border-top: 1px solid #eee;
-
-  .retry-btn {
-    display: inline-block;
-    padding: 8px 15px;
-    background-color: #000039;
-    color: white;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: background-color 0.3s ease;
-
-    &:hover {
-      background-color: darken(#000039, 10%);
-    }
-
-    i {
-      margin-right: 5px;
-    }
-  }
+  background-color: #f8f9fa; /* Consistent light background */
+  border-top: 1px solid #e9ecef;
 }
 
+.result-card .review-btn {
+  /* Targets the button in the footer */
+  display: inline-block;
+  padding: 10px 25px; /* More padding */
+  background-color: #000039 !important; /* Override inline style, ensure theme color */
+  color: white !important;
+  border: none !important;
+  border-radius: 6px; /* Consistent rounding */
+  text-decoration: none;
+  font-size: 0.95rem; /* Slightly larger font */
+  font-weight: 500;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.result-card .review-btn:hover {
+  background-color: #00002a !important; /* Darken theme color on hover */
+  transform: translateY(-2px);
+}
+
+.result-card .review-btn i {
+  margin-right: 8px; /* More space for icon */
+}
+
+/* No Results Message Styling */
 .no-results {
   text-align: center;
-  padding: 50px 0;
+  padding: 60px 20px; /* More padding */
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-top: 30px;
+}
 
-  i {
-    font-size: 3rem;
-    color: #666;
-    margin-bottom: 20px;
-  }
+.no-results i.bi-clipboard-x {
+  /* Target specific icon */
+  font-size: 4rem; /* Larger icon */
+  color: #adb5bd; /* Softer muted color */
+  margin-bottom: 25px;
+}
 
-  h3 {
-    color: #333;
-    margin-bottom: 10px;
-  }
+.no-results h3 {
+  color: #343a40; /* Darker heading */
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
 
-  p {
-    color: #666;
-    margin-bottom: 20px;
-  }
+.no-results p {
+  color: #6c757d;
+  margin-bottom: 25px;
+  font-size: 1.1rem;
+}
 
-  .btn-primary {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #000039;
-    color: white;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
+/* If you add a button to "no-results" like in the original CSS (commented out) */
+.no-results .btn-primary {
+  display: inline-block;
+  padding: 12px 25px;
+  background-color: #000039;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+  font-weight: 500;
+}
 
-    &:hover {
-      background-color: darken(#000039, 10%);
-    }
+.no-results .btn-primary:hover {
+  background-color: #00002a;
+}
 
-    i {
-      margin-left: 5px;
-    }
-  }
+/* App Load Component (Basic styling if needed) */
+app-load {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh; /* Ensure it takes up space */
+  color: #6c757d; /* Muted text color */
+}
+
+app-load .spinner-border {
+  /* If app-load uses Bootstrap spinner */
+  width: 3rem;
+  height: 3rem;
+  border-width: 0.3em;
+  color: #000039; /* Theme color for spinner */
+}
+
+app-load p {
+  margin-top: 1rem;
+  font-size: 1rem;
 }
