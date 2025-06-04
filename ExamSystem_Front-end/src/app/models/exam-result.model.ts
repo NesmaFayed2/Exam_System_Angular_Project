@@ -5,7 +5,6 @@ export interface ExamResult {
   examTitle: string;
   totalScore: number;
   submittedAt: Date;
-  // Optional additional fields from your API
   studentEmail?: string;
   maxMarks?: number;
   percentage?: number;

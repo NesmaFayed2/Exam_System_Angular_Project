@@ -9,12 +9,12 @@ import { LoadComponent } from '../../../shared/load/load.component';
 @Component({
   selector: 'app-student-table',
   standalone: true,
-  imports: [CommonModule, DatePipe,LoadComponent],
+  imports: [CommonModule, DatePipe, LoadComponent],
   templateUrl: './student-table.component.html',
   styleUrls: ['./student-table.component.css'],
 })
 export class StudentTableComponent implements OnInit, OnDestroy {
-  results: ExamResult[] = []; // Results for the specific exam
+  results: ExamResult[] = [];
   isLoading: boolean = true;
   errorMessage: string | null = null;
   examTitle: string = '';
@@ -60,6 +60,7 @@ export class StudentTableComponent implements OnInit, OnDestroy {
           this.examTitle =
             results.length > 0 ? results[0].examTitle : 'Exam Results';
           this.isLoading = false;
+          console.log(this.results);
         },
         error: (error) => {
           console.error('Error loading exam results:', error);
@@ -91,8 +92,8 @@ export class StudentTableComponent implements OnInit, OnDestroy {
   getFailedCount(): number {
     return this.results.filter(
       (result) =>
-        result.status === 'Failed' ||
-        (result.percentage && result.percentage < 50)
+        result.status !== 'Passed' &&
+        !(result.percentage && result.percentage >= 50)
     ).length;
   }
 
